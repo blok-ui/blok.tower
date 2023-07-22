@@ -1,11 +1,12 @@
 package blogish.layouts;
 
 import blogish.api.SiteApi;
-import blok.suspense.SuspenseBoundary;
+import blogish.data.Site;
+import blogish.ui.site.SiteHeader;
 import blok.html.Html;
+import blok.suspense.SuspenseBoundary;
 import blok.tower.routing.LayoutRoute;
 import blok.ui.*;
-import blogish.data.Site;
 
 class MainLayout implements LayoutRoute<'blogish.pages'> {
   @:load final site:Site = {
@@ -15,7 +16,7 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
 
   function render(context:ComponentBase, router:Child) {
     return Html.div({},
-      Html.header({}, Html.h1({}, site().title)),
+      SiteHeader.node({ site: site() }),
       Html.main({}, SuspenseBoundary.node({
         child: router,
         fallback: () -> 'Loading...'

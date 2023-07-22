@@ -15,6 +15,7 @@ class StaticSiteGenerationModule implements Module {
     #else
     container.map(Target).to(Target.StaticSiteGeneratedTarget);
     container.map(Visitor).to(Visitor).share({ scope: Parent });
+    container.map(Generator).to(Generator).share({ scope: Parent });
     container.map(Strategy).to(StaticSiteGenerationStrategy).share({ scope: Parent });
     #end
   }

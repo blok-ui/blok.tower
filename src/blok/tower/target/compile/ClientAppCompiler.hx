@@ -1,13 +1,13 @@
 package blok.tower.target.compile;
 
-import blok.tower.core.PluginContext;
+import blok.tower.core.*;
 import blok.tower.asset.*;
 
 class ClientAppCompiler implements Asset {
-  final plugins:PluginContext;
+  final version:AppVersion;
 
-  public function new(plugins) {
-    this.plugins = plugins;
+  public function new(version) {
+    this.version = version;
   }
 
   public function register(context:AssetContext) {}

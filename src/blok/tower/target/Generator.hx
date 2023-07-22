@@ -13,15 +13,17 @@ import kit.http.Request;
 class Generator {
   final container:Container;
   final appFactory:AppRootFactory;
+  final appVersion:AppVersion;
   final output:Output;
   final visitor:Visitor;
   final logger:Logger;
   final target:Target;
   final hydrationId:HydrationId;
 
-  public function new(container, appFactory, output, visitor, logger, target, hydrationId) {
+  public function new(container, appFactory, appVersion, output, visitor, logger, target, hydrationId) {
     this.container = container;
     this.appFactory = appFactory;
+    this.appVersion = appVersion;
     this.output = output;
     this.visitor = visitor;
     this.logger = logger;
@@ -96,7 +98,7 @@ class Generator {
           })
         ], _ -> appFactory.create(
           new Request(Get, path),
-          () -> new AppContext(container, assets)
+          () -> new AppContext(container, appVersion, assets)
         ))
       );
 

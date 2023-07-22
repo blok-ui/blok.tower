@@ -1,9 +1,6 @@
 package blok.tower.target.strategy;
 
-import blok.tower.asset.*;
 import blok.tower.core.*;
-import blok.tower.data.HydrationId;
-import blok.tower.target.Visitor;
 
 /**
   Static site generation strategy.
@@ -11,25 +8,16 @@ import blok.tower.target.Visitor;
   Will output the entire site as static files, including all resources.
 **/
 class StaticSiteGenerationStrategy implements Strategy {
-  final container:Container;
-  final appFactory:AppRootFactory;
-  final visitor:Visitor;
+  final generator:Generator;
   final logger:Logger;
-  final output:Output;
-  final hydrationId:HydrationId;
 
-  public function new(container, appFactory, visitor, logger, output, hydrationId) {
-    this.container = container;
-    this.appFactory = appFactory;
-    this.visitor = visitor;
+  public function new(generator, logger) {
+    this.generator = generator;
     this.logger = logger;
-    this.output = output;
-    this.hydrationId = hydrationId;
   }
 
   public function run():Cancellable {
     logger.log(Info, 'Generating site...');
-    var generator = new Generator(container, appFactory, output, visitor, logger, StaticSiteGeneratedTarget, hydrationId);
     return generator.generate().handle(o -> switch o {
       case Ok(_):
         logger.log(Info, 'Generation successful.');
