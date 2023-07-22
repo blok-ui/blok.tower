@@ -1,0 +1,19 @@
+-cp src
+-cp example/blogish/src
+
+-lib blok.core
+-lib kit
+-lib kit.http
+-lib capsule
+-lib markdown
+-lib toml
+-lib cmdr
+-lib hxnodejs
+
+--debug
+
+-D js-es=6
+
+-main Blogish
+
+-js dist/test.js
