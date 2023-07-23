@@ -22,6 +22,7 @@ function buildGeneric() {
 }
 
 function build(url:String) {
+  if (Context.defined('blok.tower.client.ssg')) return buildStaticClient(url);
   if (Context.defined('blok.tower.client')) return buildClient(url);
 
   var builder = ClassBuilder.fromContext();
@@ -137,7 +138,43 @@ function build(url:String) {
   return builder.export();
 }
 
+// @todo: Come up with something better here.
 private function buildStaticClient(url:String) {
+  var serverFields = Context.getBuildFields();
+  var builder = new ClassBuilder([]);
+  
+  for (field in serverFields) switch field.kind {
+    case FFun(f) if (isRpcMethod(field)):
+      var name = field.name;
+      var args = f.args;
+      
+      builder.addField({
+        name: name,
+        pos: field.pos,
+        access: field.access,
+        meta: field.meta,
+        kind: FFun({
+          args: args,
+          ret: f.ret,
+          expr: macro throw 'Not available on static sites'
+        })
+      });
+    default:
+  }
+
+  builder.add(macro class {
+    public function new() {}
+
+    public function test(request:kit.http.Request):Bool {
+      return false;
+    }
+
+    public function match(request:kit.http.Request):kit.Maybe<kit.Future<kit.http.Response>> {
+      return None;
+    }
+  });
+
+  return builder.export();
 }
 
 private function buildClient(url:String) {
@@ -147,7 +184,7 @@ private function buildClient(url:String) {
   builder.add(macro class {
     @:noCompletion static final __url = $v{url};
     
-    final client:blok.tower.client.JsonRpcClient;
+    final client:blok.tower.remote.JsonRpcClient;
 
     public function new(client) {
       this.client = client;
@@ -157,7 +194,7 @@ private function buildClient(url:String) {
       return false;
     }
 
-    public function match(request:kit.http.Request):kit.Maybe<kit.http.Response> {
+    public function match(request:kit.http.Request):kit.Maybe<kit.Future<kit.http.Response>> {
       return None;
     }
   });
@@ -184,11 +221,9 @@ private function buildClient(url:String) {
         kind: FFun({
           args: args,
           ret: f.ret,
-          expr: macro {
-            client
-              .call(__url, $v{name}, $callArgs)
-              .next(res -> $p{path}.fromJson(res.result));
-          }
+          expr: macro return client
+            .call(__url, $v{name}, $callArgs)
+            .next(res -> $p{path}.fromJson(res.result))
         })
       });
     default:

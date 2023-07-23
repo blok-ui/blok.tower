@@ -1,0 +1,19 @@
+example-shared.hxml
+
+# These dependencies are only needed for the server:
+-lib blok.tower
+-lib hxnodejs
+-lib toml
+-lib markdown
+# -lib genes
+
+
+-D js-es=6
+-D analyzer-optimize
+# -dce full
+-D blok.tower.client.hxml=example-client
+-D breeze.output=none
+
+--debug
+
+-js dist/build.js

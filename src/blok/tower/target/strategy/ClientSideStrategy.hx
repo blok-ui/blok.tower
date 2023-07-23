@@ -11,11 +11,13 @@ import kit.http.Request;
 class ClientSideStrategy implements Strategy {
   final container:Container;
   final appFactory:AppRootFactory;
+  final appVersion:AppVersion;
   final hydrationId:HydrationId;
   final output:Output;
 
-  public function new(container, appFactory, hydrationId, output) {
+  public function new(container, appVersion, appFactory, hydrationId, output) {
     this.container = container;
+    this.appVersion = appVersion;
     this.appFactory = appFactory;
     this.hydrationId = hydrationId;
     this.output = output;
@@ -27,7 +29,7 @@ class ClientSideStrategy implements Strategy {
     var assets = new AssetContext(output, document, hydrationId, ClientSideTarget);
     var root = hydrate(
       document.getRoot(),
-      () -> appFactory.create(request, () -> new AppContext(container, assets))
+      () -> appFactory.create(request, () -> new AppContext(container, appVersion, assets))
     );
 
     return () -> root.dispose(); 

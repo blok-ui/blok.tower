@@ -1,5 +1,6 @@
 package blok.tower.target;
 
+import blok.tower.target.compile.ClientAppCompiler;
 import haxe.Timer;
 import blok.tower.data.HydrationId;
 import blok.context.Provider;
@@ -75,6 +76,9 @@ class Generator {
       time = time.substr(0, 4);
       return  '${time}ms';
     }
+
+    // @todo: Dunno if this is the best place for this.
+    assets.add(new ClientAppCompiler(appVersion));
 
     logger.log(Info, '...visiting $path');
 

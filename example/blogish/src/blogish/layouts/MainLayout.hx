@@ -15,7 +15,7 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
   }
 
   function render(context:ComponentBase, router:Child) {
-    return Html.div({},
+    return Fragment.node(
       SiteHeader.node({ site: site() }),
       Html.main({}, SuspenseBoundary.node({
         child: router,

@@ -1,0 +1,9 @@
+-cp src
+
+-lib kit
+-lib kit.http
+-lib capsule
+-lib cmdr
+-lib blok.core
+
+-D blok.tower=0.0.1

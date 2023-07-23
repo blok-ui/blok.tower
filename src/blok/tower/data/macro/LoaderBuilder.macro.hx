@@ -62,16 +62,20 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
           @:inject final hydrate:blok.tower.data.Hydration;
           @:inject final api:blok.tower.remote.StaticFileClient;
           switch hydrate.extract(${hash}) {
-            case Some(data): $p{path}.fromJson(data);
-            case None: api.fetch(${hash}).next(data -> $p{path}.fromJson(data));
+            case Some(data): 
+              $p{path}.fromJson(data);
+            case None: 
+              api.fetch(${hash}).next(data -> $p{path}.fromJson(data));
           }
         }
       } else if (Context.defined('blok.tower.client')) {
         e = macro {
           @:inject final hydrate:blok.tower.data.Hydration;
           switch hydrate.extract(${hash}) {
-            case Some(data): $p{path}.fromJson(data);
-            case None: ${e};
+            case Some(data):
+              $p{path}.fromJson(data);
+            case None: 
+              ${e};
           }
         }
       }

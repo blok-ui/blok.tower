@@ -1,0 +1,8 @@
+-cp example/blogish/src
+
+-D message-reporting=pretty
+
+-lib breeze
+-lib blok.foundation
+
+-main Blogish

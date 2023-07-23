@@ -21,7 +21,7 @@ function buildGeneric() {
 
 function build(url:String) {
   var builder = ClassBuilder.fromContext();
-  var loaderInfo = builder.processLoaders(macro kit.Hash.hash(url.peek()));
+  var loaderInfo = builder.processLoaders(macro kit.Hash.hash(url.get()));
   var injectInfo = builder.processInjectFields();
   var args = [ for (name => type in loaderInfo.dependencies) {
     name: name,
@@ -118,7 +118,9 @@ function build(url:String) {
         return Some(blok.ui.Scope.wrap(context -> {
           var view = render(context);
           #if !blok.tower.client
-          __exportJsonAssets(context);
+          blok.signal.Observer.untrack(() -> {
+            __exportJsonAssets(context);
+          });
           #end
           return view;
         }));
