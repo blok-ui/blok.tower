@@ -4,6 +4,9 @@ example-shared.hxml
 -D js-es=6
 -D analyzer-optimize
 
+#todo: Just until we get plugins running.
+-D breeze.output=runtime
+
 -dce full
 
 # Note that we don't tell the compiler what
