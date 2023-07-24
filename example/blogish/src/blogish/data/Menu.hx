@@ -1,8 +1,8 @@
 package blogish.data;
 
-import blok.tower.data.JsonAware;
+import blok.data.Model;
 
-class Menu implements JsonAware {
+class Menu extends Model {
   public inline static function empty():Menu {
     return new Menu({ id: '<empty>', options: [] });
   }
@@ -16,7 +16,7 @@ enum abstract MenuOptionType(String) {
   var ExternalLink = 'external';
 }
 
-class MenuOption implements JsonAware {
+class MenuOption extends Model {
   @:constant public final label:String;
   @:constant public final type:MenuOptionType;
   @:constant public final url:String;

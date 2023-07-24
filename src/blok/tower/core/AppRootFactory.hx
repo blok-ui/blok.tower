@@ -6,7 +6,6 @@ import blok.suspense.SuspenseBoundary;
 import blok.tower.routing.*;
 import blok.tower.routing.Navigator;
 import blok.ui.Placeholder;
-import kit.http.Request;
 
 class AppRootFactory {
   final root:AppRoot;
@@ -18,7 +17,7 @@ class AppRootFactory {
   }
 
   public function create(
-    initialRequest:Request,
+    createNavigator:()->Navigator,
     createContext:()->AppContext
   ) {
     return ErrorBoundary.node({
@@ -27,16 +26,16 @@ class AppRootFactory {
         throw error;
         Placeholder.node();
       },
-      child: SuspenseBoundary.node({
+      child: Provider.compose([
+        createNavigator,
+        createContext
+      ], _ -> SuspenseBoundary.node({
         fallback: () -> {
           // @todo: have a default suspense fallback
           Placeholder.node();
         },
-        child: Provider.compose([
-          () -> new Navigator({ request: initialRequest }),
-          createContext
-        ], _ -> root(ViewRouter.node({ routes: routes })))
-      })
+        child: root(ViewRouter.node({ routes: routes }))
+      }))
     });
   }
 }

@@ -3,7 +3,6 @@ package blogish.pages;
 import blogish.api.PostApi;
 import blogish.data.Post;
 import blok.html.Html;
-import blok.tower.data.JsonAware;
 import blok.tower.routing.PageRoute;
 import blok.ui.*;
 

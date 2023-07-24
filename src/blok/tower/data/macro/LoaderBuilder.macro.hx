@@ -35,8 +35,8 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
       if (field.access.contains(AStatic)) {
         Context.error('$LoaderMeta fields cannot be static', field.pos);
       }
-      if (!Context.unify(t.toType(), (macro:blok.tower.data.JsonAware).toType())) {
-        Context.error('$LoaderMeta methods must return a JsonAware type.', field.pos); 
+      if (!Context.unify(t.toType(), (macro:blok.data.Model).toType())) {
+        Context.error('$LoaderMeta methods must return a Model type.', field.pos); 
       }
 
       var name = field.name;

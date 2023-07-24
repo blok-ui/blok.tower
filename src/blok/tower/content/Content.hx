@@ -1,8 +1,8 @@
 package blok.tower.content;
 
-import blok.tower.data.JsonAware;
+import blok.data.Model;
 
-class Content<Data = Dynamic> implements JsonAware {
+class Content<Data = Dynamic> extends Model {
   @:constant public final type:String;
   @:constant public final data:Data;
   @:constant public final children:Array<Content> = [];

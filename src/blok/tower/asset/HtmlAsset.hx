@@ -1,11 +1,11 @@
 package blok.tower.asset;
 
-import blok.data.Record;
+import blok.data.Model;
 
 using StringTools;
 using haxe.io.Path;
 
-class HtmlAsset extends Record implements Asset {
+class HtmlAsset extends Model implements Asset {
   @:constant final path:String;
   @:constant final content:String;
 
@@ -22,7 +22,7 @@ class HtmlAsset extends Record implements Asset {
   }
 }
 
-class HtmlOutput extends Record implements OutputItem {
+class HtmlOutput extends Model implements OutputItem {
   @:constant public final key:OutputKey;
   @:constant final path:String;
   @:constant final content:String;

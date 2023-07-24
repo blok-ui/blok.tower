@@ -1,14 +1,15 @@
 package blok.tower.target;
 
-import blok.tower.target.compile.ClientAppCompiler;
-import haxe.Timer;
-import blok.tower.data.HydrationId;
 import blok.context.Provider;
 import blok.html.server.Server.mount;
 import blok.suspense.*;
 import blok.tower.asset.*;
 import blok.tower.asset.document.StaticDocument;
 import blok.tower.core.*;
+import blok.tower.data.HydrationId;
+import blok.tower.routing.Navigator;
+import blok.tower.target.compile.ClientAppCompiler;
+import haxe.Timer;
 import kit.http.Request;
 
 class Generator {
@@ -101,7 +102,7 @@ class Generator {
             }
           })
         ], _ -> appFactory.create(
-          new Request(Get, path),
+          () -> new Navigator({ request: new Request(Get, path) }),
           () -> new AppContext(container, appVersion, assets)
         ))
       );

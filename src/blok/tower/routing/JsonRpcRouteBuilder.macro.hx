@@ -98,7 +98,7 @@ function build(url:String) {
     }
 
     @:noCompletion
-    inline function createJsonRpcResult<T:blok.tower.data.JsonAware>(
+    inline function createJsonRpcResult<T:blok.data.Model>(
       id:Null<haxe.extern.EitherType<Int, String>>,
       value:T
     ):blok.tower.remote.JsonRpcResult {

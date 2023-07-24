@@ -1,6 +1,6 @@
 package blok.tower.asset;
 
-import blok.data.Record;
+import blok.data.Model;
 #if !blok.tower.client
 import blok.html.server.*;
 #end
@@ -8,7 +8,7 @@ import blok.html.server.*;
 using Reflect;
 using haxe.io.Path;
 
-class JsonAsset extends Record implements Asset {
+class JsonAsset extends Model implements Asset {
   @:constant final id:String;
   @:constant final content:String;
   @:constant final hydrationId:String;

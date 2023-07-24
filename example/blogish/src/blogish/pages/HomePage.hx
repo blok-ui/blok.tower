@@ -9,7 +9,7 @@ class HomePage implements PageRoute<'/'> {
 
   function render(context:blok.ui.ComponentBase) {
     return Html.div({},
-      BlogPostPage.link({ slug: 'first-post' }, 'First Post')
+      BlogPostPage.link({ slug: 'first-post' }, 'First Post Link')
     );
   }
 }

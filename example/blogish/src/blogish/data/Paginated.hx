@@ -1,8 +1,8 @@
 package blogish.data;
 
-import blok.tower.data.JsonAware;
+import blok.data.Model;
 
-class Paginated implements JsonAware {
+class Paginated extends Model {
   @:constant public final page:Int;
   @:constant public final perPage:Int;
   @:json(

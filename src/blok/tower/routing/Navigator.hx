@@ -1,12 +1,12 @@
 package blok.tower.routing;
 
 import blok.context.Context;
-import blok.data.Record;
+import blok.data.Model;
 import blok.debug.Debug;
 import kit.http.Request;
 
 @:fallback(error('No Navigator found'))
-class Navigator extends Record implements Context {
+class Navigator extends Model implements Context {
   @:signal public final request:Request;
 
   @:action

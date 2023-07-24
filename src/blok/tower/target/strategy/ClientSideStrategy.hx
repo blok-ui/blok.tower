@@ -1,11 +1,12 @@
 package blok.tower.target.strategy;
 
-import blok.tower.data.HydrationId;
 import blok.html.client.Client;
 import blok.tower.asset.*;
 import blok.tower.asset.document.ClientDocument;
+import blok.tower.client.HistoryController;
 import blok.tower.core.*;
-import js.Browser;
+import blok.tower.data.HydrationId;
+import blok.tower.routing.Navigator;
 import kit.http.Request;
 
 class ClientSideStrategy implements Strategy {
@@ -25,17 +26,20 @@ class ClientSideStrategy implements Strategy {
 
   public function run():Cancellable {
     var document = new ClientDocument();
-    var request = new Request(Get, getLocation());
     var assets = new AssetContext(output, document, hydrationId, ClientSideTarget);
     var root = hydrate(
       document.getRoot(),
-      () -> appFactory.create(request, () -> new AppContext(container, appVersion, assets))
+      () -> appFactory.create(
+        () -> {
+          var nav = new Navigator({ request: new Request(Get, getLocation()) });
+          var link = bindNavigatorToBrowserHistory(nav);
+          // @todo: how to dispose of the link?
+          nav;
+        }, 
+        () -> new AppContext(container, appVersion, assets)
+      )
     );
 
     return () -> root.dispose(); 
-  }
-  
-  function getLocation() {
-    return Browser.location.pathname + Browser.location.hash + Browser.location.search;
   }
 }

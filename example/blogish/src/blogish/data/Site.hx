@@ -1,8 +1,8 @@
 package blogish.data;
 
-import blok.tower.data.JsonAware;
+import blok.data.Model;
 
-class Site implements JsonAware {
+class Site extends Model {
   @:constant public final title:String;
   @:constant public final menu:Menu;
 }

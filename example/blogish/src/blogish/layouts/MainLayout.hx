@@ -20,7 +20,8 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
       Html.main({}, SuspenseBoundary.node({
         child: router,
         fallback: () -> 'Loading...'
-      }))
+      })).constrainWidthToContainer()
+        .styles(Spacing.margin('top', 3))
     );
   }
 }

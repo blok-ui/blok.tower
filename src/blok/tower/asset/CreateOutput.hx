@@ -1,8 +1,8 @@
 package blok.tower.asset;
 
-import blok.data.Record;
+import blok.data.Model;
 
-class CreateOutput extends Record implements OutputItem {
+class CreateOutput extends Model implements OutputItem {
   @:constant public final key:OutputKey;
   @:constant final dest:String;
   @:constant final content:String;

@@ -12,6 +12,9 @@ class StaticSiteGenerationModule implements Module {
     container.map(blok.tower.remote.ClientAdaptor).to(() -> {
       return new blok.tower.remote.adaptor.BrowserClientAdaptor();
     }).share({ scope: Parent });
+    container.map(blok.tower.remote.StaticFileCache).toDefault(() -> {
+      return new blok.tower.cache.TransientCache(blok.tower.cache.TransientCache.ONE_MINUTE);
+    }).share({ scope: Parent });
     container.map(blok.tower.remote.StaticFileClient).to(blok.tower.remote.StaticFileClient).share({ scope: Parent });
     container.map(Target).to(Target.ClientSideTarget);
     container.map(Strategy).to(ClientSideStrategy).share({ scope: Parent });
