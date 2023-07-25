@@ -11,22 +11,22 @@ using kit.Hash;
 function buildGeneric() {
   return switch Context.getLocalType() {
     case TInst(_, [ TInst(_.get() => {kind: KExpr(macro $v{(pack:String)})}, _) ]):
-      buildApiRouteModule(pack);
+      buildViewRouteModule(pack);
     default:
       Context.error('Invalid number of parameters -- expect one', Context.currentPos());
       null;
   }
 }
 
-private function buildApiRouteModule(pack:String):ComplexType {
+private function buildViewRouteModule(pack:String):ComplexType {
   var suffix = pack.hash();
-  var name = 'ApiRouteModule_${suffix}';
+  var name = 'ViewRouteModule_${suffix}';
   var path:TypePath = { pack: [ 'blok', 'tower', 'module' ], name: name, params: [] };
 
   if (path.typePathExists()) return TPath(path);
   
   var builder = new ClassBuilder([]);
-  var routes = pack.scanForApiRoutes();
+  var routes = pack.scanForViewRoutes();
   var registerRoutes:Array<Expr> = [ for (route in routes) {
     var path = route.pack.concat([ route.name ]);
     macro container.map($p{path}).toShared($p{path});
@@ -43,7 +43,7 @@ private function buildApiRouteModule(pack:String):ComplexType {
 
     public function provide(container:blok.tower.core.Container) {
       @:mergeBlock $b{registerRoutes};
-      container.getMapping(blok.tower.routing.ApiRouteCollection).extend(function (router) {
+      container.getMapping(blok.tower.routing.ViewRouteCollection).extend(function (router) {
         $addRoutes;
         return router;
       });

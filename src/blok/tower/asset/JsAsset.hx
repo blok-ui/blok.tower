@@ -8,7 +8,7 @@ using haxe.io.Path;
 
 class JsAsset extends StaticAsset {
   public function getPath():String {
-    return Path.join([ 'assets', getHash() ]).withExtension('js');
+    return getHash().withExtension('js');
   }
 
   #if !forest.client
@@ -16,10 +16,10 @@ class JsAsset extends StaticAsset {
     var head:Element = document.getHead();
     head.append(new Element('script', {
       src: switch kind {
-        case External: path;
+        case External: 
+          path;
         case Generated | Local(_): 
-          // Path.join([ context.prefix, getPath(context) ]);
-          Path.join([ '/', getPath() ]);
+          context.config.path.createAssetUrl(getPath());
       },
       defer: true,
       type: 'text/javascript'

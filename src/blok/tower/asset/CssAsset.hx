@@ -8,7 +8,7 @@ using haxe.io.Path;
 
 class CssAsset extends StaticAsset {
   public function getPath():String {
-    return Path.join([ 'assets', getHash() ]).withExtension('css');
+    return getHash().withExtension('css');
   }
 
   #if !forest.client
@@ -19,8 +19,7 @@ class CssAsset extends StaticAsset {
       href: switch kind {
         case External: path;
         case Generated | Local(_): 
-          // Path.join([ context.prefix, getPath(context) ]);
-          Path.join([ '/', getPath() ]);
+          context.config.path.createAssetUrl(getPath());
       }
     }));
   }

@@ -19,9 +19,10 @@ function pushLocation(url:String) {
 
 function watchHistory(subscription:(url:String)->Void):Cancellable {
   function listener(_) {
+    var prevPopState = isPopState;
     isPopState = true;
     subscription(getLocation());
-    isPopState = false;
+    isPopState = prevPopState;
   }
   Browser.window.addEventListener('popstate', listener);
   return () -> Browser.window.removeEventListener('popstate', listener);

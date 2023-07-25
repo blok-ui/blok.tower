@@ -3,6 +3,7 @@ example-shared.hxml
 # These dependencies are only needed for the server:
 -lib blok.tower
 -lib hxnodejs
+-lib mime
 -lib toml
 -lib markdown
 # -lib genes

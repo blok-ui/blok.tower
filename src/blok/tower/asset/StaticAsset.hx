@@ -29,7 +29,7 @@ abstract class StaticAsset implements Asset {
         context.output.add(new CopyOutput({
           key: path,
           source: source,
-          dest: getPath()
+          dest: context.config.path.createAssetOutputPath(getPath())
         }));
     }
     modifyDocument(context, context.document);

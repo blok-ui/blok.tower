@@ -1,7 +1,7 @@
 package blok.tower.target;
 
 enum Target {
-  ServerSideRenderTarget;
+  ServerSideRenderingTarget;
   StaticSiteGeneratedTarget;
   ClientSideTarget;  
 }

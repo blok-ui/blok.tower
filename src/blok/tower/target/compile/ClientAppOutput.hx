@@ -65,7 +65,7 @@ class ClientAppOutput implements OutputItem {
     switch target {
       case StaticSiteGeneratedTarget:
         cmd.push('-D blok.tower.client.ssg');
-      case ServerSideRenderTarget:
+      case ServerSideRenderingTarget:
         cmd.push('-D blok.tower.client.ssr');
       default:
     }

@@ -5,7 +5,8 @@ import blok.context.Provider;
 import blok.suspense.SuspenseBoundary;
 import blok.tower.routing.*;
 import blok.tower.routing.Navigator;
-import blok.ui.Placeholder;
+import blok.ui.*;
+import blok.html.Html;
 
 class AppRootFactory {
   final root:AppRoot;
@@ -22,9 +23,8 @@ class AppRootFactory {
   ) {
     return ErrorBoundary.node({
       fallback: (component, error, recover) -> {
-        // @todo: have a default error handler
-        throw error;
-        Placeholder.node();
+        // @todo: have a default error fallback
+        Html.div({}, error.toString());
       },
       child: Provider.compose([
         createNavigator,

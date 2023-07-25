@@ -7,6 +7,7 @@ function main() {
     DefaultModule,
     DataModule,
     StaticSiteGenerationModule,
+    // ServerSideRenderingModule,
     AssetPathModule<'example/blogish/data', 'dist/www', 'dist/cache'>,
     ApiRouteModule<'blogish.api'>,
     LayoutModule<'blogish.layouts'>

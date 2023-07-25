@@ -5,6 +5,7 @@ import blok.html.server.Server.mount;
 import blok.suspense.*;
 import blok.tower.asset.*;
 import blok.tower.asset.document.StaticDocument;
+import blok.tower.config.Config;
 import blok.tower.core.*;
 import blok.tower.data.HydrationId;
 import blok.tower.routing.Navigator;
@@ -14,26 +15,26 @@ import kit.http.Request;
 
 class Generator {
   final container:Container;
+  final config:Config;
   final appFactory:AppRootFactory;
   final appVersion:AppVersion;
   final output:Output;
   final visitor:Visitor;
   final logger:Logger;
-  final target:Target;
   final hydrationId:HydrationId;
 
-  public function new(container, appFactory, appVersion, output, visitor, logger, target, hydrationId) {
+  public function new(container, config, appFactory, appVersion, output, visitor, logger, hydrationId) {
     this.container = container;
+    this.config = config;
     this.appFactory = appFactory;
     this.appVersion = appVersion;
     this.output = output;
     this.visitor = visitor;
     this.logger = logger;
-    this.target = target;
     this.hydrationId = hydrationId;
   }
 
-  public function generate() {
+  public function generate():Task<Nothing> {
     return generateAll().next(_ -> {
       var stamp = Timer.stamp();
       logger.log(Info, '...all pages visited, outputting assets...');
@@ -42,6 +43,19 @@ class Generator {
         time = time.substr(0, 4);
         logger.log(Info, '...assets processed in ${time}ms');
         Nothing;
+      });
+    });
+  }
+
+  public function generateSinglePage(path:String):Task<Document> {
+    return generatePage(path).next(document -> {
+      var stamp = Timer.stamp();
+      logger.log(Info, '...page generated, outputting assets...');
+      output.process().next(_ -> {
+        var time = Std.string(Math.ceil((Timer.stamp() - stamp) * 1000));
+        time = time.substr(0, 4);
+        logger.log(Info, '...assets processed in ${time}ms');
+        document;
       });
     });
   }
@@ -67,7 +81,7 @@ class Generator {
   function generatePage(path:String):Task<Document> {
     var document:Document = new StaticDocument();
     var container = container.getChild();
-    var assets = new AssetContext(output, document, hydrationId, target);
+    var assets = new AssetContext(output, config, document, hydrationId);
     var wasSuspended:Bool = false;
     var completed:Bool = false;
     var stamp = Timer.stamp();
@@ -113,7 +127,7 @@ class Generator {
         activate(Ok(document));
       }
     }).next(document -> {
-      assets.add(new HtmlAsset({
+      if (config.output.shouldOutputHtml()) assets.add(new HtmlAsset({
         path: path,
         content: document.toString()
       }));

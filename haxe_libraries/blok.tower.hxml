@@ -4,6 +4,7 @@
 -lib kit.http
 -lib capsule
 -lib cmdr
+-lib mime
 -lib blok.core
 
 -D blok.tower=0.0.1

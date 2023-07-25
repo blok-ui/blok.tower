@@ -15,14 +15,11 @@ class JsonAsset extends Model implements Asset {
 
   public function register(context:AssetContext) {
     #if !blok.tower.client
-    switch context.target {
+    switch context.config.output.target {
       case StaticSiteGeneratedTarget:
         context.output.add(new blok.tower.asset.CreateOutput({
           key: id,
-          dest: Path.join([
-            'api', // @todo: Make this configurable
-            id 
-          ]).withExtension('json'),
+          dest: context.config.path.createApiOutputPath(id).withExtension('json'),
           content: content
         }));
       default:

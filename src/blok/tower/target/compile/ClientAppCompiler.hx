@@ -16,11 +16,8 @@ class ClientAppCompiler implements Asset {
 
   public function register(context:AssetContext) {
     var hash = ('blok-tower-app' + version.toFileNameSafeString()).hash();
-    var path = Path.join([ 'assets', hash.withExtension('js') ]);
-    // // @todo: Figure out how we'll be handling prefixes for the static
-    // // path. This is linked up with the server package.
-    // var url = Path.join([ context.prefix, path ]);
-    var url = '/' + path;
+    var url = context.config.path.createAssetUrl(hash).withExtension('js');
+    var path = context.config.path.createAssetOutputPath(hash).withExtension('js');
     var head:Element = context.document.getHead();
 
     #if debug
@@ -37,6 +34,6 @@ class ClientAppCompiler implements Asset {
     }));
     #end
 
-    context.output.add(new ClientAppOutput(hash, path, context.target));
+    context.output.add(new ClientAppOutput(hash, path, context.config.output.target));
   }
 }
