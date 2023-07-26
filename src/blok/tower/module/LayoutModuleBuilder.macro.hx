@@ -44,11 +44,11 @@ private function buildLayoutModule(pack:String):ComplexType {
   } ].flatten();
   var registerLayouts:Array<Expr> = [ for (layout in layouts) {
     var path = layout.pack.concat([ layout.name ]);
-    macro container.map($p{path}).toShared($p{path});
+    macro container.map($p{path}).to($p{path});
   } ];
   var registerRoutes:Array<Expr> = [ for (route in routes) {
     var path = route.pack.concat([ route.name ]);
-    macro container.map($p{path}).toShared($p{path});
+    macro container.map($p{path}).to($p{path});
   } ];
   var addLayouts:Expr = if (layouts.length == 0) macro null else {
     macro router.addRoutes([ $a{layouts.map(tp -> {
@@ -63,9 +63,11 @@ private function buildLayoutModule(pack:String):ComplexType {
     public function provide(container:blok.tower.core.Container) {
       @:mergeBlock $b{registerRoutes};
       @:mergeBlock $b{registerLayouts};
-      container.getMapping(blok.tower.routing.ViewRouteCollection).extend(function (router) {
-        $addLayouts;
-        return router;
+      container.getMapping(blok.tower.core.Factory(blok.tower.routing.ViewRouteCollection)).extend(function (factory) {
+        return factory.map(router -> {
+          $addLayouts;
+          router;
+        });
       });
     }
   });

@@ -29,7 +29,7 @@ private function buildViewRouteModule(pack:String):ComplexType {
   var routes = pack.scanForViewRoutes();
   var registerRoutes:Array<Expr> = [ for (route in routes) {
     var path = route.pack.concat([ route.name ]);
-    macro container.map($p{path}).toShared($p{path});
+    macro container.map($p{path}).to($p{path});
   } ];
   var addRoutes:Expr = if (routes.length == 0) macro null else {
     macro router.addRoutes([ $a{routes.map(tp -> {
@@ -43,9 +43,11 @@ private function buildViewRouteModule(pack:String):ComplexType {
 
     public function provide(container:blok.tower.core.Container) {
       @:mergeBlock $b{registerRoutes};
-      container.getMapping(blok.tower.routing.ViewRouteCollection).extend(function (router) {
-        $addRoutes;
-        return router;
+      container.getMapping(blok.tower.core.Factory(blok.tower.routing.ViewRouteCollection)).extend(function (factory) {
+        return factory.map(router -> {
+          $addRoutes;
+          router;
+        });
       });
     }
   });

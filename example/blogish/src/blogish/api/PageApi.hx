@@ -20,12 +20,13 @@ class PageApi implements JsonRpcRoute<'/api/pages'> {
     var cacheId = 'page:$slug';
     return cache.get(cacheId).next(value -> switch value {
       case Some(page): 
-        Task.resolve(page);
+        Task.resolve((page:Post));
       case None: repository.getPages().next(pages -> {
         var page = pages.find(page -> page.slug == slug);
         if (page == null) return new Error(NotFound, 'No page exists for $slug');
-        cache.set(cacheId, page);
-        return Post.fromJson(page);
+        var post = Post.fromJson(page);
+        cache.set(cacheId, post);
+        return post;
       });
     });
   }

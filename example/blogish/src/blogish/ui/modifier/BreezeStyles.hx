@@ -1,6 +1,6 @@
 package blogish.ui.modifier;
 
-import blok.debug.Debug.assert;
+import blok.debug.Debug;
 import blok.signal.*;
 import blok.ui.*;
 

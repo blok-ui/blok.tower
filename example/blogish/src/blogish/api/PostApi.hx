@@ -22,10 +22,11 @@ class PostApi implements JsonRpcRoute<'/api/posts'> {
       case Some(post): 
         Task.resolve(post);
       case None: repository.getPosts().next(pages -> {
-        var post = pages.find(post -> post.slug == slug);
-        if (post == null) return new Error(NotFound, 'No post exists for $slug');
+        var data = pages.find(data -> data.slug == slug);
+        if (data == null) return new Error(NotFound, 'No post exists for $slug');
+        var post = Post.fromJson(data);
         cache.set(cacheId, post);
-        return Post.fromJson(post);
+        post;
       });
     });
   }

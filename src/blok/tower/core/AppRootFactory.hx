@@ -10,7 +10,7 @@ import blok.html.Html;
 
 class AppRootFactory {
   final root:AppRoot;
-  final routes:ViewRouteCollection;
+  final routes:Factory<ViewRouteCollection>;
 
   public function new(root, routes) {
     this.root = root;
@@ -34,7 +34,7 @@ class AppRootFactory {
           // @todo: have a default suspense fallback
           Placeholder.node();
         },
-        child: root(ViewRouter.node({ routes: routes }))
+        child: root(ViewRouter.node({ routes: routes.create() }))
       }))
     });
   }
