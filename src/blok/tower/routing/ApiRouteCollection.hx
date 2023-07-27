@@ -30,4 +30,8 @@ class ApiRouteCollection implements ApiRoute {
     }
     return None;
   }
+
+  public function dispose() {
+    // noop?
+  }
 }

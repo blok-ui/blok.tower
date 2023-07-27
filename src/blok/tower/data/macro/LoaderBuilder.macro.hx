@@ -86,7 +86,7 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
       }
 
       field.kind = FVar(macro:blok.suspense.Resource<$t>);
-      inits.push(macro @:pos(e.pos) this.$name = blok.suspense.Resource.lazy(() -> $e));
+      inits.push(macro @:pos(e.pos) this.$name = new blok.suspense.Resource(() -> $e));
       exports.push(macro switch this.$name.data.peek() {
         case Loaded(data):
           assets.add(new blok.tower.asset.JsonAsset({

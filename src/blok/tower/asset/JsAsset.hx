@@ -11,7 +11,7 @@ class JsAsset extends StaticAsset {
     return getHash().withExtension('js');
   }
 
-  #if !forest.client
+  #if !blok.tower.client
   function modifyDocument(context:AssetContext, document:Document) {
     var head:Element = document.getHead();
     head.append(new Element('script', {

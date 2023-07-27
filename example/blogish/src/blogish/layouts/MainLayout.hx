@@ -1,5 +1,6 @@
 package blogish.layouts;
 
+import blok.tower.ui.*;
 import blogish.api.SiteApi;
 import blogish.data.Site;
 import blogish.ui.site.SiteHeader;
@@ -16,10 +17,19 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
 
   function render(context:ComponentBase, router:Child) {
     return Fragment.node(
+      Head.node({
+        children: [
+          Html.title({}, site().title),
+          Html.meta({ name: 'viewport', content: 'width=device-width, initial-scale=1' })
+        ]
+      }),
       SiteHeader.node({ site: site() }),
       Html.main({}, SuspenseBoundary.node({
         child: router,
-        fallback: () -> 'Loading...'
+        fallback: () -> Html.div({}, 'Loading...').styles(
+          Background.color('gray', 200),
+          Spacing.pad(3)
+        )
       })).constrainWidthToContainer()
         .styles(Spacing.margin('top', 3))
     );

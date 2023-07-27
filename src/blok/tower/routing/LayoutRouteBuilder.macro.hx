@@ -59,8 +59,11 @@ function build(pack:String) {
       expr: macro {
         @:mergeBlock $b{ [ for (name => _ in loaderInfo.dependencies) macro this.$name = $i{name} ] };
         @:mergeBlock $b{injectInfo.inits};
+        var previousOwner = blok.signal.Graph.setCurrentOwner(Some(disposables));
         @:mergeBlock $b{loaderInfo.inits};
         this.routes = new blok.tower.routing.ViewRouteCollection([ $a{routes} ]);
+        blok.signal.Graph.setCurrentOwner(previousOwner);
+        disposables.addDisposable(this.routes);
       }
     }),
     pos: Context.currentPos()
@@ -71,6 +74,7 @@ function build(pack:String) {
 
     final routes:blok.tower.routing.ViewRouteCollection;
     final url = new blok.signal.Signal<String>('');
+    final disposables = new blok.core.DisposableCollection();
 
     public function test(request:kit.http.Request):Bool {
       return routes.test(request);
@@ -89,6 +93,10 @@ function build(pack:String) {
         }));
       }
       return None;
+    }
+    
+    public function dispose() {
+      disposables.dispose();
     }
   });
 

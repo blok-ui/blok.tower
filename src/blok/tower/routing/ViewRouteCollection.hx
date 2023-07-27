@@ -31,4 +31,9 @@ class ViewRouteCollection implements ViewRoute {
     }
     return None;
   }
+
+  public function dispose() {
+    for (route in routes) route.dispose();
+    routes.resize(0);
+  }
 }

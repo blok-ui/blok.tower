@@ -34,14 +34,6 @@ function build(url:String) {
     });
   }
 
-  // @todo: The way our resources work right now means that we'll
-  // only re-load a resource if a dependency (like `params()`) changes.
-  // It honestly might be better to do a fetch every time our page loads.
-  // This might just mean we have some kind of `refresh` method on our
-  // `Resource` class? We'll have to see how big of a problem this is.
-  //
-  // Right now, it's sort of a weird, unpredictable cache.
-
   builder.addField({
     name: 'new',
     access: [ APublic ],
@@ -50,7 +42,9 @@ function build(url:String) {
       expr: macro {
         @:mergeBlock $b{ [ for (name => _ in loaderInfo.dependencies) macro this.$name = $i{name} ] };
         @:mergeBlock $b{injectInfo.inits};
+        var previousOwner = blok.signal.Graph.setCurrentOwner(Some(disposables));
         @:mergeBlock $b{loaderInfo.inits};
+        blok.signal.Graph.setCurrentOwner(previousOwner);
       }
     }),
     pos: (macro null).pos
@@ -103,12 +97,16 @@ function build(url:String) {
 
     final url = new blok.signal.Signal<Null<String>>(null);
     final params = new blok.signal.Signal<Null<$routeParamsType>>(null);
+    final disposables = new blok.core.DisposableCollection();
+    @:noCompletion var __isDisposed:Bool = false;
 
     public function test(request:kit.http.Request):Bool {
+      if (__isDisposed) return false;
       return request.method == Get && matcher.match(request.url);
     }
 
     public function match(request:kit.http.Request):kit.Maybe<blok.ui.VNode> {
+      if (__isDisposed) return None;
       if (request.method != Get) return None;
       if (matcher.match(request.url)) {
         blok.signal.Action.run(() -> {
@@ -126,6 +124,11 @@ function build(url:String) {
         }));
       }
       return None;
+    }
+
+    public function dispose() {
+      __isDisposed = true;
+      disposables.dispose();
     }
   });
 

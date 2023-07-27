@@ -133,6 +133,8 @@ function build(url:String) {
         'No request payload was provided or it was not parsable.'
       );
     }
+
+    public function dispose() {}
   });
 
   return builder.export();
@@ -172,6 +174,8 @@ private function buildStaticClient(url:String) {
     public function match(request:kit.http.Request):kit.Maybe<kit.Future<kit.http.Response>> {
       return None;
     }
+
+    public function dispose() {}
   });
 
   return builder.export();
@@ -197,6 +201,8 @@ private function buildClient(url:String) {
     public function match(request:kit.http.Request):kit.Maybe<kit.Future<kit.http.Response>> {
       return None;
     }
+
+    public function dispose() {}
   });
   
   for (field in serverFields) switch field.kind {
