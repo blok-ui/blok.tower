@@ -5,8 +5,7 @@ import blok.context.Provider;
 import blok.suspense.SuspenseBoundary;
 import blok.tower.routing.*;
 import blok.tower.routing.Navigator;
-import blok.ui.*;
-import blok.html.Html;
+import blok.tower.ui.internal.*;
 
 class AppRootFactory {
   final root:AppRoot;
@@ -22,18 +21,12 @@ class AppRootFactory {
     createContext:()->AppContext
   ) {
     return ErrorBoundary.node({
-      fallback: (component, error, recover) -> {
-        // @todo: have a default error fallback
-        Html.div({}, error.toString());
-      },
+      fallback: (_, error) -> DefaultErrorHandler.node({ error: error }),
       child: Provider.compose([
         createNavigator,
         createContext
       ], _ -> SuspenseBoundary.node({
-        fallback: () -> {
-          // @todo: have a default suspense fallback
-          Placeholder.node();
-        },
+        fallback: () -> DefaultSuspenseHandler.node({}),
         child: root(ViewRouter.node({ routes: routes.create() }))
       }))
     });

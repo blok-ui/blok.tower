@@ -14,16 +14,24 @@ class JsAsset extends StaticAsset {
   #if !blok.tower.client
   function modifyDocument(context:AssetContext, document:Document) {
     var head:Element = document.getHead();
-    head.append(new Element('script', {
-      src: switch kind {
-        case External: 
-          path;
-        case Generated | Local(_): 
-          context.config.path.createAssetUrl(getPath());
-      },
-      defer: true,
-      type: 'text/javascript'
-    }));
+    switch kind {
+      case Inline(content):
+        var script = new Element('script', { type: 'text/javascript' });
+        script.append(new TextNode(content, true));
+        head.append(script);
+      case External:
+        head.append(new Element('script', {
+          src: path,
+          defer: true,
+          type: 'text/javascript'
+        }));
+      case Generated | Local(_): 
+        head.append(new Element('script', {
+          src: context.config.path.createAssetUrl(getPath()),
+          defer: true,
+          type: 'text/javascript'
+        }));
+    }
   }
   #end
 }

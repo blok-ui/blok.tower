@@ -45,7 +45,14 @@ private function buildKernel(types:Array<Type>) {
     public function provide(container:capsule.Container) {
       container.use(blok.tower.core.CoreModule);
 
-      container.map(blok.tower.target.StrategyResolver).to(blok.tower.target.StrategyResolver);
+      // @todo: This is Factory thing is weird and is only used to ensure
+      // we have a dependency on Strategy.
+      //
+      // We should look into something like `container.require()`
+      // for Capsule to resolve this better.
+      container
+        .map(blok.tower.core.Factory(blok.tower.target.Strategy))
+        .to((strategy:blok.tower.target.Strategy) -> () -> strategy);
       container.map(blok.tower.core.ContainerFactory).to(this);
       
       $b{body};
@@ -57,8 +64,8 @@ private function buildKernel(types:Array<Type>) {
 
     public function run() {
       return createContainer()
-        .get(blok.tower.target.StrategyResolver)
-        .get()
+        .get(blok.tower.core.Factory(blok.tower.target.Strategy))
+        .create()
         .run();
     }
   });

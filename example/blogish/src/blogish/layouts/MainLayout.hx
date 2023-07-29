@@ -1,13 +1,16 @@
 package blogish.layouts;
 
-import blok.tower.ui.*;
 import blogish.api.SiteApi;
 import blogish.data.Site;
+// import blogish.ui.placeholder.ErrorHandler;
 import blogish.ui.site.SiteHeader;
 import blok.html.Html;
 import blok.suspense.SuspenseBoundary;
 import blok.tower.routing.LayoutRoute;
+import blok.tower.ui.*;
 import blok.ui.*;
+
+using blok.boundary.BoundaryModifiers;
 
 class MainLayout implements LayoutRoute<'blogish.pages'> {
   @:load final site:Site = {
@@ -33,5 +36,6 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
       })).constrainWidthToContainer()
         .styles(Spacing.margin('top', 3))
     );
+    // .inErrorBoundary((component, e) -> ErrorHandler.node({ error: e }));
   }
 }

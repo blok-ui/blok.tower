@@ -7,6 +7,7 @@ using kit.Hash;
 enum StaticAssetKind {
   External;
   Generated;
+  Inline(content:String);
   Local(source:String);
 }
 
@@ -24,7 +25,7 @@ abstract class StaticAsset implements Asset {
   public function register(context:AssetContext) {
     #if !blok.tower.client
     switch kind {
-      case External | Generated: 
+      case External | Generated | Inline(_):
       case Local(source):
         context.output.add(new CopyOutput({
           key: path,
