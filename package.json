@@ -1,4 +1,5 @@
 {
+	"name": "blok.tower",
 	"devDependencies": {
 		"lix": "^15.12.0"
 	},

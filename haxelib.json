@@ -1,0 +1,17 @@
+{
+  "classPath": "src",
+  "name": "blok.tower",
+  "description": "Web development for haxe",
+  "license": "MIT",
+  "contributors": ["wartman"],
+  "version": "0.0.1-alpha.1",
+  "releasenote": "Pre-release",
+  "dependencies": {
+    "kit": "0.0.1",
+    "kit.http": "0.0.1",
+    "blok.core": "0.0.1",
+    "cmdr": "0.0.1",
+    "capsule": "0.0.1",
+    "mime": "0.1.2"
+  }
+}

@@ -2,7 +2,7 @@ package blogish.layouts;
 
 import blogish.api.SiteApi;
 import blogish.data.Site;
-// import blogish.ui.placeholder.ErrorHandler;
+import blogish.ui.placeholder.ErrorHandler;
 import blogish.ui.site.SiteHeader;
 import blok.html.Html;
 import blok.suspense.SuspenseBoundary;
@@ -35,7 +35,6 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
         )
       })).constrainWidthToContainer()
         .styles(Spacing.margin('top', 3))
-    );
-    // .inErrorBoundary((component, e) -> ErrorHandler.node({ error: e }));
+    ).inErrorBoundary((_, e) -> ErrorHandler.node({ error: e }));
   }
 }
