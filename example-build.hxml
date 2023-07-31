@@ -8,7 +8,6 @@ example-shared.hxml
 -lib markdown
 # -lib genes
 
-
 -D js-es=6
 -D breeze.output=none
 -D analyzer-optimize

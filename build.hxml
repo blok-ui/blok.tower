@@ -1,0 +1,12 @@
+-cp src
+
+-lib kit
+-lib kit.cli
+-lib toml
+-lib blok.core
+-lib capsule
+-lib hxnodejs
+
+-main blok.Tower
+
+-js dist/tower.js

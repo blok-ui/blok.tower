@@ -2,8 +2,8 @@
 
 -lib kit
 -lib kit.http
+-lib kit.cli
 -lib capsule
--lib cmdr
 -lib mime
 -lib blok.core
 

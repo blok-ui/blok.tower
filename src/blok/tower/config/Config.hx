@@ -14,14 +14,24 @@ using haxe.io.Path;
 // by the Config too. 
 
 class Config extends Model {
+  @:constant public final appName:String;
   @:constant public final server:ServerConfig;
   @:constant public final output:OutputConfig;
   @:constant public final path:PathConfig;
 }
 
 class OutputConfig extends Model {
+  @:constant public final name:String = 'build';
+  @:constant public final type:String = 'js';
+  @:constant public final main:String = 'App';
+  @:constant public final sourceFolder:String = 'src';
+  @:constant public final dependencies:{
+    shared:Array<String>,
+    client:Array<String>,
+    server:Array<String>
+  } = { shared: [], client: [], server: [] };
   @:constant public final target:Target;
-  
+
   public function shouldOutputHtml() {
     return switch target {
       case StaticSiteGeneratedTarget: true;

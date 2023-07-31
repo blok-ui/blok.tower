@@ -21,7 +21,7 @@ class CoreModule implements Module {
     #if blok.tower.client
     container.map(Logger).to(ClientLogger).share({ scope: Parent });
     #else
-    container.map(cmdr.Output).to(() -> new cmdr.output.SysOutput()).share({ scope: Parent });
+    container.map(kit.cli.Output).to(() -> new kit.cli.output.SysOutput()).share({ scope: Parent });
     container.map(Logger).to(ServerLogger).share({ scope: Parent });
     #end
   }

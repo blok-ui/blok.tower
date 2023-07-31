@@ -1,9 +1,9 @@
 package blok.tower.core.logger;
 
-import cmdr.Output;
+import kit.cli.Output;
 import blok.tower.core.Logger;
 
-using cmdr.StyleTools;
+using kit.cli.StyleTools;
 
 class ServerLogger implements Logger {
   final output:Output;

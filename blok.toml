@@ -1,5 +1,22 @@
-# todo: This will be used by the Blok Tower cli to set up dependendencies
-# soon -- just not quite yet.
+name = "blogish"
 
-[site]
-name = "Blogish"
+[output]
+name = 'build'
+type = 'js'
+main = 'Blogish'
+sourceFolder = 'example/blogish/src'
+target = 'static'
+
+[server]
+type = 'node'
+port = 8080
+
+[dependencies]
+shared = ['breeze', 'blok.foundation']
+server = ['hxnodejs', 'mime', 'toml', 'markdown']
+
+# [build.flags]
+# js-es = 6
+# message-reporting = 'pretty'
+# 'breeze.output' = 'none'
+# analyzer-optimize = true

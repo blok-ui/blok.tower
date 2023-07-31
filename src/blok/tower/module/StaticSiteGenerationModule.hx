@@ -11,6 +11,7 @@ class StaticSiteGenerationModule implements Module {
   public function provide(container:Container) {
     container.map(Config).toDefault((target:Target) -> {
       return new Config({
+        appName: 'app',
         output: new OutputConfig({ target: target }),
         server: new ServerConfig({}),
         path: new PathConfig({})
