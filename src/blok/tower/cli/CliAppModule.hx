@@ -1,7 +1,9 @@
 package blok.tower.cli;
 
+import blok.tower.target.Target;
+import blok.tower.config.TowerTomlConfigFactory;
+import blok.tower.config.ConfigFactory;
 import blok.tower.cli.command.*;
-import blok.tower.config.BlokTomlParser;
 import blok.tower.config.Config;
 import blok.tower.core.*;
 import blok.tower.file.*;
@@ -20,13 +22,13 @@ class CliAppModule implements Module {
   function provideCoreDependencies(container:Container) {
     container.map(FileSystemAdaptor).to(() -> new LocalFileSystemAdaptor(Sys.getCwd())).share();
     container.map(FileSystem).to(FileSystem).share();
-    container.map(BlokTomlParser).to(BlokTomlParser);
-    // @todo: this should not have to be a Task<Config>.
-    container.map(Task(Config)).toDefault((parser:BlokTomlParser) -> parser.load()).share({ scope: Parent });
+    container.map(Target).to(Target.Cli);
+    container.map(ConfigFactory).to(TowerTomlConfigFactory);
+    container.map(Config).toDefault((factory:ConfigFactory) -> factory.createConfig()).share();
   }
 
   function provideCommands(container:Container) {
     container.map(Create).to(Create);
-    container.map(BuildApp).to(BuildApp);
+    container.map(Build).to(Build);
   }
 }

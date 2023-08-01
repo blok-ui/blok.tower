@@ -91,7 +91,6 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
         case Loaded(data):
           assets.add(new blok.tower.asset.JsonAsset({
             id: $hash,
-            hydrationId: hydrationId,
             content: haxe.Json.stringify(data.toJson())
           }));
         case Error(_) | Loading:
@@ -104,7 +103,6 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
     #if !blok.tower.client
     function __exportJsonAssets(context:blok.ui.ComponentBase) {
       var assets = blok.tower.asset.AssetContext.from(context);
-      var hydrationId = assets.hydrationId;
       @:mergeBlock $b{exports};
     }
     #end

@@ -1,7 +1,7 @@
 package blok.tower.module;
 
 import blok.tower.target.strategy.*;
-import blok.tower.config.Config;
+// import blok.tower.config.Config;
 import blok.tower.core.*;
 import blok.tower.target.*;
 
@@ -9,13 +9,14 @@ class ServerSideRenderingModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {
-    container.map(Config).toDefault((target:Target) -> {
-      return new Config({
-        output: new OutputConfig({ target: target }),
-        server: new ServerConfig({}),
-        path: new PathConfig({ staticPrefix: '/public' })
-      });
-    }).share({ scope: Parent });
+    // container.map(Config).toDefault((target:Target) -> {
+    //   return new Config({
+    //     appName: 'app',
+    //     output: new OutputConfig({ target: target }),
+    //     server: new ServerConfig({}),
+    //     path: new PathConfig({ staticPrefix: '/public' })
+    //   });
+    // }).share({ scope: Parent });
 
     #if blok.tower.client
     container.map(blok.tower.remote.ClientAdaptor).to(() -> {

@@ -23,7 +23,9 @@ class Create implements Command {
   **/
   @:flag('a') var app:String = null;
 
-  final config:Task<Config>;
+  // @todo: Config is a bad idea: do this all with conventions 
+  // instead.
+  final config:Config;
   final fs:FileSystem;
 
   public function new(config, fs) {
@@ -60,32 +62,29 @@ class Create implements Command {
   **/
   @:command
   function page(name:String, url:String):Task<Int> {
-    return config.next(config -> {
-      var page = PageTemplate.execute({
-        app: app ?? config.appName,
-        pack: pack ?? 'page',
-        name: name,
-        url: url
-      });
-      var path = Path.join([ 
-        dir ?? config.output.sourceFolder,
-        app ?? config.appName,
-        pack?.split('.')?.join('/') ?? 'page',
-        '${name}Page'
-      ]).withExtension('hx');
-      
-      output.writeLn(page);
-  
-      output.write(
-        'Creating page ',
-        name.color(White).backgroundColor(Blue).bold(),
-        ' in file ', 
-        path.color(White).backgroundColor(Blue).bold()
-      );
-  
-      return 0;
-      // return fs.createFile(path).write(page).next(_ -> 0);
+    var page = PageTemplate.execute({
+      app: app ?? config.appName,
+      pack: pack ?? 'page',
+      name: name,
+      url: url
     });
+    var path = Path.join([ 
+      dir ?? config.output.sourceFolder,
+      app ?? config.appName,
+      pack?.split('.')?.join('/') ?? 'page',
+      '${name}Page'
+    ]).withExtension('hx');
+    
+    output.writeLn(page);
+
+    output.write(
+      'Creating page ',
+      name.color(White).backgroundColor(Blue).bold(),
+      ' in file ', 
+      path.color(White).backgroundColor(Blue).bold()
+    );
+
+    return fs.createFile(path).write(page).next(_ -> 0);
   }
 
   /**

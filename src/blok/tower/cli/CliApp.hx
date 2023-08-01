@@ -12,11 +12,19 @@ class CliApp implements Command {
     Cli.fromSys().execute(app);
   }
 
+  /**
+    Quickly create various classes for Tower.
+  **/
   @:command final create:Create;
-  @:command final build = new BuildApp();
 
-  public function new(create) {
+  /**
+    Build your app and set up dependencies.
+  **/
+  @:command final build:Build;
+
+  public function new(create, build) {
     this.create = create;
+    this.build = build;
   }
 
   /**

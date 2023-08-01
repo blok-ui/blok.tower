@@ -5,7 +5,7 @@ import blok.html.server.Server.mount;
 import blok.suspense.*;
 import blok.tower.asset.*;
 import blok.tower.asset.document.StaticDocument;
-import blok.tower.config.Config;
+import blok.tower.config.*;
 import blok.tower.core.*;
 import blok.tower.data.HydrationId;
 import blok.tower.routing.Navigator;
@@ -21,9 +21,10 @@ class Generator {
   final output:Output;
   final visitor:Visitor;
   final logger:Logger;
+  final target:Target;
   final hydrationId:HydrationId;
 
-  public function new(container, config, appFactory, appVersion, output, visitor, logger, hydrationId) {
+  public function new(container, config, appFactory, appVersion, output, visitor, logger, target, hydrationId) {
     this.container = container;
     this.config = config;
     this.appFactory = appFactory;
@@ -31,6 +32,7 @@ class Generator {
     this.output = output;
     this.visitor = visitor;
     this.logger = logger;
+    this.target = target;
     this.hydrationId = hydrationId;
   }
 
@@ -81,7 +83,7 @@ class Generator {
   function generatePage(path:String):Task<Document> {
     var document:Document = new StaticDocument();
     var container = container.getChild();
-    var assets = new AssetContext(output, config, document, hydrationId);
+    var assets = new AssetContext(output, config, document, target, hydrationId);
     var wasSuspended:Bool = false;
     var completed:Bool = false;
     var stamp = Timer.stamp();
@@ -93,7 +95,8 @@ class Generator {
     }
 
     // @todo: Dunno if this is the best place for this.
-    assets.add(new ClientAppCompiler(appVersion));
+    assets.add(new ClientAppCompiler(target, appVersion));
+    assets.add(new ConfigAsset());
 
     logger.log(Info, '...visiting $path');
 
@@ -127,7 +130,7 @@ class Generator {
         activate(Ok(document));
       }
     }).next(document -> {
-      if (config.output.shouldOutputHtml()) assets.add(new HtmlAsset({
+      if (target.shouldOutputHtml()) assets.add(new HtmlAsset({
         path: path,
         content: document.toString()
       }));

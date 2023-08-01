@@ -11,20 +11,16 @@ using haxe.io.Path;
 class JsonAsset extends Model implements Asset {
   @:constant final id:String;
   @:constant final content:String;
-  @:constant final hydrationId:String;
 
   public function register(context:AssetContext) {
     #if !blok.tower.client
-    switch context.config.output.target {
-      case StaticSiteGeneratedTarget:
-        context.output.add(new blok.tower.asset.CreateOutput({
-          key: id,
-          dest: context.config.path.createApiOutputPath(id).withExtension('json'),
-          content: content
-        }));
-      default:
-    }
+    if (context.target.shouldOutputHtml()) context.output.add(new blok.tower.asset.CreateOutput({
+      key: id,
+      dest: context.config.path.createApiOutputPath(id).withExtension('json'),
+      content: content
+    }));
 
+    var hydrationId = context.hydrationId;
     var head:Element = context.document.getHead();
     var script = new Element('script', { id: id });
     head.append(script);

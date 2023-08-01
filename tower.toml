@@ -1,19 +1,25 @@
 name = "blogish"
 
 [output]
-name = 'build'
 type = 'js'
+path = 'dist/build.js'
 main = 'Blogish'
 sourceFolder = 'example/blogish/src'
-target = 'static'
+
+[dependencies]
+shared = ['breeze', 'blok.foundation']
+server = ['hxnodejs', 'mime', 'toml', 'markdown']
 
 [server]
 type = 'node'
 port = 8080
 
-[dependencies]
-shared = ['breeze', 'blok.foundation']
-server = ['hxnodejs', 'mime', 'toml', 'markdown']
+[path]
+# staticPrefix = '/public'
+assetPath = '/assets'
+apiPrefix = '/api'
+apiPath = '/api'
+
 
 # [build.flags]
 # js-es = 6

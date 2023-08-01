@@ -1,6 +1,6 @@
 package blok.tower.module;
 
-import blok.tower.config.Config;
+// import blok.tower.config.Config;
 import blok.tower.core.*;
 import blok.tower.target.*;
 import blok.tower.target.strategy.*;
@@ -9,14 +9,16 @@ class StaticSiteGenerationModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {
-    container.map(Config).toDefault((target:Target) -> {
-      return new Config({
-        appName: 'app',
-        output: new OutputConfig({ target: target }),
-        server: new ServerConfig({}),
-        path: new PathConfig({})
-      });
-    }).share({ scope: Parent });
+    // container.map(Config).toDefault((target:Target) -> {
+    //   return new Config({
+    //     appName: 'app',
+    //     #if !blok.tower.client
+    //     output: new OutputConfig({ target: target }),
+    //     #end
+    //     server: new ServerConfig({}),
+    //     path: new PathConfig({})
+    //   });
+    // }).share({ scope: Parent });
 
     #if blok.tower.client
     container.map(blok.tower.remote.ClientAdaptor).to(() -> {

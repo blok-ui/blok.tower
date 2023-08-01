@@ -1,27 +1,42 @@
 package blok.tower.config;
 
-import blok.tower.target.Target;
 import blok.data.Model;
 
 using haxe.io.Path;
 
 // @todo: Not sure if this file really makes a lot of sense yet --
-// we're not using config for anything but path config really.
+// the paradigm up to this point has been to include modules in
+// the `App` constructor to configure things. However it *does*
+// make sense to use this for the CLI, and there are a lot of 
+// config things that benefit from being in one place, so...
 //
-// Even then, we're not using it for figuring out file paths --
+// Also, `PathsConfig` is not used for figuring out file paths --
 // that's all handled by mapping types in our Container. Either
 // we should do that here *or* we should have those paths be handled
-// by the Config too. 
+// by the Config too. We need more consistency.
+//
+// Also also: it does not work with the client side app.
 
 class Config extends Model {
   @:constant public final appName:String;
+  #if !blok.tower.client
+  @:json(
+    to = null,
+    from = null
+  )
   @:constant public final server:ServerConfig;
+  @:json(
+    to = null,
+    from = null
+  )
   @:constant public final output:OutputConfig;
+  #end
   @:constant public final path:PathConfig;
 }
 
+#if !blok.tower.client
 class OutputConfig extends Model {
-  @:constant public final name:String = 'build';
+  @:constant public final path:String = 'dist/build.js';
   @:constant public final type:String = 'js';
   @:constant public final main:String = 'App';
   @:constant public final sourceFolder:String = 'src';
@@ -30,20 +45,14 @@ class OutputConfig extends Model {
     client:Array<String>,
     server:Array<String>
   } = { shared: [], client: [], server: [] };
-  @:constant public final target:Target;
-
-  public function shouldOutputHtml() {
-    return switch target {
-      case StaticSiteGeneratedTarget: true;
-      default: false;
-    }
-  }
 }
 
 class ServerConfig extends Model {
   @:constant public final port:Int = 8080;
   // @todo: etc?
 }
+#end
+
 
 class PathConfig extends Model {
   @:constant public final staticPrefix:String = '';

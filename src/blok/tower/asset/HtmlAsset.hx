@@ -10,15 +10,11 @@ class HtmlAsset extends Model implements Asset {
   @:constant final content:String;
 
   public function register(context:AssetContext) {
-    switch context.config.output.target {
-      case StaticSiteGeneratedTarget:
-        context.output.add(new HtmlOutput({
-          key: path,
-          path: path,
-          content: content
-        }));
-      default:
-    }
+    if (context.target.shouldOutputHtml()) context.output.add(new HtmlOutput({
+      key: path,
+      path: path,
+      content: content
+    }));
   }
 }
 

@@ -8,9 +8,11 @@ using haxe.io.Path;
 using kit.Hash;
 
 class ClientAppCompiler implements Asset {
+  final target:Target;
   final version:AppVersion;
 
-  public function new(version) {
+  public function new(target, version) {
+    this.target = target;
     this.version = version;
   }
 
@@ -34,6 +36,6 @@ class ClientAppCompiler implements Asset {
     }));
     #end
 
-    context.output.add(new ClientAppOutput(hash, path, context.config.output.target));
+    context.output.add(new ClientAppOutput(hash, path, target));
   }
 }

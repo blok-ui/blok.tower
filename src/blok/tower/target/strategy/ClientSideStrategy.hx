@@ -29,7 +29,7 @@ class ClientSideStrategy implements Strategy {
 
   public function run():Cancellable {
     var document = new ClientDocument();
-    var assets = new AssetContext(output, config, document, hydrationId);
+    var assets = new AssetContext(output, config, document, ClientSideTarget, hydrationId);
     var root = hydrate(
       document.getRoot(),
       () -> appFactory.create(
