@@ -1,6 +1,5 @@
-# @install: lix --silent download "gh://github.com/wartman/kit.cli#be17664d534104b84136347e474fcfc94d1000fd" into kit.cli/0.0.0/github/be17664d534104b84136347e474fcfc94d1000fd
--lib hxnodejs
+# @install: lix --silent download "gh://github.com/wartman/kit.cli#0b0029b92331101bf41860d56e5b1ca1e27185ad" into kit.cli/0.0.1/github/0b0029b92331101bf41860d56e5b1ca1e27185ad
 -lib kit
--cp ${HAXE_LIBCACHE}/kit.cli/0.0.0/github/be17664d534104b84136347e474fcfc94d1000fd/src
--D kit.cli=0.0.0
+-cp ${HAXE_LIBCACHE}/kit.cli/0.0.1/github/0b0029b92331101bf41860d56e5b1ca1e27185ad/src
+-D kit.cli=0.0.1
 -D use-rtti-doc

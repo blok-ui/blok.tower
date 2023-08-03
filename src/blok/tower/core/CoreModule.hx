@@ -6,23 +6,23 @@ class CoreModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {
-    container.map(Container).to(() -> container).share({ scope: Parent });
+    container.map(Container).to(() -> container).share();
     provideAppDependencies(container);
     provideLogger(container);
   }
   
   function provideAppDependencies(container:Container) {
-    container.map(AppRootFactory).toDefault(AppRootFactory).share({ scope: Parent });
-    container.map(AppRoot).toDefault(() -> (router) -> router).share({ scope: Parent });
-    container.map(AppVersion).toDefault(() -> AppVersion.fromCompiler()).share({ scope: Parent });
+    container.map(AppRootFactory).toDefault(AppRootFactory).share();
+    container.map(AppRoot).toDefault(() -> (router) -> router).share();
+    container.map(AppVersion).toDefault(() -> AppVersion.fromCompiler()).share();
   }
 
   function provideLogger(container:Container) {
     #if blok.tower.client
-    container.map(Logger).to(ClientLogger).share({ scope: Parent });
+    container.map(Logger).to(ClientLogger).share();
     #else
-    container.map(kit.cli.Output).to(() -> new kit.cli.output.SysOutput()).share({ scope: Parent });
-    container.map(Logger).to(ServerLogger).share({ scope: Parent });
+    container.map(kit.cli.Output).to(() -> new kit.cli.output.SysOutput()).share();
+    container.map(Logger).to(ServerLogger).share();
     #end
   }
 }

@@ -16,7 +16,7 @@ class ServerSideRenderingModule implements Module {
     //     server: new ServerConfig({}),
     //     path: new PathConfig({ staticPrefix: '/public' })
     //   });
-    // }).share({ scope: Parent });
+    // }).share();
 
     #if blok.tower.client
     container.map(blok.tower.remote.ClientAdaptor).to(() -> {
@@ -28,8 +28,8 @@ class ServerSideRenderingModule implements Module {
     #else
     container.use(blok.tower.server.ServerModule);
     container.map(Target).to(Target.ServerSideRenderingTarget).share();
-    container.map(Visitor).to(Visitor).share({ scope: Parent });
-    container.map(Generator).to(Generator).share({ scope: Parent });
+    container.map(Visitor).to(Visitor).share();
+    container.map(Generator).to(Generator).share();
     container.map(Strategy).to(ServerSideRenderingStrategy).share();
     #end
   }

@@ -1,7 +1,8 @@
 -cp example/blogish/src
 
--D message-reporting=pretty
+-D blok.tower.client.hxml=blogish-client
 
+-lib blok.tower
 -lib breeze
 -lib blok.foundation
 

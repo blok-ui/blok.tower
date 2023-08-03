@@ -8,11 +8,9 @@ class RoutingModule implements Module {
   public function provide(container:Container) {
     container
       .map(Factory(ViewRouteCollection))
-      .toDefault(() -> () -> new ViewRouteCollection([]))
-      .share({ scope: Container });
+      .toDefault(() -> () -> new ViewRouteCollection([]));
     container
       .map(ApiRouteCollection)
-      .toDefault(() -> new ApiRouteCollection([]))
-      .share({ scope: Container });
+      .toDefault(() -> new ApiRouteCollection([]));
   }
 }

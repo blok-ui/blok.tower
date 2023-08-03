@@ -12,15 +12,15 @@ class DataModule implements Module {
     #if !blok.tower.client
     container.map(MarkdownFormat(Dynamic))
       .to(() -> new MarkdownFormat(new TomlFormat()))
-      .share({ scope: Parent });
+      .share();
     container
       .map(Cache(Dynamic))
       .to(() -> new TransientCache(TransientCache.ONE_MINUTE))
-      .share({ scope: Parent });
+      .share();
     container
       .map(Repository)
       .to(Repository)
-      .share({ scope: Parent });
+      .share();
     #end
   }
 }

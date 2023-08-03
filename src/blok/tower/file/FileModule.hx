@@ -10,11 +10,11 @@ class FileModule implements Module {
     container
       .map(FileSystemAdaptor)
       .toDefault(new blok.tower.file.adaptor.LocalFileSystemAdaptor(Sys.getCwd()))
-      .share({ scope: Parent });
+      .share();
     container
       .map(FileSystem)
       .toDefault(FileSystem)
-      .share({ scope: Parent });
+      .share();
     #end
   }
 }

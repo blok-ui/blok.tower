@@ -6,6 +6,7 @@ import blok.tower.file.FileSystem;
 
 using Reflect;
 using kit.Cli;
+using haxe.io.Path;
 
 class Build implements Command {
   final fs:FileSystem;
@@ -17,21 +18,9 @@ class Build implements Command {
   }
 
   /**
-    Run the compiled app to generate the site (requires compile to be run first).
-  **/
-  @:command
-  function generate():Task<Int> {
-    output.writeLn('Running generator...');
-    var cmd = [ createNodeCommand('node'), config.output.path ].join(' ');
-    var code = try Sys.command(cmd) catch (e) {
-      return new Error(InternalError, e.message);
-    }
-    if (code == 0) output.writeLn('Generated');
-    return code;
-  }
-
-  /**
-    Setup all hxml files needed to compile your application.
+    Setup all hxml files needed to compile your application. This is also
+    required to ensure your editor can understand your application. After
+    running setup, point your editor at the `*-server.hxml` file.
   **/
   @:command
   function setup():Task<Int> {
@@ -47,14 +36,28 @@ class Build implements Command {
   }
 
   /**
+    Run the compiled app to generate the site (requires compile to be run first).
+  **/
+  @:command
+  function visit():Task<Int> {
+    output.writeLn('Running generator...');
+    var cmd = [ createNodeCommand('node'), config.output.path ].join(' ');
+    var code = try Sys.command(cmd) catch (e) {
+      return new Error(InternalError, e.message);
+    }
+    if (code == 0) output.writeLn('Generated');
+    return code;
+  }
+
+  /**
     Compile your application (requires setup to be run first).
   **/
   @:command
-  function compile():Task<Int> {
+  function app():Task<Int> {
     output.writeLn('Compiling...');
     var cmd = [
       createNodeCommand('haxe'),
-      '__${config.appName}-server.hxml'
+      getServerName()
     ].join(' ');
     var code = try Sys.command(cmd) catch (e) {
       return new Error(InternalError, e.message);
@@ -67,10 +70,10 @@ class Build implements Command {
     Execute all build steps.
   **/
   @:command
-  function build():Task<Int> {
+  function all():Task<Int> {
     return setup()
-      .next(code -> if (code == 0) compile() else code)
-      .next(code -> if (code == 0) generate() else code);
+      .next(code -> if (code == 0) app() else code)
+      .next(code -> if (code == 0) visit() else code);
   }
 
   /**
@@ -84,7 +87,7 @@ class Build implements Command {
 
   function sharedHxml():Task<Nothing> {
     // @todo: Only output if __shared is stale.
-    var name = '__${config.appName}-shared.hxml';
+    var name = getSharedName();
     var dependencies = config.output.dependencies.shared ?? [];
     
     if (!dependencies.contains('blok.tower')) {
@@ -94,7 +97,7 @@ class Build implements Command {
     var body = new StringBuf();
 
     body.add('-cp ${config.output.sourceFolder}\n\n');
-    body.add('-D blok.tower.client.hxml=__${config.appName}-client\n\n');
+    body.add('-D blok.tower.client.hxml=${getClientName().withoutExtension()}\n\n');
     
     for (item in dependencies) {
       body.add('-lib ${item}\n');
@@ -106,8 +109,8 @@ class Build implements Command {
   }
 
   function serverHxml():Task<Nothing> {
-    var sharedName = '__${config.appName}-shared.hxml';
-    var name = '__${config.appName}-server.hxml';
+    var sharedName = getSharedName();
+    var name = getServerName();
     var dependencies = config.output.dependencies.server ?? [];
     var body = new StringBuf();
 
@@ -124,8 +127,8 @@ class Build implements Command {
   }
 
   function clientHxml():Task<Nothing> {
-    var sharedName = '__${config.appName}-shared.hxml';
-    var name = '__${config.appName}-client.hxml';
+    var sharedName = getSharedName();
+    var name = getClientName();
     var dependencies = config.output.dependencies.client ?? [];
     var body = new StringBuf();
 
@@ -136,5 +139,21 @@ class Build implements Command {
     }
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
+  }
+
+  inline function getClientName() {
+    return prepareHxmlName('client');
+  }
+
+  inline function getServerName() {
+    return prepareHxmlName('server');
+  }
+
+  inline function getSharedName() {
+    return prepareHxmlName('shared');
+  }
+
+  inline function prepareHxmlName(suffix:String) {
+    return '${config.appName}-${suffix}.hxml';
   }
 }

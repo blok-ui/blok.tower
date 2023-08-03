@@ -6,9 +6,9 @@ class DataModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {
-    container.map(HydrationId).toDefault('__blok_tower_data').share({ scope: Parent });
+    container.map(HydrationId).toDefault('__blok_tower_data').share();
     #if blok.tower.client
-    container.map(Hydration).to(Hydration).share({ scope: Parent });
+    container.map(Hydration).to(Hydration).share();
     #end
   }
 }

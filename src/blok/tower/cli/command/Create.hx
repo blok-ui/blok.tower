@@ -38,7 +38,20 @@ class Create implements Command {
   **/
   @:command
   function model(name:String):Task<Int> {
-    return 0;
+    var model = ApiTemplate.execute({
+      app: app ?? config.appName,
+      pack: pack ?? 'model',
+      name: name
+    });
+    var path = Path.join([
+      dir ?? config.output.sourceFolder,
+      app ?? config.appName,
+      pack?.split('.')?.join('/') ?? 'model',
+      name
+    ]).withExtension('hx');
+  
+    displayCreationMessage(path);
+    return fs.createFile(path).write(model).next(ok -> ok ? 0 : 1);
   }
 
   /**
@@ -46,15 +59,43 @@ class Create implements Command {
   **/
   @:command
   function api(name:String, path:String):Task<Int> {
-    return 0;
+    var api = ApiTemplate.execute({
+      app: app ?? config.appName,
+      pack: pack ?? 'api',
+      name: name,
+      path: path
+    });
+    var path = Path.join([
+      dir ?? config.output.sourceFolder,
+      app ?? config.appName,
+      pack?.split('.')?.join('/') ?? 'api',
+      '${name}Api'
+    ]).withExtension('hx');
+  
+    displayCreationMessage(path);
+    return fs.createFile(path).write(api).next(ok -> ok ? 0 : 1);
   }
 
   /**
     Create a layout route.
   **/
   @:command
-  function layout(name:String, ?pack:String):Task<Int> {
-    return 0;
+  function layout(name:String, ?target:String):Task<Int> {
+    var layout = LayoutTemplate.execute({
+      app: app ?? config.appName,
+      pack: pack ?? 'layout',
+      name: name,
+      target: target 
+    });
+    var path = Path.join([
+      dir ?? config.output.sourceFolder,
+      app ?? config.appName,
+      pack?.split('.')?.join('/') ?? 'layout',
+      '${name}Layout'
+    ]).withExtension('hx');
+
+    displayCreationMessage(path);
+    return fs.createFile(path).write(layout).next(ok -> ok ? 0 : 1);
   }
 
   /**
@@ -68,23 +109,15 @@ class Create implements Command {
       name: name,
       url: url
     });
-    var path = Path.join([ 
+    var path = Path.join([
       dir ?? config.output.sourceFolder,
       app ?? config.appName,
       pack?.split('.')?.join('/') ?? 'page',
       '${name}Page'
     ]).withExtension('hx');
     
-    output.writeLn(page);
-
-    output.write(
-      'Creating page ',
-      name.color(White).backgroundColor(Blue).bold(),
-      ' in file ', 
-      path.color(White).backgroundColor(Blue).bold()
-    );
-
-    return fs.createFile(path).write(page).next(_ -> 0);
+    displayCreationMessage(path);
+    return fs.createFile(path).write(page).next(ok -> ok ? 0 : 1);
   }
 
   /**
@@ -95,7 +128,46 @@ class Create implements Command {
     output.write(getDocs());
     return 0;
   }
+
+  function displayCreationMessage(fileName:String) {
+    output.write('Outputting ').writeLn(fileName.bold());
+  }
 }
+
+final ModelTemplate = new Template("package ::app::.::pack::;
+
+import blok.data.Model;
+
+class ::name:: extends Model {
+  // Implement your model's fields here.
+}
+");
+
+final ApiTemplate = new Template("package ::app::.::pack::;
+
+import blok.tower.routing.JsonRpcRoute;
+
+class ::name::Api implements JsonRpcRoute<'::path::'> {
+  public function new() {}
+
+  // Implement your API methods here. Every public method
+  // will be exposed as a JSON RPC endpoint automatically,
+  // so long as you return a `kit.Task<blok.data.Model>`.
+}
+");
+
+final LayoutTemplate = new Template("package ::app::.::pack::;
+
+import blok.ui.*;
+import blok.tower.routing.LayoutRoute;
+
+class ::name::Layout implements LayoutRoute<'::target::'> {
+  function render(context:ComponentBase, router:Child):Child {
+    // Implement your layout here. Be sure to include `router`
+    // somewhere or your app will not work!
+  }
+}
+");
 
 final PageTemplate = new Template("package ::app::.::pack::;
 

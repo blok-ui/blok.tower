@@ -22,7 +22,7 @@ class ServerModule implements Module {
     // Also we should change the kind of connection based on platform.
     container.map(Server).to((config:Config) -> {
       return new NodeServer(config.server.port);
-    }).share({ scope: Parent });
+    }).share();
   }
 
   public function providerServerAndMiddleware(container:Container) {

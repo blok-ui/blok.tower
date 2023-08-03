@@ -1,0 +1,8 @@
+blogish-shared.hxml
+
+-lib hxnodejs
+-lib mime
+-lib toml
+-lib markdown
+
+-js dist/build.js

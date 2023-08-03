@@ -1,6 +1,7 @@
 name = "blogish"
 
 [output]
+target = 'static'
 type = 'js'
 path = 'dist/build.js'
 main = 'Blogish'

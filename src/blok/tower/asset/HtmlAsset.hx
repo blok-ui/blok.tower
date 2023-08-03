@@ -26,6 +26,8 @@ class HtmlOutput extends Model implements OutputItem {
   public function process(context:Output):Task<Nothing> {
     var path = path.trim().normalize();
     if (path.startsWith('/')) path = path.substr(1);
+    // @todo: allow other output modes -- some hosts don't need
+    // an index.html in a folder to work
     var dest = Path.join([ path, 'index.html' ]);
     var file = context.pub.createFile(dest);
     return file.write(content);

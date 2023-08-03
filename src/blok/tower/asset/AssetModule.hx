@@ -10,16 +10,16 @@ class AssetModule implements Module {
     #if !blok.tower.client
     container.map(SourceDirectory)
       .toDefault((fs:blok.tower.file.FileSystem) -> fs.openDirectory('data'))
-      .share({ scope: Parent });
+      .share();
     container.map(PrivateDirectory)
       .toDefault((fs:blok.tower.file.FileSystem) -> fs.openDirectory('dist/data'))
-      .share({ scope: Parent });
+      .share();
     container.map(PublicDirectory)
       .toDefault((fs:blok.tower.file.FileSystem) -> fs.openDirectory('dist/public'))
-      .share({ scope: Parent });
+      .share();
     #end
     container.map(Output)
       .toDefault(Output)
-      .share({ scope: Parent });
+      .share();
   }
 }

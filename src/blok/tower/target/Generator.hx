@@ -82,7 +82,6 @@ class Generator {
 
   function generatePage(path:String):Task<Document> {
     var document:Document = new StaticDocument();
-    var container = container.getChild();
     var assets = new AssetContext(output, config, document, target, hydrationId);
     var wasSuspended:Bool = false;
     var completed:Bool = false;
