@@ -15,8 +15,9 @@ class TowerTomlConfigFactory implements ConfigFactory {
     var data:Dynamic = try Toml.parse(contents) catch (e) {
       throw new Error(InternalError, e.message);
     };
-    var output:Dynamic = data.field('output') ?? {};
+    var haxe:Dynamic = data.field('haxe') ?? {};
     var server:Dynamic = data.field('server') ?? {};
+    var assets:Dynamic = data.field('assets') ?? {};
     var path:Dynamic = data.field('path') ?? {};
     var type:AppType = switch data.field('target') {
       case null: StaticApp;
@@ -46,15 +47,20 @@ class TowerTomlConfigFactory implements ConfigFactory {
 
     return new Config({
       name: appName,
-      version: SemVer.parse(output.field('version') ?? '0.0.1'),
+      version: SemVer.parse(haxe.field('version') ?? '0.0.1'),
       type: type,
-      output: new OutputConfig({
-        path: output.field('path'),
-        type: output.field('type'),
-        main: output.field('main'),
-        src: output.field('src'),
+      haxe: new HaxeConfig({
+        output: haxe.field('output'),
+        target: haxe.field('target'),
+        main: haxe.field('main'),
+        src: haxe.field('src'),
         dependencies: data.field('dependencies'),
-        flags: output.field('flags')
+        flags: haxe.field('flags')
+      }),
+      assets: new AssetConfig({
+        src: assets.field('src'),
+        publicDirectory: assets.field('public'),
+        privateDirectory: assets.field('private'),
       }),
       path: new PathConfig({
         staticPrefix: staticPrefix,

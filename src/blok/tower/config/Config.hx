@@ -11,7 +11,8 @@ class Config extends Model {
     to = value.toString(),
     from = SemVer.parse(value)
   )
-  @:constant public final version:SemVer;
+  @:constant 
+  public final version:SemVer;
   @:json(
     to = switch value {
       case StaticApp: 'static';
@@ -22,28 +23,26 @@ class Config extends Model {
       default: StaticApp;
     }
   )
-  @:constant public final type:AppType;
+  @:constant 
+  public final type:AppType;
   #if !blok.tower.client
-  @:json(
-    to = null,
-    from = null
-  )
-  @:constant public final server:ServerConfig;
-  @:json(
-    to = null,
-    from = null
-  )
-  @:constant public final output:OutputConfig;
+  @:json( to = null, from = null )
+  @:constant 
+  public final server:ServerConfig;
+  @:json( to = null, from = null )
+  @:constant 
+  public final haxe:HaxeConfig;
+  @:constant public final assets:AssetConfig;
   #end
   @:constant public final path:PathConfig;
 }
 
 #if !blok.tower.client
-class OutputConfig extends Model {
-  @:constant public final path:String = 'dist/build.js';
-  @:constant public final type:String = 'js';
-  @:constant public final main:String = 'App';
+class HaxeConfig extends Model {
   @:constant public final src:String = 'src';
+  @:constant public final main:String = 'App';
+  @:constant public final target:String = 'js';
+  @:constant public final output:String = 'dist/build.js';
   @:constant public final dependencies:{
     shared:Array<String>,
     client:Array<String>,
@@ -54,6 +53,12 @@ class OutputConfig extends Model {
     client:{},
     server:{}
   } = { shared: [], client: [], server: [] };
+}
+
+class AssetConfig extends Model {
+  @:constant public final src:String = 'data';
+  @:constant public final privateDirectory:String = 'dist/data';
+  @:constant public final publicDirectory:String = 'dist/public';
 }
 
 class ServerConfig extends Model {

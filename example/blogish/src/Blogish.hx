@@ -7,7 +7,6 @@ function main() {
     DefaultModule,
     PreConfiguredTargetModule,
     DataModule,
-    AssetPathModule<'example/blogish/data', 'dist/www', 'dist/cache'>,
     ApiRouteModule<'blogish.api'>,
     LayoutModule<'blogish.layouts'>
   >();

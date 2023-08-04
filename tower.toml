@@ -12,20 +12,25 @@ assetPath = '/assets'
 apiPrefix = '/api'
 apiPath = '/api'
 
-[output]
-type = 'js'
-path = 'dist/build.js'
-main = 'Blogish'
-src = 'example/blogish/src'
+[assets]
+src = 'example/blogish/data'
+public = 'dist/www'
+private = 'dist/cache'
 
-[output.flags.shared]
+[haxe]
+src = 'example/blogish/src'
+main = 'Blogish'
+target = 'js'
+output = 'dist/build.js'
+
+[haxe.flags.shared]
 js-es = '6'
 message-reporting = 'pretty'
 analyzer-optimize = true
 debug = true
 
-[output.flags.server]
+[haxe.flags.server]
 'breeze.output' = 'none'
 
-[output.flags.client]
+[haxe.flags.client]
 'breeze.output' = 'runtime'

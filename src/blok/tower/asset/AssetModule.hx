@@ -9,13 +9,13 @@ class AssetModule implements Module {
   public function provide(container:Container) {
     #if !blok.tower.client
     container.map(SourceDirectory)
-      .toDefault((fs:blok.tower.file.FileSystem) -> fs.openDirectory('data'))
+      .toDefault((config:blok.tower.config.Config, fs:blok.tower.file.FileSystem) -> fs.openDirectory(config.assets.src))
       .share();
     container.map(PrivateDirectory)
-      .toDefault((fs:blok.tower.file.FileSystem) -> fs.openDirectory('dist/data'))
+      .toDefault((config:blok.tower.config.Config, fs:blok.tower.file.FileSystem) -> fs.openDirectory(config.assets.privateDirectory))
       .share();
     container.map(PublicDirectory)
-      .toDefault((fs:blok.tower.file.FileSystem) -> fs.openDirectory('dist/public'))
+      .toDefault((config:blok.tower.config.Config, fs:blok.tower.file.FileSystem) -> fs.openDirectory(config.assets.publicDirectory))
       .share();
     #end
     container.map(Output)

@@ -44,7 +44,7 @@ class Create implements Command {
       name: name
     });
     var path = Path.join([
-      dir ?? config.output.src,
+      dir ?? config.haxe.src,
       app ?? config.name,
       pack?.split('.')?.join('/') ?? 'model',
       name
@@ -66,7 +66,7 @@ class Create implements Command {
       path: path
     });
     var path = Path.join([
-      dir ?? config.output.src,
+      dir ?? config.haxe.src,
       app ?? config.name,
       pack?.split('.')?.join('/') ?? 'api',
       '${name}Api'
@@ -88,7 +88,7 @@ class Create implements Command {
       target: target 
     });
     var path = Path.join([
-      dir ?? config.output.src,
+      dir ?? config.haxe.src,
       app ?? config.name,
       pack?.split('.')?.join('/') ?? 'layout',
       '${name}Layout'
@@ -110,7 +110,7 @@ class Create implements Command {
       url: url
     });
     var path = Path.join([
-      dir ?? config.output.src,
+      dir ?? config.haxe.src,
       app ?? config.name,
       pack?.split('.')?.join('/') ?? 'page',
       '${name}Page'

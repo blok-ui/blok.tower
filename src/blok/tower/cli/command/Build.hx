@@ -52,7 +52,7 @@ class Build implements Command {
   @:command
   function visit():Task<Int> {
     output.writeLn('Running generator...');
-    var cmd = [ createNodeCommand('node'), config.output.path ].join(' ');
+    var cmd = [ createNodeCommand('node'), config.haxe.output ].join(' ');
     var code = try Sys.command(cmd) catch (e) {
       return new Error(InternalError, e.message);
     }
@@ -99,7 +99,7 @@ class Build implements Command {
   function outputSharedHxml():Task<Nothing> {
     // @todo: Only output if __shared is stale.
     var name = getSharedName();
-    var dependencies = config.output.dependencies.shared ?? [];
+    var dependencies = config.haxe.dependencies.shared ?? [];
     
     if (!dependencies.contains('blok.tower')) {
       dependencies.unshift('blok.tower');
@@ -109,12 +109,12 @@ class Build implements Command {
     
     addGeneratedWarning(body);
 
-    body.add('-cp ${config.output.src}\n\n');
+    body.add('-cp ${config.haxe.src}\n\n');
     body.add('-D blok.tower.pre-configured\n');
     body.add('-D blok.tower.version=${config.version.toString()}\n');
     body.add('-D blok.tower.type=${config.type.toString()}\n');
     body.add('-D blok.tower.client.hxml=${getClientName().withoutExtension()}\n');
-    addFlags(body, config.output.flags.shared);
+    addFlags(body, config.haxe.flags.shared);
 
     body.add('\n-resource ${getConfigResourcePath()}@blok.tower.config\n\n');
     
@@ -122,7 +122,7 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
     
-    body.add('\n-main ${config.output.main}\n');
+    body.add('\n-main ${config.haxe.main}\n');
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
   }
@@ -130,7 +130,7 @@ class Build implements Command {
   function outputServerHxml():Task<Nothing> {
     var sharedName = getSharedName();
     var name = getServerName();
-    var dependencies = config.output.dependencies.server ?? [];
+    var dependencies = config.haxe.dependencies.server ?? [];
     var body = new StringBuf();
 
     addGeneratedWarning(body);
@@ -143,10 +143,10 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
 
-    addFlags(body, config.output.flags.server);
+    addFlags(body, config.haxe.flags.server);
 
     body.add('\n');
-    body.add('-${config.output.type} ${config.output.path}');
+    body.add('-${config.haxe.target} ${config.haxe.output}');
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
   }
@@ -154,7 +154,7 @@ class Build implements Command {
   function outputClientHxml():Task<Nothing> {
     var sharedName = getSharedName();
     var name = getClientName();
-    var dependencies = config.output.dependencies.client ?? [];
+    var dependencies = config.haxe.dependencies.client ?? [];
     var body = new StringBuf();
 
     addGeneratedWarning(body);
@@ -165,7 +165,7 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
 
-    addFlags(body, config.output.flags.client);
+    addFlags(body, config.haxe.flags.client);
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
   }
