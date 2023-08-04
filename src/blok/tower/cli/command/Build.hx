@@ -7,8 +7,14 @@ import blok.tower.file.FileSystem;
 using Reflect;
 using kit.Cli;
 using haxe.io.Path;
+using haxe.Json;
 
 class Build implements Command {
+  /**
+    Set the resource folder. Defaults to `res`.
+  **/
+  @:flag('r') var res:String = 'res';
+
   final fs:FileSystem;
   final config:Config;
 
@@ -21,16 +27,21 @@ class Build implements Command {
     Setup all hxml files needed to compile your application. This is also
     required to ensure your editor can understand your application. After
     running setup, point your editor at the `*-server.hxml` file.
+
+    This will also output your current configuration as a JSON file in
+    your resource folder, which will be used to include it with the compiled
+    application.
   **/
   @:command
   function setup():Task<Int> {
-    output.writeLn('Creating artifacts...');
+    output.writeLn('Setting up...');
     return Task.parallel(
-      sharedHxml(),
-      serverHxml(),
-      clientHxml()
+      outputSharedHxml(),
+      outputServerHxml(),
+      outputClientHxml(),
+      outputConfig()
     ).next(_ -> {
-      output.writeLn('Artifacts created.');
+      output.writeLn('Setup complete.');
       return 0;
     });
   }
@@ -85,7 +96,7 @@ class Build implements Command {
     return 0;
   }
 
-  function sharedHxml():Task<Nothing> {
+  function outputSharedHxml():Task<Nothing> {
     // @todo: Only output if __shared is stale.
     var name = getSharedName();
     var dependencies = config.output.dependencies.shared ?? [];
@@ -96,8 +107,13 @@ class Build implements Command {
 
     var body = new StringBuf();
 
-    body.add('-cp ${config.output.sourceFolder}\n\n');
-    body.add('-D blok.tower.client.hxml=${getClientName().withoutExtension()}\n\n');
+    body.add('-cp ${config.output.src}\n\n');
+    body.add('-D blok.tower.pre-configured\n');
+    body.add('-D blok.tower.type=${config.type.toString()}\n');
+    body.add('-D blok.tower.client.hxml=${getClientName().withoutExtension()}\n');
+    addFlags(body, config.output.flags.shared);
+
+    body.add('\n-resource ${getConfigResourcePath()}@blok.tower.config\n\n');
     
     for (item in dependencies) {
       body.add('-lib ${item}\n');
@@ -108,7 +124,7 @@ class Build implements Command {
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
   }
 
-  function serverHxml():Task<Nothing> {
+  function outputServerHxml():Task<Nothing> {
     var sharedName = getSharedName();
     var name = getServerName();
     var dependencies = config.output.dependencies.server ?? [];
@@ -120,13 +136,15 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
 
+    addFlags(body, config.output.flags.server);
+
     body.add('\n');
     body.add('-${config.output.type} ${config.output.path}');
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
   }
 
-  function clientHxml():Task<Nothing> {
+  function outputClientHxml():Task<Nothing> {
     var sharedName = getSharedName();
     var name = getClientName();
     var dependencies = config.output.dependencies.client ?? [];
@@ -138,7 +156,20 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
 
+    addFlags(body, config.output.flags.client);
+
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
+  }
+
+  function outputConfig() {
+    return fs
+      .createFile(getConfigResourcePath())
+      .write(config.toJson().stringify())
+      .next(_ -> Nothing);
+  }
+
+  inline function getConfigResourcePath() {
+    return Path.join([ res,  'blok-tower-config.json' ]);
   }
 
   inline function getClientName() {
@@ -154,6 +185,21 @@ class Build implements Command {
   }
 
   inline function prepareHxmlName(suffix:String) {
-    return '${config.appName}-${suffix}.hxml';
+    return '${config.name}-${suffix}.hxml';
+  }
+
+  function addFlags(body:StringBuf, flags:{}) {
+    for (flag in flags.fields()) {
+      var value:Dynamic = flags.field(flag);
+      if (flag == 'debug') {
+        body.add('--debug');
+      } else if (flag == 'dce') {
+        body.add('-dce ${value}');
+      } else if (value == true) {
+        body.add('-D $flag\n');
+      } else {
+        body.add('-D ${flag}=${value}\n');
+      }
+    }
   }
 }

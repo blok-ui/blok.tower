@@ -4,5 +4,6 @@ blogish-shared.hxml
 -lib mime
 -lib toml
 -lib markdown
+-D breeze.output=none
 
 -js dist/build.js

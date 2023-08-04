@@ -1,5 +1,6 @@
 package blok.tower.config;
 
+import blok.tower.core.SemVer;
 import blok.data.Model;
 
 using haxe.io.Path;
@@ -14,11 +15,25 @@ using haxe.io.Path;
 // that's all handled by mapping types in our Container. Either
 // we should do that here *or* we should have those paths be handled
 // by the Config too. We need more consistency.
-//
-// Also also: it does not work with the client side app.
 
 class Config extends Model {
-  @:constant public final appName:String;
+  @:constant public final name:String;
+  @:json(
+    to = value.toString(),
+    from = SemVer.parse(value)
+  )
+  @:constant public final version:SemVer;
+  @:json(
+    to = switch value {
+      case StaticApp: 'static';
+      case DynamicApp: 'dynamic';
+    },
+    from = switch value {
+      case 'dynamic': DynamicApp;
+      default: StaticApp;
+    }
+  )
+  @:constant public final type:AppType;
   #if !blok.tower.client
   @:json(
     to = null,
@@ -39,11 +54,16 @@ class OutputConfig extends Model {
   @:constant public final path:String = 'dist/build.js';
   @:constant public final type:String = 'js';
   @:constant public final main:String = 'App';
-  @:constant public final sourceFolder:String = 'src';
+  @:constant public final src:String = 'src';
   @:constant public final dependencies:{
     shared:Array<String>,
     client:Array<String>,
     server:Array<String>
+  } = { shared: [], client: [], server: [] };
+  @:constant public final flags:{
+    shared:{},
+    client:{},
+    server:{}
   } = { shared: [], client: [], server: [] };
 }
 

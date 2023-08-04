@@ -1,6 +1,5 @@
 package blok.tower.cli;
 
-import blok.tower.target.Target;
 import blok.tower.config.TowerTomlConfigFactory;
 import blok.tower.config.ConfigFactory;
 import blok.tower.cli.command.*;
@@ -22,7 +21,6 @@ class CliAppModule implements Module {
   function provideCoreDependencies(container:Container) {
     container.map(FileSystemAdaptor).to(() -> new LocalFileSystemAdaptor(Sys.getCwd())).share();
     container.map(FileSystem).to(FileSystem).share();
-    container.map(Target).to(Target.Cli);
     container.map(ConfigFactory).to(TowerTomlConfigFactory);
     container.map(Config).toDefault((factory:ConfigFactory) -> factory.createConfig()).share();
   }

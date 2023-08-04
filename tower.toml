@@ -1,19 +1,10 @@
-name = "blogish"
-
-[output]
-target = 'static'
-type = 'js'
-path = 'dist/build.js'
-main = 'Blogish'
-sourceFolder = 'example/blogish/src'
+name = 'blogish'
+version = '0.0.1'
+type = 'static'
 
 [dependencies]
 shared = ['breeze', 'blok.foundation']
 server = ['hxnodejs', 'mime', 'toml', 'markdown']
-
-[server]
-type = 'node'
-port = 8080
 
 [path]
 # staticPrefix = '/public'
@@ -21,9 +12,20 @@ assetPath = '/assets'
 apiPrefix = '/api'
 apiPath = '/api'
 
+[output]
+type = 'js'
+path = 'dist/build.js'
+main = 'Blogish'
+src = 'example/blogish/src'
 
-# [build.flags]
-# js-es = 6
-# message-reporting = 'pretty'
-# 'breeze.output' = 'none'
-# analyzer-optimize = true
+[output.flags.shared]
+js-es = '6'
+message-reporting = 'pretty'
+analyzer-optimize = true
+debug = true
+
+[output.flags.server]
+'breeze.output' = 'none'
+
+[output.flags.client]
+'breeze.output' = 'runtime'

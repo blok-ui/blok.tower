@@ -5,9 +5,8 @@ import blok.tower.module.*;
 function main() {
   var app = new App<
     DefaultModule,
+    ConfiguredTargetModule,
     DataModule,
-    StaticSiteGenerationModule,
-    // ServerSideRenderingModule,
     AssetPathModule<'example/blogish/data', 'dist/www', 'dist/cache'>,
     ApiRouteModule<'blogish.api'>,
     LayoutModule<'blogish.layouts'>

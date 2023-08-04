@@ -1,6 +1,13 @@
 -cp example/blogish/src
 
+-D blok.tower.pre-configured
+-D blok.tower.type=static
 -D blok.tower.client.hxml=blogish-client
+-D js-es=6
+-D message-reporting=pretty
+-D analyzer-optimize
+--debug
+-resource res/blok-tower-config.json@blok.tower.config
 
 -lib blok.tower
 -lib breeze

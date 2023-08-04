@@ -39,13 +39,13 @@ class Create implements Command {
   @:command
   function model(name:String):Task<Int> {
     var model = ApiTemplate.execute({
-      app: app ?? config.appName,
+      app: app ?? config.name,
       pack: pack ?? 'model',
       name: name
     });
     var path = Path.join([
-      dir ?? config.output.sourceFolder,
-      app ?? config.appName,
+      dir ?? config.output.src,
+      app ?? config.name,
       pack?.split('.')?.join('/') ?? 'model',
       name
     ]).withExtension('hx');
@@ -60,14 +60,14 @@ class Create implements Command {
   @:command
   function api(name:String, path:String):Task<Int> {
     var api = ApiTemplate.execute({
-      app: app ?? config.appName,
+      app: app ?? config.name,
       pack: pack ?? 'api',
       name: name,
       path: path
     });
     var path = Path.join([
-      dir ?? config.output.sourceFolder,
-      app ?? config.appName,
+      dir ?? config.output.src,
+      app ?? config.name,
       pack?.split('.')?.join('/') ?? 'api',
       '${name}Api'
     ]).withExtension('hx');
@@ -82,14 +82,14 @@ class Create implements Command {
   @:command
   function layout(name:String, ?target:String):Task<Int> {
     var layout = LayoutTemplate.execute({
-      app: app ?? config.appName,
+      app: app ?? config.name,
       pack: pack ?? 'layout',
       name: name,
       target: target 
     });
     var path = Path.join([
-      dir ?? config.output.sourceFolder,
-      app ?? config.appName,
+      dir ?? config.output.src,
+      app ?? config.name,
       pack?.split('.')?.join('/') ?? 'layout',
       '${name}Layout'
     ]).withExtension('hx');
@@ -104,14 +104,14 @@ class Create implements Command {
   @:command
   function page(name:String, url:String):Task<Int> {
     var page = PageTemplate.execute({
-      app: app ?? config.appName,
+      app: app ?? config.name,
       pack: pack ?? 'page',
       name: name,
       url: url
     });
     var path = Path.join([
-      dir ?? config.output.sourceFolder,
-      app ?? config.appName,
+      dir ?? config.output.src,
+      app ?? config.name,
       pack?.split('.')?.join('/') ?? 'page',
       '${name}Page'
     ]).withExtension('hx');

@@ -1,18 +1,14 @@
 package blok.tower.config;
 
+import blok.tower.core.SemVer;
 import blok.tower.config.Config;
-import blok.tower.target.Target;
 
 using haxe.io.Path;
 using sys.io.File;
 using Reflect;
 
 class TowerTomlConfigFactory implements ConfigFactory {
-  final target:Target;
-
-  public function new(target) {
-    this.target = target;
-  }
+  public function new() {}
   
   public function createConfig():Config {
     var contents = Path.join([ Sys.getCwd(), 'tower.toml' ]).getContent();
@@ -22,6 +18,13 @@ class TowerTomlConfigFactory implements ConfigFactory {
     var output:Dynamic = data.field('output') ?? {};
     var server:Dynamic = data.field('server') ?? {};
     var path:Dynamic = data.field('path') ?? {};
+    var type:AppType = switch data.field('target') {
+      case null: StaticApp;
+      case 'static': StaticApp;
+      case 'dynamic': DynamicApp;
+      default:
+        throw new Error(NotAcceptable, '`type` must be `static` or `dynamic`');
+    }
     var appName = switch data.field('name') {
       case null: 
         throw new Error(NotFound, 'An app name is required');
@@ -29,26 +32,30 @@ class TowerTomlConfigFactory implements ConfigFactory {
         name;
     }
     var staticPrefix = switch path.field('staticPrefix') {
-      case null if (target == ServerSideRenderingTarget): 
+      case null if (type == DynamicApp): 
         '/public';
       case null:
         null;
-      case other if (target == ServerSideRenderingTarget && other.length == 0):
-        throw new Error(NotAcceptable, 'A static prefix is required for SSR targets');
-      case _ if (target != ServerSideRenderingTarget):
-        throw new Error(NotAcceptable, 'No static prefix is allowed on non-SSR targets');
+      case other if (type == DynamicApp && other.length == 0):
+        throw new Error(NotAcceptable, 'A static prefix is required for dynamic apps');
+      case _ if (type != DynamicApp):
+        throw new Error(NotAcceptable, 'No static prefix is allowed on static apps');
       case other:
         other;
     }
+    var flags:Dynamic = output.field('flags') ?? {};
 
     return new Config({
-      appName: appName,
+      name: appName,
+      version: SemVer.parse(output.field('version') ?? '0.0.1'),
+      type: type,
       output: new OutputConfig({
         path: output.field('path'),
         type: output.field('type'),
         main: output.field('main'),
-        sourceFolder: output.field('sourceFolder'),
-        dependencies: data.field('dependencies')
+        src: output.field('src'),
+        dependencies: data.field('dependencies'),
+        flags: output.field('flags')
       }),
       path: new PathConfig({
         staticPrefix: staticPrefix,

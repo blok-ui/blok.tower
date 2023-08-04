@@ -1,8 +1,8 @@
 package blok.tower.target;
 
+// @todo: Probably drop this in favor of `config.type`?
 @:using(Target.TargetTools)
 enum Target {
-  Cli;
   ServerSideRenderingTarget;
   StaticSiteGeneratedTarget;
   ClientSideTarget;  

@@ -6,7 +6,9 @@ class ConfigModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {
-    #if blok.tower.client
+    #if blok.tower.pre_configured
+    container.map(ConfigFactory).to(ResourceConfigFactory);
+    #elseif blok.tower.client
     container.map(ConfigFactory).to(HydratingConfigFactory);
     #else
     container.map(ConfigFactory).to(TowerTomlConfigFactory);
