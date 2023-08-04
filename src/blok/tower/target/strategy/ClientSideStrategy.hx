@@ -14,14 +14,12 @@ class ClientSideStrategy implements Strategy {
   final container:Container;
   final config:Config;
   final appFactory:AppRootFactory;
-  final appVersion:AppVersion;
   final hydrationId:HydrationId;
   final output:Output;
 
-  public function new(container, config, appVersion, appFactory, hydrationId, output) {
+  public function new(container, config, appFactory, hydrationId, output) {
     this.container = container;
     this.config = config;
-    this.appVersion = appVersion;
     this.appFactory = appFactory;
     this.hydrationId = hydrationId;
     this.output = output;
@@ -29,7 +27,7 @@ class ClientSideStrategy implements Strategy {
 
   public function run():Cancellable {
     var document = new ClientDocument();
-    var assets = new AssetContext(output, config, document, ClientSideTarget, hydrationId);
+    var assets = new AssetContext(output, config, document, hydrationId);
     var root = hydrate(
       document.getRoot(),
       () -> appFactory.create(
@@ -39,7 +37,7 @@ class ClientSideStrategy implements Strategy {
           nav.addDisposable(() -> link.cancel());
           nav;
         }, 
-        () -> new AppContext(container, appVersion, assets)
+        () -> new AppContext(container, assets, config)
       )
     );
 

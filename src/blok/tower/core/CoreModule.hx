@@ -14,7 +14,6 @@ class CoreModule implements Module {
   function provideAppDependencies(container:Container) {
     container.map(AppRootFactory).toDefault(AppRootFactory).share();
     container.map(AppRoot).toDefault(() -> (router) -> router).share();
-    container.map(AppVersion).toDefault(() -> AppVersion.fromCompiler()).share();
   }
 
   function provideLogger(container:Container) {

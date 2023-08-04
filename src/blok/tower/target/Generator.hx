@@ -17,22 +17,18 @@ class Generator {
   final container:Container;
   final config:Config;
   final appFactory:AppRootFactory;
-  final appVersion:AppVersion;
   final output:Output;
   final visitor:Visitor;
   final logger:Logger;
-  final target:Target;
   final hydrationId:HydrationId;
 
-  public function new(container, config, appFactory, appVersion, output, visitor, logger, target, hydrationId) {
+  public function new(container, config, appFactory, output, visitor, logger, hydrationId) {
     this.container = container;
     this.config = config;
     this.appFactory = appFactory;
-    this.appVersion = appVersion;
     this.output = output;
     this.visitor = visitor;
     this.logger = logger;
-    this.target = target;
     this.hydrationId = hydrationId;
   }
 
@@ -82,7 +78,7 @@ class Generator {
 
   function generatePage(path:String):Task<Document> {
     var document:Document = new StaticDocument();
-    var assets = new AssetContext(output, config, document, target, hydrationId);
+    var assets = new AssetContext(output, config, document, hydrationId);
     var wasSuspended:Bool = false;
     var completed:Bool = false;
     var stamp = Timer.stamp();
@@ -94,8 +90,10 @@ class Generator {
     }
 
     // @todo: Dunno if this is the best place for this.
-    assets.add(new ClientAppCompiler(target, appVersion));
+    assets.add(new ClientAppCompiler(config));
+    #if !blok.tower.pre_configured
     assets.add(new ConfigAsset());
+    #end
 
     logger.log(Info, '...visiting $path');
 
@@ -119,7 +117,7 @@ class Generator {
           })
         ], _ -> appFactory.create(
           () -> new Navigator({ request: new Request(Get, path) }),
-          () -> new AppContext(container, appVersion, assets)
+          () -> new AppContext(container, assets, config)
         ))
       );
 
@@ -129,7 +127,7 @@ class Generator {
         activate(Ok(document));
       }
     }).next(document -> {
-      if (target.shouldOutputHtml()) assets.add(new HtmlAsset({
+      if (config.type.shouldOutputHtml()) assets.add(new HtmlAsset({
         path: path,
         content: document.toString()
       }));

@@ -1,6 +1,5 @@
 package blok.tower.cli;
 
-import blok.tower.core.AppVersion;
 import blok.tower.config.Config;
 
 using haxe.io.Path;
@@ -10,11 +9,9 @@ class BuildCommandFactory {
   final dependencies:Array<String> = [];
   final flags:Map<String, Null<String>> = [];
   final config:Config;
-  final version:AppVersion;
 
-  public function new(config, version) {
+  public function new(config) {
     this.config = config;
-    this.version = version;
   }
 
   public function addDependency(dependency:String) {

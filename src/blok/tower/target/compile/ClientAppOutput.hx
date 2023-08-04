@@ -1,5 +1,6 @@
 package blok.tower.target.compile;
 
+import blok.tower.config.Config;
 import haxe.macro.Compiler;
 import blok.tower.asset.*;
 import blok.tower.cli.CommandTools;
@@ -10,12 +11,12 @@ class ClientAppOutput implements OutputItem {
   public final key:OutputKey;
   
   final path:String;
-  final target:Target;
+  final config:Config;
 
-  public function new(key, path, target) {
+  public function new(key, path, config) {
     this.key = key;
     this.path = path;
-    this.target = target;
+    this.config = config;
   }
 
   public function process(output:Output):Task<Nothing> {
@@ -62,12 +63,11 @@ class ClientAppOutput implements OutputItem {
       '-js ${path}'
     ];
 
-    switch target {
-      case StaticSiteGeneratedTarget:
+    switch config.type {
+      case StaticApp:
         cmd.push('-D blok.tower.client.ssg');
-      case ServerSideRenderingTarget:
+      case DynamicApp:
         cmd.push('-D blok.tower.client.ssr');
-      default:
     }
 
     #if debug

@@ -10,7 +10,7 @@ class HtmlAsset extends Model implements Asset {
   @:constant final content:String;
 
   public function register(context:AssetContext) {
-    if (context.target.shouldOutputHtml()) context.output.add(new HtmlOutput({
+    if (context.config.type.shouldOutputHtml()) context.output.add(new HtmlOutput({
       key: path,
       path: path,
       content: content

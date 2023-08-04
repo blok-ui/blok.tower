@@ -43,7 +43,6 @@ class TowerTomlConfigFactory implements ConfigFactory {
       case other:
         other;
     }
-    var flags:Dynamic = output.field('flags') ?? {};
 
     return new Config({
       name: appName,

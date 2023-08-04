@@ -109,6 +109,7 @@ class Build implements Command {
 
     body.add('-cp ${config.output.src}\n\n');
     body.add('-D blok.tower.pre-configured\n');
+    body.add('-D blok.tower.version=${config.version.toString()}\n');
     body.add('-D blok.tower.type=${config.type.toString()}\n');
     body.add('-D blok.tower.client.hxml=${getClientName().withoutExtension()}\n');
     addFlags(body, config.output.flags.shared);

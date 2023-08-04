@@ -5,17 +5,6 @@ import blok.data.Model;
 
 using haxe.io.Path;
 
-// @todo: Not sure if this file really makes a lot of sense yet --
-// the paradigm up to this point has been to include modules in
-// the `App` constructor to configure things. However it *does*
-// make sense to use this for the CLI, and there are a lot of 
-// config things that benefit from being in one place, so...
-//
-// Also, `PathsConfig` is not used for figuring out file paths --
-// that's all handled by mapping types in our Container. Either
-// we should do that here *or* we should have those paths be handled
-// by the Config too. We need more consistency.
-
 class Config extends Model {
   @:constant public final name:String;
   @:json(

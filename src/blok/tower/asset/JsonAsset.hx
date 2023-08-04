@@ -14,7 +14,7 @@ class JsonAsset extends Model implements Asset {
 
   public function register(context:AssetContext) {
     #if !blok.tower.client
-    if (context.target.shouldOutputHtml()) context.output.add(new blok.tower.asset.CreateOutput({
+    if (context.config.type.shouldOutputHtml()) context.output.add(new blok.tower.asset.CreateOutput({
       key: id,
       dest: context.config.path.createApiOutputPath(id).withExtension('json'),
       content: content
