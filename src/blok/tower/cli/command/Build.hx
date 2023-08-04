@@ -106,6 +106,8 @@ class Build implements Command {
     }
 
     var body = new StringBuf();
+    
+    addGeneratedWarning(body);
 
     body.add('-cp ${config.output.src}\n\n');
     body.add('-D blok.tower.pre-configured\n');
@@ -131,6 +133,10 @@ class Build implements Command {
     var dependencies = config.output.dependencies.server ?? [];
     var body = new StringBuf();
 
+    addGeneratedWarning(body);
+
+    body.add('# Note: for haxe completion support, point your editor at THIS file.\n\n');
+
     body.add(sharedName + '\n\n');
     
     for (item in dependencies) {
@@ -150,6 +156,8 @@ class Build implements Command {
     var name = getClientName();
     var dependencies = config.output.dependencies.client ?? [];
     var body = new StringBuf();
+
+    addGeneratedWarning(body);
 
     body.add(sharedName + '\n\n');
     
@@ -189,13 +197,19 @@ class Build implements Command {
     return '${config.name}-${suffix}.hxml';
   }
 
+  function addGeneratedWarning(body:StringBuf) {
+    body.add('# Automatically generated file. DO NOT EDIT!\n');
+    body.add('# To configure things, edit your `tower.toml` and run\n');
+    body.add('# `> tower build setup` or `> tower build all`\n\n');
+  }
+
   function addFlags(body:StringBuf, flags:{}) {
     for (flag in flags.fields()) {
       var value:Dynamic = flags.field(flag);
       if (flag == 'debug') {
-        body.add('--debug');
+        body.add('--debug\n');
       } else if (flag == 'dce') {
-        body.add('-dce ${value}');
+        body.add('-dce ${value}\n');
       } else if (value == true) {
         body.add('-D $flag\n');
       } else {

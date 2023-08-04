@@ -7,7 +7,7 @@ import blok.tower.core.*;
   should use. It will automatically map the correct classes
   based on your configuration.
 **/
-class ConfiguredTargetModule implements Module {
+class PreConfiguredTargetModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {

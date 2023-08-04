@@ -1,3 +1,7 @@
+# Automatically generated file. DO NOT EDIT!
+# To configure things, edit your `tower.toml` and run
+# `> tower build setup` or `> tower build all`
+
 blogish-shared.hxml
 
 -D breeze.output=runtime

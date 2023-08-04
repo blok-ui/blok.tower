@@ -1,3 +1,7 @@
+# Automatically generated file. DO NOT EDIT!
+# To configure things, edit your `tower.toml` and run
+# `> tower build setup` or `> tower build all`
+
 -cp example/blogish/src
 
 -D blok.tower.pre-configured
@@ -8,6 +12,7 @@
 -D message-reporting=pretty
 -D analyzer-optimize
 --debug
+
 -resource res/blok-tower-config.json@blok.tower.config
 
 -lib blok.tower

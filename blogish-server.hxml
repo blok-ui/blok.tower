@@ -1,3 +1,9 @@
+# Automatically generated file. DO NOT EDIT!
+# To configure things, edit your `tower.toml` and run
+# `> tower build setup` or `> tower build all`
+
+# Note: for haxe completion support, point your editor at THIS file.
+
 blogish-shared.hxml
 
 -lib hxnodejs
