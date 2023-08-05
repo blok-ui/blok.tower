@@ -21,9 +21,13 @@ class ClientAppOutput implements OutputItem {
 
   public function process(output:Output):Task<Nothing> {
     output.addToManifest(path);
-    #if !debug
+
+    #if debug
+    output.addToManifest(path.withExtension('js.map'));
+    #else
     output.addToManifest(path.withExtension('min.js'));
     #end
+
     return Task.parallel(
       output.root.getFile(Sys.programPath()).next(f -> Some(f)).recover(_ -> Future.immediate(None)),
       output.pub.getFile(path).next(f -> Some(f)).recover(_ -> Future.immediate(None))

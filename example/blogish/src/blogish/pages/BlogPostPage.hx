@@ -1,5 +1,6 @@
 package blogish.pages;
 
+import blok.tower.content.ContentComponent;
 import blogish.api.PostApi;
 import blogish.data.Post;
 import blok.html.Html;
@@ -13,8 +14,13 @@ class BlogPostPage implements PageRoute<'/blog/post/{slug:String}'> {
   }
 
   function render(context:ComponentBase) {
-    return Html.div({},
-      post().title
+    return Html.article({},
+      Html.header({}, 
+        Html.h3({}, post().title)
+      ),
+      Html.div({},
+        ContentComponent.node({ content: post().content })
+      )
     );
   }
 }

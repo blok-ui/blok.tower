@@ -84,7 +84,7 @@ class HaxeConfig extends Model {
 
 class AssetConfig extends Model {
   @:constant public final src:String = 'data';
-  @:constant public final privateDirectory:String = 'dist/data';
+  @:constant public final privateDirectory:String = 'dist';
   @:constant public final publicDirectory:String = 'dist/public';
 }
 

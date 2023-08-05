@@ -1,5 +1,6 @@
 package blok.tower.module;
 
+import blok.tower.content.ContentModule;
 import blok.tower.config.ConfigModule;
 import blok.tower.asset.AssetModule;
 import blok.tower.core.*;
@@ -16,5 +17,6 @@ class DefaultModule implements Module {
     container.use(FileModule);
     container.use(AssetModule);
     container.use(DataModule);
+    container.use(ContentModule);
   }
 }

@@ -1,8 +1,12 @@
 package blok.tower.image;
 
+import blok.suspense.SuspenseBoundary;
 import blok.html.*;
 import blok.suspense.Resource;
 import blok.ui.*;
+
+using blok.suspense.SuspenseModifiers;
+using blok.boundary.BoundaryModifiers;
 
 class Image extends Component {
   @:observable final wrapperClassName:String = '';
@@ -20,11 +24,9 @@ class Image extends Component {
       child: (image, assetContext) -> {
         var res = new Resource(() -> image.load(assetContext, __renderMode == Hydrating));
         return Html.figure({ className: wrapperClassName },
-          Scope.wrap(_ -> switch res.data() {
-            case Loading: loading();
-            case Error(error): failed(error.message);
-            case Loaded(url): Html.img({ className: className, src: url, alt: alt });
-          })
+          Scope.wrap(_ -> Html.img({ className: className, src: res(), alt: alt }))
+            .inSuspense(loading)
+            .inErrorBoundary((_, e) -> failed(e.message))
         );
       }
     });

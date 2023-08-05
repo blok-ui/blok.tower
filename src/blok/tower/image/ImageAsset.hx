@@ -31,9 +31,9 @@ class ImageAsset extends Model implements Asset {
   public function load(context:AssetContext, immediate:Bool):Task<String> {
     var url = context.config.path.createAssetUrl(getBasePath());
     #if !blok.tower.client
-    return url;
+    return Task.resolve(url);
     #else
-    if (immediate) return url;
+    if (immediate) return Task.resolve(url);
     if (loaders.exists(url)) return loaders.get(url);
     var loader = new ClientImageLoader(url);
     loaders.set(url, loader);
