@@ -20,6 +20,10 @@ class ClientAppOutput implements OutputItem {
   }
 
   public function process(output:Output):Task<Nothing> {
+    output.addToManifest(path);
+    #if !debug
+    output.addToManifest(path.withExtension('min.js'));
+    #end
     return Task.parallel(
       output.root.getFile(Sys.programPath()).next(f -> Some(f)).recover(_ -> Future.immediate(None)),
       output.pub.getFile(path).next(f -> Some(f)).recover(_ -> Future.immediate(None))
@@ -62,13 +66,6 @@ class ClientAppOutput implements OutputItem {
       '-D blok.tower.client',
       '-js ${path}'
     ];
-
-    switch config.type {
-      case StaticApp:
-        cmd.push('-D blok.tower.client.ssg');
-      case DynamicApp:
-        cmd.push('-D blok.tower.client.ssr');
-    }
 
     #if debug
     cmd.push('--debug');

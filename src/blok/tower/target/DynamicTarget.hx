@@ -1,9 +1,9 @@
-package blok.tower.target.strategy;
+package blok.tower.target;
 
 import blok.tower.core.Logger;
 import blok.tower.server.ServerRunner;
 
-class ServerSideRenderingStrategy implements Strategy {
+class DynamicTarget implements Target {
   final server:ServerRunner;
   final generator:Generator;
   final logger:Logger;

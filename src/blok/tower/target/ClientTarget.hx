@@ -1,4 +1,4 @@
-package blok.tower.target.strategy;
+package blok.tower.target;
 
 import blok.html.client.Client;
 import blok.tower.asset.*;
@@ -10,7 +10,7 @@ import blok.tower.data.HydrationId;
 import blok.tower.routing.Navigator;
 import kit.http.Request;
 
-class ClientSideStrategy implements Strategy {
+class ClientTarget implements Target {
   final container:Container;
   final config:Config;
   final appFactory:AppRootFactory;

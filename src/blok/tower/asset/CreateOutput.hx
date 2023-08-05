@@ -7,7 +7,8 @@ class CreateOutput extends Model implements OutputItem {
   @:constant final dest:String;
   @:constant final content:String;
 
-  public function process(context:Output):Task<Nothing> {
-    return context.pub.createFile(dest).write(content);
+  public function process(output:Output):Task<Nothing> {
+    output.addToManifest(dest);
+    return output.pub.createFile(dest).write(content);
   }
 }

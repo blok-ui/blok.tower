@@ -1,13 +1,8 @@
-package blok.tower.target.strategy;
+package blok.tower.target;
 
 import blok.tower.core.*;
 
-/**
-  Static site generation strategy.
-
-  Will output the entire site as static files, including all resources.
-**/
-class StaticSiteGenerationStrategy implements Strategy {
+class StaticTarget implements Target {
   final generator:Generator;
   final logger:Logger;
 

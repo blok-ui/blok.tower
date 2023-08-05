@@ -1,5 +1,5 @@
 package blok.tower.target;
 
-interface Strategy {
+interface Target {
   public function run():Cancellable;
 }

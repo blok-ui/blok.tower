@@ -30,6 +30,11 @@ class SiteApi implements JsonRpcRoute<'/api/site'> {
                 label: 'Posts',
                 type: InternalLink,
                 url: blogish.pages.BlogPostArchivePage.createUrl({ page: 1 })
+              }),
+              new MenuOption({
+                label: 'Image Test',
+                type: InternalLink,
+                url: blogish.pages.images.ShowImagePage.createUrl({})
               })
             ].concat([ for (page in pages) 
               new MenuOption({

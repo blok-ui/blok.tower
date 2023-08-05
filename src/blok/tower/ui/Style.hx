@@ -8,13 +8,17 @@ import blok.ui.*;
 class Style extends Component {
   @:constant final src:String;
   @:constant final kind:StaticAssetKind = External;
-  @:constant final version:SemVer = null;
+  @:constant final version:Null<SemVer> = null;
 
   function render() {
     return Html.link({
       href: src,
       rel: 'stylesheet',
       dataset: [
+        'generated' => switch kind {
+          case Generated: 'generated';
+          default: null;
+        },
         'source' => switch kind {
           case Local(source): source;
           default: null;

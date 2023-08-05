@@ -17,7 +17,7 @@ class PageVisitor extends Component {
     });
   }
 
-  #if (!blok.tower.client)
+  #if !blok.tower.client
   function setup() {
     switch blok.tower.target.VisitorContext.maybeFrom(this) {
       case Some(visitor): visitor.get().visit(to);

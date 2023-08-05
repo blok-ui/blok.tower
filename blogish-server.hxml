@@ -10,6 +10,7 @@ blogish-shared.hxml
 -lib mime
 -lib toml
 -lib markdown
--D breeze.output=none
+-resource res/blok-tower-config-server.json@blok.tower.config
+
 
 -js dist/build.js

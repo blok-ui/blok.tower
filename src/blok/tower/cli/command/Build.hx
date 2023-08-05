@@ -8,6 +8,7 @@ using Reflect;
 using kit.Cli;
 using haxe.io.Path;
 using haxe.Json;
+using StringTools;
 
 class Build implements Command {
   /**
@@ -115,8 +116,6 @@ class Build implements Command {
     body.add('-D blok.tower.type=${config.type.toString()}\n');
     body.add('-D blok.tower.client.hxml=${getClientName().withoutExtension()}\n');
     addFlags(body, config.haxe.flags.shared);
-
-    body.add('\n-resource ${getConfigResourcePath()}@blok.tower.config\n\n');
     
     for (item in dependencies) {
       body.add('-lib ${item}\n');
@@ -143,6 +142,7 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
 
+    addConfigResource(body, 'server');
     addFlags(body, config.haxe.flags.server);
 
     body.add('\n');
@@ -165,20 +165,27 @@ class Build implements Command {
       body.add('-lib ${item}\n');
     }
 
+    addConfigResource(body, 'client');
     addFlags(body, config.haxe.flags.client);
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);
   }
 
   function outputConfig() {
-    return fs
-      .createFile(getConfigResourcePath())
-      .write(config.toJson().stringify())
-      .next(_ -> Nothing);
+    return Task.parallel(
+      fs.createFile(getConfigResourcePath('server'))
+        .write(config.toJson().stringify()),
+      fs.createFile(getConfigResourcePath('client'))
+        .write(config.toClientJson().stringify())
+    ).next(_ -> Nothing);
   }
 
-  inline function getConfigResourcePath() {
-    return Path.join([ res,  'blok-tower-config.json' ]);
+  inline function getConfigResourcePath(type:String) {
+    return Path.join([ res,  'blok-tower-config-${type}.json' ]);
+  }
+
+  inline function addConfigResource(body:StringBuf, type:String) {
+    body.add('-resource ${getConfigResourcePath(type)}@blok.tower.config\n\n');
   }
 
   inline function getClientName() {
@@ -204,16 +211,22 @@ class Build implements Command {
   }
 
   function addFlags(body:StringBuf, flags:{}) {
+    var version = config.version.toFileNameSafeString();
+
     for (flag in flags.fields()) {
       var value:Dynamic = flags.field(flag);
       if (flag == 'debug') {
         body.add('--debug\n');
       } else if (flag == 'dce') {
         body.add('-dce ${value}\n');
+      } else if (flag == 'macro') {
+        body.add('--macro ${value}\n');
       } else if (value == true) {
         body.add('-D $flag\n');
       } else {
-        body.add('-D ${flag}=${value}\n');
+        // @todo: Think up a better way to do this.
+        var str = Std.string(value).replace('{{version}}', version);
+        body.add('-D ${flag}=${str}\n');
       }
     }
   }

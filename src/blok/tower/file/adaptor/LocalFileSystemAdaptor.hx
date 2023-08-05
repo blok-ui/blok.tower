@@ -38,15 +38,16 @@ class LocalFileSystemAdaptor implements FileSystemAdaptor {
     return Task.parallel(
       ...fullPath
         .readDirectory()
+        .filter(name -> !Path.join([ fullPath, name ]).isDirectory())
         .map(name -> getMeta(Path.join([ path, name ])))
     );
   }
 
   public function listDirectories(path:String):Task<Array<String>> {
     var fullPath = resolvePath(path);
-    return fullPath.readDirectory().filter(name -> {
-      return Path.join([ fullPath, name ]).isDirectory();
-    }).map(name -> Path.join([ path, name ]));
+    return fullPath.readDirectory()
+      .filter(name -> Path.join([ fullPath, name ]).isDirectory())
+      .map(name -> Path.join([ path, name ]));
   }
 
   public function exists(path:String):Task<Bool> {

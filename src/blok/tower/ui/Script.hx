@@ -16,6 +16,10 @@ class Script extends Component {
       src: src,
       type: type,
       dataset: [
+        'generated' => switch kind {
+          case Generated: 'generated';
+          default: null;
+        },
         'source' => switch kind {
           case Local(source): source;
           default: null;

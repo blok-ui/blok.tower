@@ -18,7 +18,7 @@ class ImageAsset extends Model implements Asset {
   @:constant final config:ImageConfig;
 
   public function register(context:AssetContext) {
-    #if !forest.client
+    #if !blok.tower.client
     context.output.add(new ImageOutput({
       key: getHash(),
       source: path,
@@ -30,7 +30,7 @@ class ImageAsset extends Model implements Asset {
   
   public function load(context:AssetContext, immediate:Bool):Task<String> {
     var url = context.config.path.createAssetUrl(getBasePath());
-    #if !forest.client
+    #if !blok.tower.client
     return url;
     #else
     if (immediate) return url;

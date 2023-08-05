@@ -1,5 +1,6 @@
 package blok.tower.ui;
 
+import blok.tower.core.SemVer;
 import blok.core.BlokException.BlokComponentException;
 import blok.html.server.*;
 import blok.tower.asset.*;
@@ -53,16 +54,28 @@ private function updateRealHead(
           el.attributes.field('content')
         );
       case 'link' if (el.attributes.field('rel') == 'stylesheet'):
+        var ver:Null<String> = el.attributes.field('data-sem-ver');
         assets.add(new CssAsset(
           el.attributes.field('href'),
-          if (el.attributes.field('data-source') != null) Local(el.attributes.field('data-source')) else External,
-          el.attributes.field('data-sem-ver')
+          if (el.attributes.field('data-source') != null) 
+            Local(el.attributes.field('data-source'))
+          else if (el.attributes.field('data-generated') != null)
+            Generated
+          else 
+            External,
+          if (ver != null) SemVer.parse(ver) else null
         ));
       case 'script':
+        var ver:Null<String> = el.attributes.field('data-sem-ver');
         assets.add(new JsAsset(
           el.attributes.field('src'),
-          if (el.attributes.field('data-source') != null) Local(el.attributes.field('data-source')) else External,
-          el.attributes.field('data-sem-ver')
+          if (el.attributes.field('data-source') != null) 
+            Local(el.attributes.field('data-source'))
+          else if (el.attributes.field('data-generated') != null)
+            Generated
+          else 
+            External,
+          if (ver != null) SemVer.parse(ver) else null
         ));
       case other:
         throw new BlokComponentException('Couldn\'t handle ' + other + ' tag.', head);

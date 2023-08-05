@@ -15,7 +15,7 @@ apiPath = '/api'
 [assets]
 src = 'example/blogish/data'
 public = 'dist/www'
-private = 'dist/cache'
+private = 'dist'
 
 [haxe]
 src = 'example/blogish/src'
@@ -28,9 +28,4 @@ js-es = '6'
 message-reporting = 'pretty'
 analyzer-optimize = true
 debug = true
-
-[haxe.flags.server]
-'breeze.output' = 'none'
-
-[haxe.flags.client]
-'breeze.output' = 'runtime'
+'breeze.output' = 'styles-{{version}}'

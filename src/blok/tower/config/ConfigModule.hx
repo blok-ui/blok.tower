@@ -11,7 +11,7 @@ class ConfigModule implements Module {
     #elseif blok.tower.client
     container.map(ConfigFactory).to(HydratingConfigFactory);
     #else
-    container.map(ConfigFactory).to(TowerTomlConfigFactory);
+    container.map(ConfigFactory).toDefault(TowerTomlConfigFactory);
     #end
     container.map(Config).to((factory:ConfigFactory) -> factory.createConfig()).share();
   }

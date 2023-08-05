@@ -12,9 +12,9 @@ class PreConfiguredTargetModule implements Module {
 
   public function provide(container:Container) {
     #if (blok.tower.type == 'static')
-    container.use(StaticSiteGenerationModule);
+    container.use(StaticTargetModule);
     #else
-    container.use(ServerSideRenderingModule);
+    container.use(DynamicTargetModule);
     #end
   }
 }

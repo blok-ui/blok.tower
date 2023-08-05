@@ -2,9 +2,8 @@ package blok.tower.module;
 
 import blok.tower.core.*;
 import blok.tower.target.*;
-import blok.tower.target.strategy.*;
 
-class StaticSiteGenerationModule implements Module {
+class StaticTargetModule implements Module {
   public function new() {}
 
   public function provide(container:Container) {
@@ -16,11 +15,11 @@ class StaticSiteGenerationModule implements Module {
       return new blok.tower.cache.TransientCache(blok.tower.cache.TransientCache.ONE_MINUTE);
     }).share();
     container.map(blok.tower.remote.StaticFileClient).to(blok.tower.remote.StaticFileClient).share();
-    container.map(Strategy).to(ClientSideStrategy).share();
+    container.map(Target).to(ClientTarget).share();
     #else
     container.map(Visitor).to(Visitor).share();
     container.map(Generator).to(Generator).share();
-    container.map(Strategy).to(StaticSiteGenerationStrategy).share();
+    container.map(Target).to(StaticTarget).share();
     #end
   }
 }

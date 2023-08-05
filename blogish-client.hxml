@@ -4,4 +4,5 @@
 
 blogish-shared.hxml
 
--D breeze.output=runtime
+-resource res/blok-tower-config-client.json@blok.tower.config
+

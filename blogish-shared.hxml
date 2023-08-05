@@ -12,9 +12,7 @@
 -D message-reporting=pretty
 -D analyzer-optimize
 --debug
-
--resource res/blok-tower-config.json@blok.tower.config
-
+-D breeze.output=styles-v0_0_1
 -lib blok.tower
 -lib breeze
 -lib blok.foundation

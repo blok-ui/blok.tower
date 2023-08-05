@@ -23,8 +23,10 @@ function buildGeneric() {
 }
 
 function build(method:String, url:String) {
-  // if (Context.defined('blok.tower.client.ssg')) return buildStaticClient(url);
-  // if (Context.defined('blok.tower.client')) return buildClient(url);
+  // if (isClient()) return switch getAppType() {
+  //   case StaticApp: buildStaticClient(url);
+  //   default: buildClient(url);
+  // }
 
   var builder = ClassBuilder.fromContext();
   var route = url.processRoute();

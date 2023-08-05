@@ -1,5 +1,6 @@
 package blok.tower.routing;
 
+import blok.tower.core.macro.CompileConfig;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import blok.macro.ClassBuilder;
@@ -22,8 +23,10 @@ function buildGeneric() {
 }
 
 function build(url:String) {
-  if (Context.defined('blok.tower.client.ssg')) return buildStaticClient(url);
-  if (Context.defined('blok.tower.client')) return buildClient(url);
+  if (isClient()) return switch getAppType() {
+    case StaticApp: buildStaticClient(url);
+    default: buildClient(url);
+  }
 
   var builder = ClassBuilder.fromContext();
   var responseCases:Array<Case> = [];

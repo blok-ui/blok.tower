@@ -10,11 +10,13 @@ class CopyOutput extends Model implements OutputItem  {
   @:constant final dest:String;
 
   public function process(output:Output):Task<Nothing> {
+    var path = Path.join([ output.pub.path, dest ]);
+    output.addToManifest(path);
     return isNewer(output.src, output.pub, source, dest).next(newer -> {
       if (!newer) return Nothing;
       return output.src
         .getFile(source)
-        .next(file -> file.copy(Path.join([ output.pub.path, dest ])));
+        .next(file -> file.copy(path));
     });
   }
 

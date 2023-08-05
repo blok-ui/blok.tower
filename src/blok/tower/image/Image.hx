@@ -1,8 +1,8 @@
 package blok.tower.image;
 
+import blok.html.*;
 import blok.suspense.Resource;
 import blok.ui.*;
-import blok.html.*;
 
 class Image extends Component {
   @:observable final wrapperClassName:String = '';

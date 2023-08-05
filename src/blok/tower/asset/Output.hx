@@ -1,8 +1,12 @@
 package blok.tower.asset;
 
+import blok.tower.file.Directory;
 #if !blok.tower.client
+import haxe.Json;
 import blok.tower.file.FileSystem;
 import blok.tower.asset.data.*;
+
+using haxe.io.Path;
 #end
 
 class Output {
@@ -20,6 +24,7 @@ class Output {
   public final pub:PublicDirectory;
   public final priv:PrivateDirectory;
   final items:Map<String, OutputItem> = [];
+  final manifest:OutputManifest = [];
 
   public function new(root, src, pub, priv) {
     this.root = root;
@@ -30,6 +35,12 @@ class Output {
 
   public function add(item:OutputItem) {
     items.set(item.key, item);
+  }
+
+  public function addToManifest(path:String) {
+    path = Path.join([ pub.path, path ]);
+    if (manifest.contains(path)) return;
+    manifest.push(path);
   }
 
   // @todo: We need to keep track of all files output
@@ -46,7 +57,30 @@ class Output {
           return Nothing;
         });
     }
-    return batch();
+    return batch()
+      .next(_ -> priv.createFile('manifest.json').write(Json.stringify({
+        files: manifest
+      }, '  ')))
+      .next(_ -> cleanup());
+  }
+
+  function cleanup():Task<Nothing> {
+    return pub.listDirectories()
+      .next(dirs -> Task.parallel(...dirs.map(cleanupDir)))
+      .next(_ -> Nothing);
+  }
+
+  function cleanupDir(dir:Directory) {
+    return dir.listFiles().next(files -> {
+      for (file in files) {
+        // @todo: Still not sure about this.
+        if (!manifest.contains(file.path)) file.remove();
+      }
+      return Nothing;
+    }).next(_ -> dir.listDirectories()
+        .next(dirs -> Task.parallel(...dirs.map(cleanupDir)))
+        .next(_ -> Nothing)
+    );
   }
   #end
 }

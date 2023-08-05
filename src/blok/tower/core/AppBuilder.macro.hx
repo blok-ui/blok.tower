@@ -51,8 +51,8 @@ private function buildKernel(types:Array<Type>) {
       // We should look into something like `container.require()`
       // for Capsule to resolve this better.
       container
-        .map(blok.tower.core.Factory(blok.tower.target.Strategy))
-        .to((strategy:blok.tower.target.Strategy) -> () -> strategy);
+        .map(blok.tower.core.Factory(blok.tower.target.Target))
+        .to((strategy:blok.tower.target.Target) -> () -> strategy);
       container.map(blok.tower.core.ContainerFactory).to(this);
       
       $b{body};
@@ -64,7 +64,7 @@ private function buildKernel(types:Array<Type>) {
 
     public function run() {
       return createContainer()
-        .get(blok.tower.core.Factory(blok.tower.target.Strategy))
+        .get(blok.tower.core.Factory(blok.tower.target.Target))
         .create()
         .run();
     }

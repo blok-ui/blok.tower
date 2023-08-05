@@ -14,6 +14,7 @@ class ImageOutput extends Model implements OutputItem {
   @:constant final image:ImageAsset;
 
   public function process(output:Output):Task<Nothing> {
+    output.addToManifest(dest);
     return Task.parallel(
       output.src.getFile(source),
       output.pub.getFile(dest)

@@ -9,8 +9,11 @@ import blok.suspense.SuspenseBoundary;
 import blok.tower.routing.LayoutRoute;
 import blok.tower.ui.*;
 import blok.ui.*;
+import haxe.macro.Compiler;
 
 using blok.boundary.BoundaryModifiers;
+using haxe.io.Path;
+
 
 class MainLayout implements LayoutRoute<'blogish.pages'> {
   @:load final site:Site = {
@@ -19,11 +22,13 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
   }
 
   function render(context:ComponentBase, router:Child) {
+    var stylesPath = Compiler.getDefine('breeze.output')?.withExtension('css') ?? 'styles.css'; 
     return Fragment.node(
       Head.node({
         children: [
           Html.title({}, site().title),
-          Html.meta({ name: 'viewport', content: 'width=device-width, initial-scale=1' })
+          Html.meta({ name: 'viewport', content: 'width=device-width, initial-scale=1' }),
+          Style.node({ src: stylesPath, kind: Generated })
         ]
       }),
       SiteHeader.node({ site: site() }),

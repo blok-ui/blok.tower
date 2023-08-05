@@ -13,7 +13,7 @@ class ConfigAsset implements Asset {
   public function register(context:AssetContext) {
     context.add(new JsonAsset({
       id: id,
-      content: context.config.toJson().stringify()
+      content: context.config.toClientJson().stringify()
     }));
   }
 }

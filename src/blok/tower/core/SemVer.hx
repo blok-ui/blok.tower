@@ -32,6 +32,6 @@ abstract SemVer(Array<Int>) {
   }
 
   public function toFileNameSafeString() {
-    return '-v${this.join('_')}';
+    return 'v${this.join('_')}';
   }
 }

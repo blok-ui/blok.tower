@@ -16,7 +16,7 @@ class ClientAppCompiler implements Asset {
 
   public function register(context:AssetContext) {
     #if debug
-    var hash = config.name + config.version.toFileNameSafeString();
+    var hash = config.name + '-' + config.version.toFileNameSafeString();
     #else
     var hash = (config.name + config.version.toFileNameSafeString()).hash();
     #end

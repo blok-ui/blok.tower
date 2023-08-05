@@ -1,5 +1,6 @@
 package blok.tower.data.macro;
 
+import blok.tower.core.macro.CompileConfig;
 import blok.macro.ClassBuilder;
 import haxe.macro.Expr;
 import haxe.macro.Context;
@@ -57,7 +58,7 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
       // suspense work with our Capsule-based dependency injection. We
       // should find a better way to add assets.
 
-      if (Context.defined('blok.tower.client.ssg')) {
+      if (isClient() && getAppType() == StaticApp) {
         e = macro {
           @:inject final hydrate:blok.tower.data.Hydration;
           @:inject final api:blok.tower.remote.StaticFileClient;
@@ -68,7 +69,7 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
               api.fetch(${hash}).next(data -> $p{path}.fromJson(data));
           }
         }
-      } else if (Context.defined('blok.tower.client')) {
+      } else if (isClient()) {
         e = macro {
           @:inject final hydrate:blok.tower.data.Hydration;
           switch hydrate.extract(${hash}) {
