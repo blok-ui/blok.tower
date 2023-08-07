@@ -1,5 +1,6 @@
 package blogish.pages;
 
+import blogish.ui.page.*;
 import blok.html.Html;
 import blogish.data.*;
 import blok.ui.ComponentBase;
@@ -13,10 +14,13 @@ class BlogPostArchivePage implements PageRoute<'/blog/archive/page-{page:Int}'> 
   }
 
   function render(_:ComponentBase) {
-    return Html.div({},
-      Html.ul({}, ...[for (post in posts().items)
-        Html.li({}, BlogPostPage.link({ slug: post.slug }, post.title))
-      ])
+    return Fragment.node(
+      PageHeader.node({ title: 'Blog Posts' }),
+      PageContent.node({
+        children: Html.ul({}, ...[for (post in posts().items)
+          Html.li({}, BlogPostPage.link({ slug: post.slug }, post.title))
+        ])
+      })
     );
   }
 }

@@ -39,9 +39,13 @@ class SiteHeader extends Component {
       ).horizontalLayout()
         .centerAlign()
         .constrainWidthToContainer()
-        .styles(Spacing.pad(3))
+        .styles(
+          Spacing.pad(3),
+          Sizing.height('full')
+        )
 
     ).styles(
+      Sizing.height(20),
       Background.color('black', 0),
       Typography.textColor('white', 0)
     );

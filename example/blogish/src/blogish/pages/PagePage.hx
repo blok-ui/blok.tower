@@ -1,10 +1,11 @@
 package blogish.pages;
 
-import blogish.data.Post;
 import blogish.api.PageApi;
-import blok.ui.*;
-import blok.html.Html;
+import blogish.data.Post;
+import blogish.ui.page.*;
+import blok.tower.content.ContentComponent;
 import blok.tower.routing.PageRoute;
+import blok.ui.*;
 
 class PagePage implements PageRoute<'page/{slug:String}'> {
   @:load final page:Post = {
@@ -13,6 +14,11 @@ class PagePage implements PageRoute<'page/{slug:String}'> {
   }
 
   function render(context:ComponentBase) {
-    return Html.div({}, page().title);
+    return Fragment.node(
+      PageHeader.node({ title: page().title }),
+      PageContent.node({
+        children: ContentComponent.node({ content: page().content })
+      })
+    );
   }
 }
