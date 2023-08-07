@@ -73,6 +73,8 @@ private function updateRealHead(
             Local(el.attributes.field('data-source'))
           else if (el.attributes.field('data-generated') != null)
             Generated
+          else if (el.attributes.field('data-inline') != null)
+            Inline(el.attributes.field('data-inline'))
           else 
             External,
           if (ver != null) SemVer.parse(ver) else null

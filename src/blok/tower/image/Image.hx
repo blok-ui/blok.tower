@@ -22,9 +22,14 @@ class Image extends Component {
       src: src,
       size: size,
       child: (image, assetContext) -> {
-        var res = new Resource(() -> image.load(assetContext, __renderMode == Hydrating));
+        var src = new Resource(() -> image.load(assetContext, __renderMode == Hydrating));
         return Html.figure({ className: wrapperClassName },
-          Scope.wrap(_ -> Html.img({ className: className, src: res(), alt: alt }))
+          Scope
+            .wrap(_ -> Html.img({ 
+              className: className,
+              src: src(), 
+              alt: alt 
+            }))
             .inSuspense(loading)
             .inErrorBoundary((_, e) -> failed(e.message))
         );

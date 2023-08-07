@@ -17,7 +17,7 @@ class JsAsset extends StaticAsset {
     switch kind {
       case Inline(content):
         var script = new Element('script', { type: 'text/javascript' });
-        script.append(new TextNode(content, true));
+        script.append(new TextNode(content, false));
         head.append(script);
       case External:
         head.append(new Element('script', {

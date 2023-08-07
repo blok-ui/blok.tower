@@ -1,6 +1,6 @@
 package blok.tower.target;
 
-import blok.html.client.Client;
+import blok.html.Client;
 import blok.tower.asset.*;
 import blok.tower.asset.document.ClientDocument;
 import blok.tower.client.HistoryTools;

@@ -16,6 +16,10 @@ class Script extends Component {
       src: src,
       type: type,
       dataset: [
+        'inline' => switch kind {
+          case Inline(content): content;
+          default: null; 
+        },
         'generated' => switch kind {
           case Generated: 'generated';
           default: null;
