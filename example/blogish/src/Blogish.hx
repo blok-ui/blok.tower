@@ -1,4 +1,4 @@
-import blogish.data.DataModule;
+import blogish.module.*;
 import blok.tower.core.App;
 import blok.tower.module.*;
 
@@ -7,6 +7,7 @@ function main() {
     DefaultModule,
     PreConfiguredTargetModule,
     DataModule,
+    AssetModule,
     ApiRouteModule<'blogish.api'>,
     LayoutModule<'blogish.layouts'>
   >();

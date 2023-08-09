@@ -1,10 +1,15 @@
-package blogish.data;
+package blogish.module;
 
+import blogish.data.*;
 import blok.tower.cache.Cache;
 import blok.tower.cache.TransientCache;
 import blok.tower.core.*;
 import blok.tower.format.*;
 
+/**
+  This module sets up all the dependencies we need for our
+  backend.
+**/
 class DataModule implements Module {
   public function new() {}
 

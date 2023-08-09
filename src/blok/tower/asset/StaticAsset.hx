@@ -34,7 +34,7 @@ abstract class StaticAsset implements Asset {
   final kind:StaticAssetKind;
   final version:Null<SemVer>;
 
-  public function new(path, kind, ver) {
+  public function new(path, kind, ?ver) {
     this.path = path;
     this.kind = kind;
     this.version = ver;

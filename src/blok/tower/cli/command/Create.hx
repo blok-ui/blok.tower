@@ -121,6 +121,27 @@ class Create implements Command {
   }
 
   /**
+    Create a module.
+  **/
+  @:command
+  function module(name:String):Task<Int> {
+    var module = ModuleTemplate.execute({
+      app: app ?? config.name,
+      pack: pack ?? 'page',
+      name: name,
+    });
+    var path = Path.join([
+      dir ?? config.haxe.src,
+      app ?? config.name,
+      pack?.split('.')?.join('/') ?? 'module',
+      '${name}Module'
+    ]).withExtension('hx');
+    
+    displayCreationMessage(path);
+    return fs.createFile(path).write(module).next(ok -> ok ? 0 : 1);
+  }
+
+  /**
     Quickly create various classes for Tower.
   **/
   @:defaultCommand
@@ -177,6 +198,19 @@ import blok.tower.routing.PageRoute;
 class ::name::Page implements PageRoute<'::url::'> {
   public function render(context:ComponentBase):Child {
     // Implement your page here.
+  }
+}
+");
+
+final ModuleTemplate = new Template("package ::app::.::pack::;
+
+import blok.tower.core.*;
+
+class ::name::Module implements Module {
+  public function new() {}
+
+  public function provide(container:Container) {
+    // Implement your module here.
   }
 }
 ");
