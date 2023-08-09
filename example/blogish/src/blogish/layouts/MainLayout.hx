@@ -27,7 +27,7 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
         fallback: () -> Html.div({}, 'Loading...').styles(
           Background.color('gray', 200),
           Spacing.pad(3)
-        )
+        ).constrainWidthToContainer()
       })
     ).inErrorBoundary((_, e) -> ErrorHandler.node({ error: e }));
   }

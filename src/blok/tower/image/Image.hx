@@ -1,12 +1,11 @@
 package blok.tower.image;
 
-import blok.suspense.SuspenseBoundary;
 import blok.html.*;
 import blok.suspense.Resource;
 import blok.ui.*;
 
-using blok.suspense.SuspenseModifiers;
 using blok.boundary.BoundaryModifiers;
+using blok.suspense.SuspenseModifiers;
 
 class Image extends Component {
   @:observable final wrapperClassName:String = '';

@@ -7,29 +7,29 @@ import blok.tower.asset.*;
 import blok.tower.asset.document.StaticDocument;
 import blok.tower.config.*;
 import blok.tower.core.*;
-import blok.tower.data.HydrationId;
 import blok.tower.routing.Navigator;
-import blok.tower.target.compile.ClientAppCompiler;
 import haxe.Timer;
 import kit.http.Request;
 
 class Generator {
   final container:Container;
   final config:Config;
-  final appFactory:AppRootFactory;
   final output:Output;
+  final appFactory:AppRootFactory;
+  final assetContextFactory:AssetContextFactory;
   final visitor:Visitor;
   final logger:Logger;
-  final hydrationId:HydrationId;
+  final coreAssets:AssetBundle;
 
-  public function new(container, config, appFactory, output, visitor, logger, hydrationId) {
+  public function new(container, config, output, appFactory, assetContextFactory, visitor, logger, coreAssets) {
     this.container = container;
     this.config = config;
-    this.appFactory = appFactory;
     this.output = output;
+    this.appFactory = appFactory;
+    this.assetContextFactory = assetContextFactory;
     this.visitor = visitor;
     this.logger = logger;
-    this.hydrationId = hydrationId;
+    this.coreAssets = coreAssets;
   }
 
   public function generate():Task<Nothing> {
@@ -78,7 +78,7 @@ class Generator {
 
   function generatePage(path:String):Task<Document> {
     var document:Document = new StaticDocument();
-    var assets = new AssetContext(output, config, document, hydrationId);
+    var assets = assetContextFactory.createAssetContext(document);
     var wasSuspended:Bool = false;
     var completed:Bool = false;
     var stamp = Timer.stamp();
@@ -88,12 +88,6 @@ class Generator {
       time = time.substr(0, 4);
       return  '${time}ms';
     }
-
-    // @todo: Dunno if this is the best place for this.
-    assets.add(new ClientAppCompiler(config));
-    #if !blok.tower.pre_configured
-    assets.add(new ConfigAsset());
-    #end
 
     logger.log(Info, '...visiting $path');
 

@@ -8,6 +8,7 @@ class HomePage implements PageRoute<'/'> {
   @:inject final logger:Logger;
 
   function render(context:blok.ui.ComponentBase) {
+    logger.log(Info, 'Visited the home page');
     return Fragment.node(
       PageHeader.node({ title: 'Home' }),
       PageContent.node({

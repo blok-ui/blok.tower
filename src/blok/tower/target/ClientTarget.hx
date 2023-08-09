@@ -6,7 +6,6 @@ import blok.tower.asset.document.ClientDocument;
 import blok.tower.client.HistoryTools;
 import blok.tower.config.Config;
 import blok.tower.core.*;
-import blok.tower.data.HydrationId;
 import blok.tower.routing.Navigator;
 import kit.http.Request;
 
@@ -14,20 +13,18 @@ class ClientTarget implements Target {
   final container:Container;
   final config:Config;
   final appFactory:AppRootFactory;
-  final hydrationId:HydrationId;
-  final output:Output;
+  final assetFactory:AssetContextFactory;
 
-  public function new(container, config, appFactory, hydrationId, output) {
+  public function new(container, config, appFactory, assetFactory) {
     this.container = container;
     this.config = config;
     this.appFactory = appFactory;
-    this.hydrationId = hydrationId;
-    this.output = output;
+    this.assetFactory = assetFactory;
   }
 
   public function run():Cancellable {
     var document = new ClientDocument();
-    var assets = new AssetContext(output, config, document, hydrationId);
+    var assets = assetFactory.createAssetContext(document);
     var root = hydrate(
       document.getRoot(),
       () -> appFactory.create(

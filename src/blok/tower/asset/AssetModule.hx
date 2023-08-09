@@ -18,6 +18,12 @@ class AssetModule implements Module {
       .toDefault((config:blok.tower.config.Config, fs:blok.tower.file.FileSystem) -> fs.openDirectory(config.assets.publicDirectory))
       .share();
     #end
+    container.map(AssetContextFactory)
+      .to(AssetContextFactory)
+      .share();
+    container.map(AssetBundle)
+      .toDefault(() -> new AssetBundle([]))
+      .share();
     container.map(Output)
       .toDefault(Output)
       .share();

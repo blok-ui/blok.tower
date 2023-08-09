@@ -14,6 +14,11 @@ class DynamicTargetModule implements Module {
     container.map(blok.tower.remote.JsonRpcClient).to(blok.tower.remote.JsonRpcClient).share();
     container.map(Target).to(ClientTarget).share();
     #else
+    container.getMapping(blok.tower.asset.AssetBundle).extend(bundle -> {
+      var compiler = container.instantiate(blok.tower.target.compile.ClientAppCompiler);
+      bundle.add(compiler);
+      return bundle;
+    });
     container.use(blok.tower.server.ServerModule);
     container.map(Visitor).to(Visitor).share();
     container.map(Generator).to(Generator).share();

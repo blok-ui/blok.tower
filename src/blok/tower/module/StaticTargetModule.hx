@@ -17,6 +17,11 @@ class StaticTargetModule implements Module {
     container.map(blok.tower.remote.StaticFileClient).to(blok.tower.remote.StaticFileClient).share();
     container.map(Target).to(ClientTarget).share();
     #else
+    container.getMapping(blok.tower.asset.AssetBundle).extend(bundle -> {
+      var compiler = container.instantiate(blok.tower.target.compile.ClientAppCompiler);
+      bundle.add(compiler);
+      return bundle;
+    });
     container.map(Visitor).to(Visitor).share();
     container.map(Generator).to(Generator).share();
     container.map(Target).to(StaticTarget).share();

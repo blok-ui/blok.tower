@@ -1,6 +1,5 @@
 package blok.tower.module;
 
-
 /**
   Customize the source directory static files are read from, the
   Public directory assets will be saved to, and a Private directory
