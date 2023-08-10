@@ -43,8 +43,6 @@ class Output {
     manifest.push(path);
   }
 
-  // @todo: We need to keep track of all files output
-  // and then remove any leftovers that we didn't create.
   public function process():Task<Nothing> {
     var allItems = [ for (_ => value in items) value ];
     function batch() {

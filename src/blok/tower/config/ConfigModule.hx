@@ -11,12 +11,11 @@ class ConfigModule implements Module {
     #elseif blok.tower.client
     container.map(ConfigFactory).to(HydratingConfigFactory);
     #else
-    container.map(ConfigFactory)
-      .toDefault((assets:blok.tower.asset.AssetBundle) -> {
-        var config = new TowerTomlConfigFactory();
-        assets.add(new ConfigAsset());
-        return config;
-      });
+    container.map(ConfigFactory).to(TowerTomlConfigFactory);
+    container.getMapping(blok.tower.asset.AssetBundle).extend(bundle -> {
+      bundle.add(new ConfigAsset());
+      return bundle;
+    });
     #end
     container.map(Config).to((factory:ConfigFactory) -> factory.createConfig()).share();
   }

@@ -23,8 +23,6 @@ class Create implements Command {
   **/
   @:flag('a') var app:String = null;
 
-  // @todo: Config is a bad idea: do this all with conventions 
-  // instead.
   final config:Config;
   final fs:FileSystem;
 
@@ -127,7 +125,7 @@ class Create implements Command {
   function module(name:String):Task<Int> {
     var module = ModuleTemplate.execute({
       app: app ?? config.name,
-      pack: pack ?? 'page',
+      pack: pack ?? 'module',
       name: name,
     });
     var path = Path.join([

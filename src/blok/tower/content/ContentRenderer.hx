@@ -52,7 +52,6 @@ class ContentRenderer implements Context {
   }
 }
 
-// @todo: Do we need an even more robust validation step?
 final allowedHtmlTags = [
   'div',
   'code',

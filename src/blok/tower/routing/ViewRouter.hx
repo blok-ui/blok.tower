@@ -7,8 +7,6 @@ class ViewRouter extends Component {
   @:constant final routes:ViewRouteCollection;
 
   function isNestedRouter() {
-    // @todo: This works, but it's kinda a hack and I think reveals that
-    // our routing system maybe needs some work?
     return findAncestorOfType(ViewRouter).map(_ -> true).or(false);
   }
 
