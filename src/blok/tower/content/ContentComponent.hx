@@ -6,6 +6,6 @@ class ContentComponent extends Component {
   @:constant final content:Content;
 
   public function render():Child {
-    return ContentRenderer.from(this).render(content);
+    return ContentContext.from(this).render(content);
   }
 }

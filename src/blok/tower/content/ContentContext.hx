@@ -7,8 +7,8 @@ import blok.tower.core.AppContext;
 import blok.tower.routing.PageLink;
 import blok.ui.*;
 
-@:fallback(AppContext.from(context).container.get(ContentRenderer))
-class ContentRenderer implements Context {
+@:fallback(AppContext.from(context).container.get(ContentContext))
+class ContentContext implements Context {
   final factory:ContentFactory;
 
   public function new(factory) {

@@ -3,7 +3,6 @@ package blogish.pages;
 import blogish.api.PageApi;
 import blogish.data.Post;
 import blogish.ui.page.*;
-import blok.tower.content.ContentComponent;
 import blok.tower.routing.PageRoute;
 import blok.ui.*;
 
@@ -17,7 +16,7 @@ class PagePage implements PageRoute<'page/{slug:String}'> {
     return Fragment.node(
       PageHeader.node({ title: page().title }),
       PageContent.node({
-        children: ContentComponent.node({ content: page().content })
+        children: page().content.render()
       })
     );
   }

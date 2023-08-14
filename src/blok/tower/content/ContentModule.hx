@@ -7,6 +7,6 @@ class ContentModule implements Module {
 
   public function provide(container:Container) {
     container.map(ContentFactory).toDefault(new ContentFactory([])).share();
-    container.map(ContentRenderer).toShared(ContentRenderer);
+    container.map(ContentContext).to(ContentContext).share();
   }
 }

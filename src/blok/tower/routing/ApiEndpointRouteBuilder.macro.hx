@@ -49,9 +49,7 @@ function build(method:String, url:String) {
       return None;
     }
 
-    public function dispose() {
-      // noop
-    }
+    public function dispose() {}
   });
 
   return builder.export();
