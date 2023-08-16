@@ -29,7 +29,7 @@ class ImageAsset extends Model implements Asset {
   }
   
   public function load(context:AssetContext, immediate:Bool):Task<String> {
-    var url = context.config.path.createAssetUrl(getBasePath());
+    var url = getUrl(context);
     #if !blok.tower.client
     return Task.resolve(url);
     #else
@@ -39,6 +39,10 @@ class ImageAsset extends Model implements Asset {
     loaders.set(url, loader);
     return loader;
     #end
+  }
+
+  public function getUrl(context:AssetContext) {
+    return context.config.path.createAssetUrl(getBasePath());
   }
 
   public function getHash() {

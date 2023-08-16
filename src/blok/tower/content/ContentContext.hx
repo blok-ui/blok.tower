@@ -2,7 +2,8 @@ package blok.tower.content;
 
 import blok.context.Context;
 import blok.core.BlokException;
-import blok.html.*;
+import blok.html.TagCollection;
+import blok.signal.Signal;
 import blok.tower.core.AppContext;
 import blok.tower.routing.PageLink;
 import blok.ui.*;
@@ -32,11 +33,16 @@ class ContentContext implements Context {
         if (factory.has(content)) {
           return factory.create(content, render);
         }
+        
         if (allowedHtmlTags.contains(content.type)) {
-          // This is a little dicey, but...
-          var factory:(props:Dynamic, ...children:Child)->VNode = Reflect.field(Html, content.type);
-          if (factory != null) return factory(content.data, ...content.children.map(render));
+          var type = getTypeForTag(content.type);
+          var props:{} = {};
+          for (field in Reflect.fields(content.data)) {
+            Reflect.setField(props, field, new ReadonlySignal(Reflect.field(content.data, field)));
+          }
+          return new VRealNode(type, content.type, props, content.children.map(render));
         }
+
         throw new BlokException(
           'Cannot render content of the type [${content.type}].'
           #if debug
@@ -52,7 +58,7 @@ class ContentContext implements Context {
   }
 }
 
-final allowedHtmlTags = [
+private final allowedHtmlTags = [
   'div',
   'code',
   'aside',
