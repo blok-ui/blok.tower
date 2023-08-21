@@ -1,5 +1,6 @@
 package blok.tower.ui;
 
+import Blok.Fragment;
 import blok.tower.core.SemVer;
 import blok.core.BlokException.BlokComponentException;
 import blok.html.server.*;
@@ -11,22 +12,22 @@ using StringTools;
 
 class Head extends Component {
   @:constant final children:Children;
+  var root:Null<RootComponent> = null;
 
-  function setup() {
-    var root = RootComponent.node({
+  function createRoot() {
+    var component:RootComponent = cast RootComponent.node({
       target: new Element('head', {}),
       child: () -> Fragment.node(...children.toArray()),
       adaptor: new ServerAdaptor({ prefixTextWithMarker: false })
-    });
-    var component = root.createComponent();
+    }).createComponent();
     component.mount(this, null);
-
-    updateRealHead(this, component, children);
-
     addDisposable(component);
+    return component;
   }
 
   function render() {
+    if (root == null) root = createRoot();
+    updateRealHead(this, root, children);
     return Placeholder.node();
   }
 }
@@ -39,6 +40,10 @@ private function updateRealHead(
   var assets = AssetContext.from(head);
   var document = AssetContext.from(head).document;
   var target:Element = root.getRealNode();
+
+  root.findChildOfType(Fragment)
+    .unwrap()
+    ?.update(Fragment.node(...children));
   
   for (child in target.children) switch Std.downcast(child, Element) {
     case null:
