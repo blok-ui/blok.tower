@@ -88,6 +88,25 @@ class Build implements Command {
       .next(code -> if (code == 0) visit() else code);
   }
 
+  // @todo: Use the following commands instead of hard coding
+  // targets into our config.
+
+  // /**
+  //   Build the app for production.
+  // **/
+  // @:command
+  // function production():Task<Int> {
+  //   return 1;
+  // }
+
+  // /**
+  //   Start a dev server.
+  // **/
+  // @:command
+  // function dev():Task<Int> {
+  //   return 1;
+  // }
+
   /**
     Compile and generate your Tower site.
   **/

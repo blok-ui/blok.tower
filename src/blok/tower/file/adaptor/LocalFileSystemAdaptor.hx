@@ -35,9 +35,9 @@ class LocalFileSystemAdaptor implements FileSystemAdaptor {
     if (!fullPath.exists()) {
       return new Error(NotFound, 'No directory exists at $path');
     }
+    var paths = try fullPath.readDirectory() catch (e) return new Error(InternalError, e.message);
     return Task.parallel(
-      ...fullPath
-        .readDirectory()
+      ...paths
         .filter(name -> !Path.join([ fullPath, name ]).isDirectory())
         .map(name -> getMeta(Path.join([ path, name ])))
     );
