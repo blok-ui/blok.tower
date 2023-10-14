@@ -7,7 +7,7 @@ import blok.tower.routing.PageVisitor;
 import blok.ui.*;
 
 class SiteHeader extends Component {
-  @:constant final site:Site;
+  @:attribute final site:Site;
 
   function render() {
     return Html.header({},

@@ -7,7 +7,7 @@ import blok.html.*;
 using haxe.io.Path;
 
 class SiteHead extends Component {
-  @:constant final site:Site;
+  @:attribute final site:Site;
 
   function render() {
     return Head.node({

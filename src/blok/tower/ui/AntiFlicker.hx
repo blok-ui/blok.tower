@@ -7,9 +7,9 @@ import blok.ui.*;
 // This does not work
 
 class AntiFlicker extends Component {
-  @:constant final delay:Int = 1000;
-  @:constant final fallback:()->Child;
-  @:constant final child:Child;
+  @:attribute final delay:Int = 1000;
+  @:attribute final fallback:()->Child;
+  @:attribute final child:Child;
 
   var timer:Null<Timer>;
   var previous:Null<Child> = null;

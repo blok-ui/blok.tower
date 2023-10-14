@@ -6,9 +6,9 @@ import blok.tower.core.SemVer;
 import blok.ui.*;
 
 class Style extends Component {
-  @:constant final src:String;
-  @:constant final kind:StaticAssetKind = External;
-  @:constant final version:Null<SemVer> = null;
+  @:attribute final src:String;
+  @:attribute final kind:StaticAssetKind = External;
+  @:attribute final version:Null<SemVer> = null;
 
   function render() {
     return Html.link({

@@ -3,9 +3,9 @@ package blok.tower.routing;
 import blok.ui.*;
 
 class PageVisitor extends Component {
-  @:constant final to:String;
-  @:constant final onUsed:()->Void = null;
-  @:constant final child:(goToPage:()->Void)->Child;
+  @:attribute final to:String;
+  @:attribute final onUsed:()->Void = null;
+  @:attribute final child:(goToPage:()->Void)->Child;
 
   function render() {
     return child(() -> {

@@ -1,12 +1,10 @@
 package blogish.ui.modifier;
 
 import blok.debug.Debug;
-import blok.signal.*;
-import blok.ui.*;
 
 class BreezeStyles extends Component {
   @:observable final styles:ClassName;
-  @:constant final child:Child;
+  @:attribute final child:Child;
 
   var previousClasses:String = '';
 

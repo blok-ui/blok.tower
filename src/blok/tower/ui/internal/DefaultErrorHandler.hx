@@ -6,7 +6,7 @@ import haxe.Exception;
 import kit.Error;
 
 class DefaultErrorHandler extends Component {
-  @:constant final error:Exception;
+  @:attribute final error:Exception;
 
   // @todo: Fix up styles and branding here!
   // Ideally this would have handy developer friendly stuff available.

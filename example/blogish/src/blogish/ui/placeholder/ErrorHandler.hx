@@ -7,7 +7,7 @@ import kit.Error;
 using Std;
 
 class ErrorHandler extends Component {
-  @:constant final error:Exception;
+  @:attribute final error:Exception;
 
   // @todo: Styles and stuff.
   function render() {

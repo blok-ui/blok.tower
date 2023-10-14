@@ -3,7 +3,7 @@ package blogish.ui.page;
 import blok.html.*;
 
 class PageHeader extends Component {
-  @:constant final title:String;
+  @:attribute final title:String;
 
   function render() {
     return Html.header({},

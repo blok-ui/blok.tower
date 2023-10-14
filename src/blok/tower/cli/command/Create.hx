@@ -36,7 +36,7 @@ class Create implements Command {
   **/
   @:command
   function model(name:String):Task<Int> {
-    var model = ApiTemplate.execute({
+    var model = ModelTemplate.execute({
       app: app ?? config.name,
       pack: pack ?? 'model',
       name: name
@@ -182,7 +182,7 @@ import blok.tower.routing.LayoutRoute;
 
 class ::name::Layout implements LayoutRoute<'::target::'> {
   function render(context:ComponentBase, router:Child):Child {
-    // Implement your layout here. Be sure to include `router`
+    // Implement your layout here. Be sure to return `router`
     // somewhere or your app will not work!
   }
 }

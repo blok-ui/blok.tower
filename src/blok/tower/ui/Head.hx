@@ -11,7 +11,7 @@ using Reflect;
 using StringTools;
 
 class Head extends Component {
-  @:constant final children:Children;
+  @:attribute final children:Children;
   var root:Null<RootComponent> = null;
 
   function createRoot() {

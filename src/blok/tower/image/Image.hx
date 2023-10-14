@@ -14,11 +14,11 @@ class Image extends Component {
   @:observable final src:String;
   @:observable final alt:String;
   @:observable final size:ImageSize = ImageSize.Full;
-  @:constant final onClick:EventListener = null;
-  @:constant final onTouchStart:EventListener = null;
-  @:constant final onTouchEnd:EventListener = null;
-  @:constant final loading:()->Child;
-  @:constant final failed:(message:String)->Child;
+  @:attribute final onClick:EventListener = null;
+  @:attribute final onTouchStart:EventListener = null;
+  @:attribute final onTouchEnd:EventListener = null;
+  @:attribute final loading:()->Child;
+  @:attribute final failed:(message:String)->Child;
   
   function render() {
     return ImageLoader.node({

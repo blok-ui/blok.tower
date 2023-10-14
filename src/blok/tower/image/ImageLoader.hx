@@ -6,7 +6,7 @@ import blok.ui.*;
 class ImageLoader extends Component {
   @:observable final src:String;
   @:observable final size:ImageSize = ImageSize.Full;
-  @:constant final child:(image:ImageAsset, assets:AssetContext)->Child;
+  @:attribute final child:(image:ImageAsset, assets:AssetContext)->Child;
 
   function render() {
     var config = ImageContext.from(this).config;

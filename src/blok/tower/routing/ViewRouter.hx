@@ -3,8 +3,8 @@ package blok.tower.routing;
 import blok.ui.*;
 
 class ViewRouter extends Component {
-  @:constant final navigator:Navigator = null;
-  @:constant final routes:ViewRouteCollection;
+  @:attribute final navigator:Navigator = null;
+  @:attribute final routes:ViewRouteCollection;
 
   function isNestedRouter() {
     return findAncestorOfType(ViewRouter).map(_ -> true).or(false);

@@ -6,10 +6,10 @@ import blok.ui.*;
 import blok.html.Html;
 
 class Script extends Component {
-  @:constant final src:String;
-  @:constant final type:String = 'text/javascript';
-  @:constant final kind:StaticAssetKind = External;
-  @:constant final version:SemVer = null;
+  @:attribute final src:String;
+  @:attribute final type:String = 'text/javascript';
+  @:attribute final kind:StaticAssetKind = External;
+  @:attribute final version:SemVer = null;
   
   function render() {
     return Html.script({

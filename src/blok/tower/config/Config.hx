@@ -23,8 +23,7 @@ class Config extends Model implements Context {
       default: StaticApp;
     }
   )
-  @:constant 
-  public final type:AppType;
+  @:constant public final type:AppType;
   @:constant public final path:PathConfig;
   #if !blok.tower.client
   @:constant public final server:ServerConfig;

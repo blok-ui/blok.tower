@@ -4,10 +4,10 @@ import blok.html.Html;
 import blok.ui.*;
 
 class PageLink extends Component {
-  @:constant final to:String;
-  @:constant final onUsed:()->Void = null;
+  @:attribute final to:String;
+  @:attribute final onUsed:()->Void = null;
   @:observable final className:String = null;
-  @:constant final children:Children;
+  @:attribute final children:Children;
   
   function render() {
     return PageVisitor.node({
