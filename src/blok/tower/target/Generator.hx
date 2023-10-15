@@ -77,7 +77,7 @@ class Generator {
   }
 
   function generatePage(path:String):Task<Document> {
-    var document:Document = new StaticDocument();
+    var document:Document = new StaticDocument({ root: config.render.root });
     var assets = assetContextFactory.createAssetContext(document);
     var wasSuspended:Bool = false;
     var completed:Bool = false;

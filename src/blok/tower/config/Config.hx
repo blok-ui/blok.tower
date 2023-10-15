@@ -25,6 +25,7 @@ class Config extends Model implements Context {
   )
   @:constant public final type:AppType;
   @:constant public final path:PathConfig;
+  @:constant public final render:RenderConfig;
   #if !blok.tower.client
   @:constant public final server:ServerConfig;
   @:constant public final haxe:HaxeConfig;
@@ -38,6 +39,10 @@ class Config extends Model implements Context {
     Reflect.deleteField(json, 'assets');
     return json;
   }
+}
+
+class RenderConfig extends Model {
+  @:constant public final root:String = 'root';
 }
 
 class PathConfig extends Model {

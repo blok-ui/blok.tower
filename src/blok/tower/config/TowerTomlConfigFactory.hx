@@ -19,6 +19,7 @@ class TowerTomlConfigFactory implements ConfigFactory {
     var server:Dynamic = data.field('server') ?? {};
     var assets:Dynamic = data.field('assets') ?? {};
     var path:Dynamic = data.field('path') ?? {};
+    var render:Dynamic = data.field('render') ?? {};
     var type:AppType = switch data.field('type') {
       case null: StaticApp;
       case 'static': StaticApp;
@@ -56,6 +57,9 @@ class TowerTomlConfigFactory implements ConfigFactory {
         src: haxe.field('src'),
         dependencies: data.field('dependencies'),
         flags: haxe.field('flags')
+      }),
+      render: new RenderConfig({
+        root: render.field('root')
       }),
       assets: new AssetConfig({
         src: assets.field('src'),

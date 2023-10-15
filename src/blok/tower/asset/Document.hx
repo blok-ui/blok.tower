@@ -1,11 +1,16 @@
 package blok.tower.asset;
 
 abstract class Document {
-  public function new() {}
+  final options:{
+    root:String
+  };
+
+  public function new(?options) {
+    this.options = options ?? { root: 'root' };
+  }
   
   public function getRoot():Dynamic {
-    // @todo: make configurable
-    return getLayer('root');
+    return getLayer(options.root);
   }
 
   abstract public function getHead():Dynamic;

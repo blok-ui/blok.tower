@@ -23,7 +23,7 @@ class ClientTarget implements Target {
   }
 
   public function run():Cancellable {
-    var document = new ClientDocument();
+    var document = new ClientDocument({ root: config.render.root });
     var assets = assetFactory.createAssetContext(document);
     var root = hydrate(
       document.getRoot(),
