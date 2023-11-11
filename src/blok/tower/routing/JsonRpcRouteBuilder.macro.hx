@@ -1,15 +1,15 @@
 package blok.tower.routing;
 
-import blok.tower.core.macro.CompileConfig;
+import blok.macro.*;
+import blok.tower.macro.CompileConfig;
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.ClassBuilder;
 
 using Lambda;
 using blok.macro.MacroTools;
-using kit.Hash;
 using blok.tower.routing.macro.RouteBuilder;
 using haxe.macro.Tools;
+using kit.Hash;
 
 function buildGeneric() {
   return switch Context.getLocalType() {
@@ -19,7 +19,7 @@ function buildGeneric() {
       buildJsonRpcRoute(url.normalizeUrl());
     default:
       throw 'assert';
-  }  
+  }
 }
 
 function build(url:String) {
@@ -146,7 +146,7 @@ function build(url:String) {
 // @todo: Come up with something better here.
 private function buildStaticClient(url:String) {
   var serverFields = Context.getBuildFields();
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   
   for (field in serverFields) switch field.kind {
     case FFun(f) if (isRpcMethod(field)):
@@ -186,7 +186,7 @@ private function buildStaticClient(url:String) {
 
 private function buildClient(url:String) {
   var serverFields = Context.getBuildFields();
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
 
   builder.add(macro class {
     @:noCompletion static final __url = $v{url};

@@ -2,7 +2,7 @@ package blok.tower.routing;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.ClassBuilder;
+import blok.macro.*;
 
 using blok.tower.routing.macro.RouteBuilder;
 using blok.tower.routing.internal.RouteParser;
@@ -68,7 +68,7 @@ function buildApiEndpointRoute(method:String, url:String) {
 
   if (path.typePathExists()) return TPath(path);
 
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   var route = url.processRoute();
   var routeParamsType = route.paramsType;
 

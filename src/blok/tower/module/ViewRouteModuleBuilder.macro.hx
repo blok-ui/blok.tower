@@ -1,8 +1,8 @@
 package blok.tower.module;
 
+import blok.macro.*;
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.ClassBuilder;
 
 using blok.tower.routing.macro.RouteScanner;
 using blok.macro.MacroTools;
@@ -25,7 +25,7 @@ private function buildViewRouteModule(pack:String):ComplexType {
 
   if (path.typePathExists()) return TPath(path);
   
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   var routes = pack.scanForViewRoutes();
   var registerRoutes:Array<Expr> = [ for (route in routes) {
     var path = route.pack.concat([ route.name ]);

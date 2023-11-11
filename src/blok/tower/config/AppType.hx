@@ -1,9 +1,9 @@
 package blok.tower.config;
 
 @:using(AppType.AppTypeTools)
-enum AppType {
-  StaticApp;
-  DynamicApp;
+enum abstract AppType(Int) {
+  final StaticApp;
+  final DynamicApp;
 }
 
 class AppTypeTools {

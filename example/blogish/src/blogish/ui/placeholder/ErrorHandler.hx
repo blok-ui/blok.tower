@@ -4,14 +4,14 @@ import blok.html.Html;
 import haxe.Exception;
 import kit.Error;
 
-using Std;
+using Kit;
 
 class ErrorHandler extends Component {
   @:attribute final error:Exception;
 
   // @todo: Styles and stuff.
   function render() {
-    var code:ErrorCode = error.downcast(Error)?.code ?? InternalError;
+    var code:ErrorCode = error.as(Error)?.code ?? InternalError;
     return Html.div({},
       Html.header({},
         Html.h1({}, 'Error: $code')  

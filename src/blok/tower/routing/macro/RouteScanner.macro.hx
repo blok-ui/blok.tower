@@ -1,6 +1,6 @@
 package blok.tower.routing.macro;
 
-import blok.tower.core.macro.ClassScanner;
+import blok.tower.macro.ClassScanner;
 
 function scanForViewRoutes(pack:String) {
   return scanForClasses(pack, 'blok.tower.routing.ViewRoute');

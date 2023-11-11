@@ -94,7 +94,7 @@ function processLoaders(builder:ClassBuilder, hashPrefix:Expr):LoaderInfo {
             id: $hash,
             content: haxe.Json.stringify(data.toJson())
           }));
-        case Error(_) | Loading:
+        case Error(_) | Loading(_) | Pending:
       });
     default:
       Context.error('Invalid field type for $LoaderMeta', field.pos);

@@ -1,4 +1,4 @@
-package blok.tower.core.macro;
+package blok.tower.macro;
 
 import blok.tower.config.AppType;
 import haxe.macro.Context;

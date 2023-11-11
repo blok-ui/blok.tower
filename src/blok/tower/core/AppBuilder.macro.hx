@@ -3,7 +3,7 @@ package blok.tower.core;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
-import blok.macro.ClassBuilder;
+import blok.macro.*;
 
 using haxe.macro.Tools;
 using kit.Hash;
@@ -25,7 +25,7 @@ private function buildKernel(types:Array<Type>) {
 
   if (path.typePathExists()) return TPath(path);
 
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   var body:Array<Expr> = [];
   var pos = Context.currentPos();
 

@@ -2,7 +2,7 @@ package blok.tower.module;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.ClassBuilder;
+import blok.macro.*;
 
 using kit.Hash;
 using blok.macro.MacroTools;
@@ -27,7 +27,7 @@ function buildAssetModule(src:String, pub:String, priv:String) {
 
   if (modulePath.typePathExists()) return TPath(modulePath);
 
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   
   builder.add(macro class {
     public function new() {}

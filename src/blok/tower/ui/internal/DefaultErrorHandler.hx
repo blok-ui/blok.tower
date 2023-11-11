@@ -11,7 +11,7 @@ class DefaultErrorHandler extends Component {
   // @todo: Fix up styles and branding here!
   // Ideally this would have handy developer friendly stuff available.
   function render() {
-    var code:ErrorCode = Std.downcast(error, kit.Error)?.code ?? InternalError;
+    var code:ErrorCode = error.as(kit.Error)?.code ?? InternalError;
     return Html.div({ style: '
       max-width: 900px;
       margin: 30px auto;

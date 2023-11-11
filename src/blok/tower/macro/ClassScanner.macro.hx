@@ -1,4 +1,4 @@
-package blok.tower.core.macro;
+package blok.tower.macro;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;

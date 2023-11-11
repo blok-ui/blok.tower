@@ -1,14 +1,36 @@
 package blok.tower.routing;
 
-import blok.macro.ClassBuilder;
+import blok.macro.*;
+import blok.tower.macro.builder.*;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
 using blok.macro.MacroTools;
-using blok.tower.core.macro.InjectorBuilder;
-using blok.tower.data.macro.LoaderBuilder;
 using blok.tower.routing.macro.RouteBuilder;
 using kit.Hash;
+
+final builderFactory = new ClassBuilderFactory([
+  new LoadFieldBuilder({
+    createJsonAssetExportMethod: true,
+    createHashPrefix: _ -> macro kit.Hash.hash(url.get())
+  }),
+  new InjectFieldBuilder({
+    buildConstructor: true,
+    customBuilder: options -> {
+      args: options.args,
+      expr: macro {
+        ${options.inits};
+        var previousOwner = blok.signal.Graph.setCurrentOwner(Some(disposables));
+        ${options.lateInits};
+        blok.signal.Graph.setCurrentOwner(previousOwner);
+        ${switch options.previousExpr {
+          case Some(expr): expr;
+          case None: macro null;
+        }}
+      }
+    }
+  })
+]);
 
 function buildGeneric() {
   return switch Context.getLocalType() {
@@ -20,122 +42,13 @@ function buildGeneric() {
 }
 
 function build(url:String) {
-  var builder = ClassBuilder.fromContext();
-  var loaderInfo = builder.processLoaders(macro kit.Hash.hash(url.get()));
-  var injectInfo = builder.processInjectFields();
-  var args = [ for (name => type in loaderInfo.dependencies) {
-    name: name,
-    type: type,
-  } ].concat(injectInfo.args);
-  
-  for (name => type in loaderInfo.dependencies) {
-    builder.add(macro class {
-      final $name:$type;
-    });
-  }
-
-  builder.addField({
-    name: 'new',
-    access: [ APublic ],
-    kind: FFun({
-      args: args,
-      expr: macro {
-        @:mergeBlock $b{ [ for (name => _ in loaderInfo.dependencies) macro this.$name = $i{name} ] };
-        @:mergeBlock $b{injectInfo.inits};
-        var previousOwner = blok.signal.Graph.setCurrentOwner(Some(disposables));
-        @:mergeBlock $b{loaderInfo.inits};
-        blok.signal.Graph.setCurrentOwner(previousOwner);
-      }
-    }),
-    pos: (macro null).pos
-  });
-  
-  var route = url.processRoute();
-  var routeParamsType = route.paramsType;
-  var linkParamsType:ComplexType = switch routeParamsType {
-    case TAnonymous(fields):
-      TAnonymous(fields.concat((macro class {
-        @:optional public final className:Null<String>;
-        @:optional public final onUsed:Null<()->Void>; 
-      }).fields));
-    default: 
-      throw 'assert';
-  }
-  var visitParamsType:ComplexType = switch routeParamsType {
-    case TAnonymous(fields):
-      TAnonymous(fields.concat((macro class {
-        @:optional public final child:(goToPage:()->Void)->blok.ui.Child;
-        @:optional public final onUsed:Null<()->Void>;
-      }).fields));
-    default: 
-      throw 'assert';
-  }
-
-  builder.add(macro class {
-    static final matcher = ${route.matcher};
-
-    public static function createUrl(props:$routeParamsType):String {
-      return ${route.urlBuilder};
-    }
-    
-    public static function link(props:$linkParamsType, ...children:blok.ui.Child) {
-      return blok.tower.routing.PageLink.node({
-        to: createUrl(props),
-        className: props.className,
-        onUsed: props.onUsed,
-        children: children.toArray()
-      });
-    }
-    
-    public static function visit(props:$visitParamsType) {
-      return blok.tower.routing.PageVisitor.node({
-        to: createUrl(props),
-        onUsed: props.onUsed,
-        child: props.child
-      });
-    }
-
-    final url = new blok.signal.Signal<Null<String>>(null);
-    final params = new blok.signal.Signal<Null<$routeParamsType>>(null);
-    final disposables = new blok.core.DisposableCollection();
-    @:noCompletion var __isDisposed:Bool = false;
-
-    public function test(request:kit.http.Request):Bool {
-      if (__isDisposed) return false;
-      return request.method == Get && matcher.match(request.url);
-    }
-
-    public function match(request:kit.http.Request):kit.Maybe<blok.ui.VNode> {
-      if (__isDisposed) return None;
-      if (request.method != Get) return None;
-      if (matcher.match(request.url)) {
-        blok.signal.Action.run(() -> {
-          this.url.set(request.url);
-          this.params.set(${route.paramsBuilder});
-        });
-        return Some(blok.ui.Scope.wrap(context -> {
-          var view = render(context);
-          #if !blok.tower.client
-          blok.signal.Observer.untrack(() -> {
-            __exportJsonAssets(context);
-          });
-          #end
-          return view;
-        }));
-      }
-      return None;
-    }
-
-    public function dispose() {
-      __isDisposed = true;
-      disposables.dispose();
-    }
-  });
-
-  return builder.export();
+  return builderFactory
+    .withBuilders(new PageRouteBuilder(url))
+    .fromContext()
+    .export();
 }
 
-function buildPageRoute(url:String) {
+private function buildPageRoute(url:String) {
   var suffix = url.hash();
   var pos = Context.getLocalClass().get().pos;
   var pack = [ 'blok', 'tower', 'routing' ];
@@ -144,7 +57,7 @@ function buildPageRoute(url:String) {
 
   if (path.typePathExists()) return TPath(path);
 
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
 
   builder.add(macro class {
     private function render(context:blok.ui.ComponentBase):blok.ui.Child;
@@ -176,4 +89,98 @@ function buildPageRoute(url:String) {
   });
 
   return TPath(path);
+}
+
+class PageRouteBuilder implements Builder {
+  public final priority:BuilderPriority = Normal;
+
+  final url:String;
+  
+  public function new(url) {
+    this.url = url;
+  }
+
+  public function apply(builder:ClassBuilder) {
+    var route = url.processRoute();
+    var routeParamsType = route.paramsType;
+    var linkParamsType:ComplexType = switch routeParamsType {
+      case TAnonymous(fields):
+        TAnonymous(fields.concat((macro class {
+          @:optional public final className:Null<String>;
+          @:optional public final onUsed:Null<()->Void>; 
+        }).fields));
+      default: 
+        throw 'assert';
+    }
+    var visitParamsType:ComplexType = switch routeParamsType {
+      case TAnonymous(fields):
+        TAnonymous(fields.concat((macro class {
+          @:optional public final child:(goToPage:()->Void)->blok.ui.Child;
+          @:optional public final onUsed:Null<()->Void>;
+        }).fields));
+      default: 
+        throw 'assert';
+    }
+  
+    builder.add(macro class {
+      static final matcher = ${route.matcher};
+  
+      public static function createUrl(props:$routeParamsType):String {
+        return ${route.urlBuilder};
+      }
+      
+      public static function link(props:$linkParamsType, ...children:blok.ui.Child) {
+        return blok.tower.routing.PageLink.node({
+          to: createUrl(props),
+          className: props.className,
+          onUsed: props.onUsed,
+          children: children.toArray()
+        });
+      }
+      
+      public static function visit(props:$visitParamsType) {
+        return blok.tower.routing.PageVisitor.node({
+          to: createUrl(props),
+          onUsed: props.onUsed,
+          child: props.child
+        });
+      }
+  
+      final url = new blok.signal.Signal<Null<String>>(null);
+      final params = new blok.signal.Signal<Null<$routeParamsType>>(null);
+      final disposables = new blok.core.DisposableCollection();
+      @:noCompletion var __isDisposed:Bool = false;
+  
+      public function test(request:kit.http.Request):Bool {
+        if (__isDisposed) return false;
+        return request.method == Get && matcher.match(request.url);
+      }
+  
+      public function match(request:kit.http.Request):kit.Maybe<blok.ui.VNode> {
+        if (__isDisposed) return None;
+        if (request.method != Get) return None;
+        if (matcher.match(request.url)) {
+          blok.signal.Action.run(() -> {
+            this.url.set(request.url);
+            this.params.set(${route.paramsBuilder});
+          });
+          return Some(blok.ui.Scope.wrap(context -> {
+            var view = render(context);
+            #if !blok.tower.client
+            blok.signal.Observer.untrack(() -> {
+              __exportJsonAssets(context);
+            });
+            #end
+            return view;
+          }));
+        }
+        return None;
+      }
+  
+      public function dispose() {
+        __isDisposed = true;
+        disposables.dispose();
+      }
+    });
+  }
 }

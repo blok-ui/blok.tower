@@ -2,7 +2,7 @@ package blok.tower.module;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.ClassBuilder;
+import blok.macro.FieldBuilder;
 
 using blok.tower.routing.macro.RouteScanner;
 using blok.macro.MacroTools;
@@ -25,7 +25,7 @@ private function buildApiRouteModule(pack:String):ComplexType {
 
   if (path.typePathExists()) return TPath(path);
   
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   var routes = pack.scanForApiRoutes();
   var registerRoutes:Array<Expr> = [ for (route in routes) {
     var path = route.pack.concat([ route.name ]);

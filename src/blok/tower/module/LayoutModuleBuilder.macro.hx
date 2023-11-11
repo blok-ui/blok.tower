@@ -2,7 +2,7 @@ package blok.tower.module;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.ClassBuilder;
+import blok.macro.*;
 
 using Lambda;
 using blok.tower.routing.macro.RouteScanner;
@@ -27,7 +27,7 @@ private function buildLayoutModule(pack:String):ComplexType {
 
   if (path.typePathExists()) return TPath(path);
   
-  var builder = new ClassBuilder([]);
+  var builder = new FieldBuilder([]);
   var layouts = pack.scanForLayoutRoutes();
   var routes = [ for (layout in layouts) {
     // We need to provide all the Layout's routes, which handily are
