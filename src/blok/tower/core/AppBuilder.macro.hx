@@ -18,7 +18,7 @@ function buildGeneric() {
   }
 }
 
-private function buildKernel(types:Array<Type>) {
+private function buildKernel(types:Array<Type>) {  
   var pack = ['blok', 'tower', 'core'];
   var name = 'App_' + types.map(type -> type.stringifyTypeForClassName()).join('_').hash();
   var path:TypePath = { pack: pack, name: name };

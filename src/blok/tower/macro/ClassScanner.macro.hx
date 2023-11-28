@@ -3,8 +3,8 @@ package blok.tower.macro;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-using sys.FileSystem;
 using haxe.io.Path;
+using sys.FileSystem;
 
 function scanForClasses(pack:String, implementing:String):Array<TypePath> {
   var types:Array<TypePath> = [];
@@ -40,4 +40,3 @@ function scanForClassInDir(root:String, pack:Array<String>, implementing:String)
   
   return types;
 }
-
