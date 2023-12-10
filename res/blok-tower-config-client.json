@@ -1,1 +1,1 @@
-{"name":"blogish","version":[0,0,1],"type":0,"path":{"staticPrefix":"","assetPath":"/assets","apiPrefix":"/api","apiPath":"/api"},"render":{"root":"root"}}
+{"name":"blogish","version":"0.0.1","type":"static","path":{"staticPrefix":"","assetPath":"/assets","apiPrefix":"/api","apiPath":"/api"},"render":{"root":"root"}}

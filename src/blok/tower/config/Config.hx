@@ -7,12 +7,16 @@ import blok.data.Model;
 
 using haxe.io.Path;
 
+@:build(blok.tower.config.ConfigBuilder.build())
 @:fallback(AppContext.from(context).container.get(Config))
-class Config extends Model implements Context {
-  @:constant public final name:String;
+class Config implements Context {
+  @:prop public final name:String;
+  
+  @:prop 
   @:json(to = value.toString(), from = SemVer.parse(value))
-  @:constant 
   public final version:SemVer;
+  
+  @:prop
   @:json(
     to = switch value {
       case StaticApp: 'static';
@@ -22,14 +26,29 @@ class Config extends Model implements Context {
       case 'dynamic': DynamicApp;
       default: StaticApp;
     }
-  )
-  @:constant public final type:AppType;
-  @:constant public final path:PathConfig;
-  @:constant public final render:RenderConfig;
+  ) 
+  public var type:AppType;
+  
+  @:prop 
+  @:json(to = value.toJson(), from = PathConfig.fromJson(value))
+  public final path:PathConfig;
+  
+  @:prop
+  @:json(to = value.toJson(), from = RenderConfig.fromJson(value)) 
+  public final render:RenderConfig;
+  
   #if !blok.tower.client
-  @:constant public final server:ServerConfig;
-  @:constant public final haxe:HaxeConfig;
-  @:constant public final assets:AssetConfig;
+  @:prop 
+  @:json(to = value.toJson(), from = ServerConfig.fromJson(value))
+  public final server:ServerConfig;
+  
+  @:prop 
+  @:json(to = value.toJson(), from = HaxeConfig.fromJson(value))
+  public final haxe:HaxeConfig;
+  
+  @:prop
+  @:json(to = value.toJson(), from = AssetConfig.fromJson(value))
+  public final assets:AssetConfig;
   #end
 
   public function toClientJson() {
@@ -41,15 +60,17 @@ class Config extends Model implements Context {
   }
 }
 
-class RenderConfig extends Model {
-  @:constant public final root:String = 'root';
+@:build(blok.tower.config.ConfigBuilder.build())
+class RenderConfig {
+  @:prop public final root:String = 'root';
 }
 
-class PathConfig extends Model {
-  @:constant public final staticPrefix:String = '';
-  @:constant public final assetPath:String = 'assets';
-  @:constant public final apiPrefix:String = 'api';
-  @:constant public final apiPath:String = 'api';
+@:build(blok.tower.config.ConfigBuilder.build())
+class PathConfig {
+  @:prop public final staticPrefix:String = '';
+  @:prop public final assetPath:String = 'assets';
+  @:prop public final apiPrefix:String = 'api';
+  @:prop public final apiPath:String = 'api';
 
   public function createAssetUrl(path:String) {
     return Path.join([ '/', staticPrefix, assetPath, path ]);
@@ -69,31 +90,34 @@ class PathConfig extends Model {
 }
 
 #if !blok.tower.client
-class HaxeConfig extends Model {
-  @:constant public final src:String = 'src';
-  @:constant public final main:String = 'App';
-  @:constant public final target:String = 'js';
-  @:constant public final output:String = 'dist/build.js';
-  @:constant public final dependencies:{
+@:build(blok.tower.config.ConfigBuilder.build())
+class HaxeConfig {
+  @:prop public final src:String = 'src';
+  @:prop public final main:String = 'App';
+  @:prop public final target:String = 'js';
+  @:prop public final output:String = 'dist/build.js';
+  @:prop public final dependencies:{
     shared:Array<String>,
     client:Array<String>,
     server:Array<String>
   } = { shared: [], client: [], server: [] };
-  @:constant public final flags:{
+  @:prop public final flags:{
     shared:{},
     client:{},
     server:{}
   } = { shared: [], client: [], server: [] };
 }
 
-class AssetConfig extends Model {
-  @:constant public final src:String = 'data';
-  @:constant public final privateDirectory:String = 'dist';
-  @:constant public final publicDirectory:String = 'dist/public';
+@:build(blok.tower.config.ConfigBuilder.build())
+class AssetConfig {
+  @:prop public final src:String = 'data';
+  @:prop public final privateDirectory:String = 'dist';
+  @:prop public final publicDirectory:String = 'dist/public';
 }
 
-class ServerConfig extends Model {
-  @:constant public final port:Int = 3000;
+@:build(blok.tower.config.ConfigBuilder.build())
+class ServerConfig {
+  @:prop public final port:Int = 3000;
   // @todo: etc?
 }
 #end

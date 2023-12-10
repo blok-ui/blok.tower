@@ -1,6 +1,6 @@
 # Automatically generated file. DO NOT EDIT!
 # To configure things, edit your `tower.toml` and run
-# `> tower build setup` or `> tower build all`
+# `> tower build setup`.
 
 -cp example/blogish/src
 
@@ -11,8 +11,8 @@
 -D js-es=6
 -D message-reporting=pretty
 -D analyzer-optimize
---debug
 -D breeze.output=styles-v0_0_1
+--debug
 -lib blok.tower
 -lib breeze
 -lib blok.foundation

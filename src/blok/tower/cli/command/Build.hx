@@ -65,7 +65,7 @@ class Build implements Command {
     Compile your application (requires setup to be run first).
   **/
   @:command
-  function app():Task<Int> {
+  function compile():Task<Int> {
     output.writeLn('Compiling...');
     var cmd = [
       createNodeCommand('haxe'),
@@ -79,33 +79,27 @@ class Build implements Command {
   }
 
   /**
-    Execute all build steps.
+    Build the app for production.
   **/
   @:command
-  function all():Task<Int> {
+  function production():Task<Int> {
+    config.haxe.flags.shared.setField('debug', 'false');
     return setup()
-      .next(code -> if (code == 0) app() else code)
+      .next(code -> if (code == 0) compile() else code)
       .next(code -> if (code == 0) visit() else code);
   }
 
-  // @todo: Use the following commands instead of hard coding
-  // targets into our config.
-
-  // /**
-  //   Build the app for production.
-  // **/
-  // @:command
-  // function production():Task<Int> {
-  //   return 1;
-  // }
-
-  // /**
-  //   Start a dev server.
-  // **/
-  // @:command
-  // function dev():Task<Int> {
-  //   return 1;
-  // }
+  /**
+    Compile for development and start up a server.
+  **/
+  @:command
+  function dev():Task<Int> {
+    config.haxe.flags.shared.setField('debug', 'true');
+    return setup()
+      .next(code -> if (code == 0) compile() else code)
+      .next(code -> if (code == 0) visit() else code);
+    // @todo: start the server.
+  }
 
   /**
     Compile and generate your Tower site.
@@ -226,7 +220,7 @@ class Build implements Command {
   function addGeneratedWarning(body:StringBuf) {
     body.add('# Automatically generated file. DO NOT EDIT!\n');
     body.add('# To configure things, edit your `tower.toml` and run\n');
-    body.add('# `> tower build setup` or `> tower build all`\n\n');
+    body.add('# `> tower build setup`.\n\n');
   }
 
   function addFlags(body:StringBuf, flags:{}) {
@@ -235,7 +229,7 @@ class Build implements Command {
     for (flag in flags.fields()) {
       var value:Dynamic = flags.field(flag);
       if (flag == 'debug') {
-        body.add('--debug\n');
+        if (value == 'true') body.add('--debug\n');
       } else if (flag == 'dce') {
         body.add('-dce ${value}\n');
       } else if (flag == 'macro') {

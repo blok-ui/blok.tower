@@ -27,5 +27,4 @@ output = 'dist/build.js'
 js-es = '6'
 message-reporting = 'pretty'
 analyzer-optimize = true
-debug = true
 'breeze.output' = 'styles-{{version}}'
