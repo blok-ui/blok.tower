@@ -1,4 +1,4 @@
-package blok.tower.target;
+package blok.tower.generate;
 
 import blok.debug.Debug;
 import blok.context.Context;

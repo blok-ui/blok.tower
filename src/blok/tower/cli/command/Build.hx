@@ -148,6 +148,10 @@ class Build implements Command {
     addGeneratedWarning(body);
 
     body.add('# Note: for haxe completion support, point your editor at THIS file.\n\n');
+    body.add('# Note: while it\'s recommended you use the Tower cli, you *can* generate\n');
+    body.add('# or serve your site by running `node ${config.haxe.output}`.\n');
+    body.add('# However, you generally should build your app using `> tower build dev`\n');
+    body.add('# or `> tower build production`.\n\n');
 
     body.add(sharedName + '\n\n');
     
@@ -156,6 +160,7 @@ class Build implements Command {
     }
 
     addConfigResource(body, 'server');
+    body.add('-D blok.tower.server');
     addFlags(body, config.haxe.flags.server);
 
     body.add('\n');
@@ -172,6 +177,10 @@ class Build implements Command {
 
     addGeneratedWarning(body);
 
+    body.add('# Note: This file is used only to set up dependencies and configuration. \n');
+    body.add('# It intentionally has no target (like "-js app.js").\n');
+    body.add('# Build your app using `> tower build dev` or `> tower build production`.\n\n');
+
     body.add(sharedName + '\n\n');
     
     for (item in dependencies) {
@@ -179,6 +188,7 @@ class Build implements Command {
     }
 
     addConfigResource(body, 'client');
+    body.add('-D blok.tower.client');
     addFlags(body, config.haxe.flags.client);
 
     return fs.createFile(name).write(body.toString()).next(_ -> Nothing);

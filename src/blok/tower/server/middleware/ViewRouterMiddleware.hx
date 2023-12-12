@@ -1,7 +1,7 @@
 package blok.tower.server.middleware;
 
 import kit.http.Handler.HandlerObject;
-import blok.tower.target.Generator;
+import blok.tower.generate.Generator;
 import kit.http.*;
 
 class ViewRouterMiddleware implements Middleware {

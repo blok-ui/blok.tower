@@ -1,22 +1,21 @@
-package blok.tower.core;
+package blok.tower.generate;
 
 import blok.boundary.ErrorBoundary;
 import blok.context.Provider;
 import blok.suspense.SuspenseBoundary;
+import blok.tower.core.*;
 import blok.tower.routing.*;
 import blok.tower.routing.Navigator;
 import blok.tower.ui.internal.*;
 
-class AppRootFactory {
-  final root:AppRoot;
+class Renderer {
   final routes:Factory<ViewRouteCollection>;
 
-  public function new(root, routes) {
-    this.root = root;
+  public function new(routes) {
     this.routes = routes;
   }
 
-  public function create(
+  public function render(
     createNavigator:()->Navigator,
     createContext:()->AppContext
   ) {
@@ -27,7 +26,7 @@ class AppRootFactory {
         createContext
       ], _ -> SuspenseBoundary.node({
         fallback: () -> DefaultSuspenseHandler.node({}),
-        child: root(ViewRouter.node({ routes: routes.create() }))
+        child: ViewRouter.node({ routes: routes.create() })
       }))
     });
   }

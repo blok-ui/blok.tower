@@ -12,13 +12,13 @@ using blok.macro.MacroTools;
 function buildGeneric() {
   return switch Context.getLocalType() {
     case TInst(_, params):
-      buildKernel(params);
+      buildApp(params);
     default:
       throw 'assert';
   }
 }
 
-private function buildKernel(types:Array<Type>) {  
+private function buildApp(types:Array<Type>) {  
   var pack = ['blok', 'tower', 'core'];
   var name = 'App_' + types.map(type -> type.stringifyTypeForClassName()).join('_').hash();
   var path:TypePath = { pack: pack, name: name };
@@ -44,17 +44,7 @@ private function buildKernel(types:Array<Type>) {
 
     public function provide(container:capsule.Container) {
       container.use(blok.tower.core.CoreModule);
-
-      // @todo: This is Factory thing is weird and is only used to ensure
-      // we have a dependency on Strategy.
-      //
-      // We should look into something like `container.require()`
-      // for Capsule to resolve this better.
-      container
-        .map(blok.tower.core.Factory(blok.tower.target.Target))
-        .to((strategy:blok.tower.target.Target) -> () -> strategy);
-      container.map(blok.tower.core.ContainerFactory).to(this);
-      
+      container.use(blok.tower.generate.GeneratorModule);
       $b{body};
     }
 
@@ -64,7 +54,7 @@ private function buildKernel(types:Array<Type>) {
 
     public function run() {
       return createContainer()
-        .get(blok.tower.core.Factory(blok.tower.target.Target))
+        .get(blok.tower.core.Factory(blok.tower.generate.Target))
         .create()
         .run();
     }

@@ -1,4 +1,4 @@
-package blok.tower.target;
+package blok.tower.generate;
 
 class Visitor {
   final visited:Array<String> = [];

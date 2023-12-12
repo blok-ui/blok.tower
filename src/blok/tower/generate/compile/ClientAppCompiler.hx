@@ -1,4 +1,4 @@
-package blok.tower.target.compile;
+package blok.tower.generate.compile;
 
 import blok.html.server.Element;
 import blok.tower.asset.*;

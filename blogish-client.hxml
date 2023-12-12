@@ -2,7 +2,12 @@
 # To configure things, edit your `tower.toml` and run
 # `> tower build setup`.
 
+# Note: This file is used only to set up dependencies and configuration. 
+# It intentionally has no target (like "-js app.js").
+# Build your app using `> tower build dev` or `> tower build production`.
+
 blogish-shared.hxml
 
 -resource res/blok-tower-config-client.json@blok.tower.config
 
+-D blok.tower.client

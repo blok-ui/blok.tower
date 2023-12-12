@@ -1,4 +1,4 @@
-package blok.tower.target;
+package blok.tower.generate;
 
 import blok.tower.core.Logger;
 import blok.tower.server.ServerRunner;

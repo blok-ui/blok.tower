@@ -1,4 +1,4 @@
-package blok.tower.target;
+package blok.tower.generate;
 
 import blok.context.Provider;
 import blok.html.Server;
@@ -15,17 +15,17 @@ class Generator {
   final container:Container;
   final config:Config;
   final output:Output;
-  final appFactory:AppRootFactory;
+  final renderer:Renderer;
   final assetContextFactory:AssetContextFactory;
   final visitor:Visitor;
   final logger:Logger;
   final coreAssets:AssetBundle;
 
-  public function new(container, config, output, appFactory, assetContextFactory, visitor, logger, coreAssets) {
+  public function new(container, config, output, renderer, assetContextFactory, visitor, logger, coreAssets) {
     this.container = container;
     this.config = config;
     this.output = output;
-    this.appFactory = appFactory;
+    this.renderer = renderer;
     this.assetContextFactory = assetContextFactory;
     this.visitor = visitor;
     this.logger = logger;
@@ -109,7 +109,7 @@ class Generator {
               activate(Ok(document));
             }
           })
-        ], _ -> appFactory.create(
+        ], _ -> renderer.render(
           () -> new Navigator({ request: new Request(Get, path) }),
           () -> new AppContext(container, assets, config)
         ))

@@ -1,4 +1,4 @@
-package blok.tower.target;
+package blok.tower.generate;
 
 import blok.html.Client;
 import blok.tower.asset.*;
@@ -12,13 +12,13 @@ import kit.http.Request;
 class ClientTarget implements Target {
   final container:Container;
   final config:Config;
-  final appFactory:AppRootFactory;
+  final renderer:Renderer;
   final assetFactory:AssetContextFactory;
 
-  public function new(container, config, appFactory, assetFactory) {
+  public function new(container, config, renderer, assetFactory) {
     this.container = container;
     this.config = config;
-    this.appFactory = appFactory;
+    this.renderer = renderer;
     this.assetFactory = assetFactory;
   }
 
@@ -27,7 +27,7 @@ class ClientTarget implements Target {
     var assets = assetFactory.createAssetContext(document);
     var root = hydrate(
       document.getRoot(),
-      () -> appFactory.create(
+      () -> renderer.render(
         () -> {
           var nav = new Navigator({ request: new Request(Get, getLocation()) });
           var link = bindNavigatorToBrowserHistory(nav);

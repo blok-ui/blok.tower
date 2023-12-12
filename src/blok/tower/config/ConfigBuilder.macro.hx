@@ -7,7 +7,7 @@ import blok.macro.builder.*;
 using blok.macro.MacroTools;
 
 final builderFactory = new ClassBuilderFactory([
-  new ConfigFieldBuilder(),
+  new ConfigBuilder(),
   new JsonSerializerBuilder({}),
   new ConstructorBuilder({})
 ]);
@@ -16,7 +16,7 @@ function build() {
   return builderFactory.fromContext().export();
 }
 
-class ConfigFieldBuilder implements Builder {
+class ConfigBuilder implements Builder {
   public final priority:BuilderPriority = Normal;
 
   public function new() {}

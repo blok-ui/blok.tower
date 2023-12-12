@@ -27,7 +27,7 @@ class Config implements Context {
       default: StaticApp;
     }
   ) 
-  public var type:AppType;
+  public final type:AppType;
   
   @:prop 
   @:json(to = value.toJson(), from = PathConfig.fromJson(value))
@@ -42,7 +42,7 @@ class Config implements Context {
   @:json(to = value.toJson(), from = ServerConfig.fromJson(value))
   public final server:ServerConfig;
   
-  @:prop 
+  @:prop
   @:json(to = value.toJson(), from = HaxeConfig.fromJson(value))
   public final haxe:HaxeConfig;
   

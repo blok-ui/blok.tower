@@ -1,7 +1,7 @@
 package blok.tower.module;
 
 import blok.tower.core.*;
-import blok.tower.target.*;
+import blok.tower.generate.*;
 
 class DynamicTargetModule implements Module {
   public function new() {}
@@ -15,7 +15,7 @@ class DynamicTargetModule implements Module {
     container.map(Target).to(ClientTarget).share();
     #else
     container.getMapping(blok.tower.asset.AssetBundle).extend(bundle -> {
-      var compiler = container.instantiate(blok.tower.target.compile.ClientAppCompiler);
+      var compiler = container.instantiate(blok.tower.generate.compile.ClientAppCompiler);
       bundle.add(compiler);
       return bundle;
     });

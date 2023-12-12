@@ -4,6 +4,11 @@
 
 # Note: for haxe completion support, point your editor at THIS file.
 
+# Note: while it's recommended you use the Tower cli, you *can* generate
+# or serve your site by running `node dist/build.js`.
+# However, you generally should build your app using `> tower build dev`
+# or `> tower build production`.
+
 blogish-shared.hxml
 
 -lib hxnodejs
@@ -12,5 +17,5 @@ blogish-shared.hxml
 -lib markdown
 -resource res/blok-tower-config-server.json@blok.tower.config
 
-
+-D blok.tower.server
 -js dist/build.js

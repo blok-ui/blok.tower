@@ -7,13 +7,7 @@ class CoreModule implements Module {
 
   public function provide(container:Container) {
     container.map(Container).to(() -> container).share();
-    provideAppDependencies(container);
     provideLogger(container);
-  }
-  
-  function provideAppDependencies(container:Container) {
-    container.map(AppRootFactory).toDefault(AppRootFactory).share();
-    container.map(AppRoot).toDefault(() -> (router) -> router).share();
   }
 
   function provideLogger(container:Container) {
