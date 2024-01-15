@@ -10,8 +10,8 @@ class PageVisitor extends Component {
   function render() {
     return child(() -> {
       switch Navigator.maybeFrom(this) {
-        case None:
         case Some(nav): nav.go(to);
+        case None:
       }
       if (onUsed != null) onUsed();
     });

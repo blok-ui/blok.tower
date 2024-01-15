@@ -16,14 +16,14 @@ class Renderer {
   }
 
   public function render(
-    createNavigator:()->Navigator,
-    createContext:()->AppContext
+    navigatorFactory:Factory<Navigator>,
+    contextFactory:Factory<AppContext>
   ) {
     return ErrorBoundary.node({
       fallback: (_, error) -> DefaultErrorHandler.node({ error: error }),
       child: Provider.compose([
-        createNavigator,
-        createContext
+        navigatorFactory,
+        contextFactory
       ], _ -> SuspenseBoundary.node({
         fallback: () -> DefaultSuspenseHandler.node({}),
         child: ViewRouter.node({ routes: routes.create() })

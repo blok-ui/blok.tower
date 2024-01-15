@@ -3,6 +3,10 @@ package blok.tower.module;
 import blok.tower.core.*;
 import blok.tower.generate.*;
 
+/**
+  Includes the dependencies needed to generate an app that
+  uses pre-generated static files on the backend.
+**/
 class StaticTargetModule implements Module {
   public function new() {}
 
@@ -17,8 +21,9 @@ class StaticTargetModule implements Module {
     container.map(blok.tower.remote.StaticFileClient).to(blok.tower.remote.StaticFileClient).share();
     container.map(Target).to(ClientTarget).share();
     #else
+    // @todo: Adding the client app this way feels a bit fragile.
     container.getMapping(blok.tower.asset.AssetBundle).extend(bundle -> {
-      var compiler = container.instantiate(blok.tower.generate.compile.ClientAppCompiler);
+      var compiler = container.instantiate(blok.tower.generate.ClientAppAsset);
       bundle.add(compiler);
       return bundle;
     });

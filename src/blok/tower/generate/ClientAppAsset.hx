@@ -1,4 +1,4 @@
-package blok.tower.generate.compile;
+package blok.tower.generate;
 
 import blok.html.server.Element;
 import blok.tower.asset.*;
@@ -7,7 +7,7 @@ import blok.tower.config.Config;
 using haxe.io.Path;
 using kit.Hash;
 
-class ClientAppCompiler implements Asset {
+class ClientAppAsset implements Asset {
   final config:Config;
 
   public function new(config) {

@@ -12,7 +12,6 @@
 -D message-reporting=pretty
 -D analyzer-optimize
 -D breeze.output=styles-v0_0_1
---debug
 -lib blok.tower
 -lib breeze
 -lib blok.foundation

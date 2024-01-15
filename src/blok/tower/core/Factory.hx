@@ -1,15 +1,16 @@
 package blok.tower.core;
 
-abstract Factory<T>(()->T) from () -> T {
-  public function new(factory) {
+@:callable
+abstract Factory<T>(()->T) from () -> T to () -> T {
+  public inline function new(factory) {
     this = factory;
   }
 
-  public function map(transform:(value:T)->T):Factory<T> {
+  public inline function map(transform:(value:T)->T):Factory<T> {
     return new Factory(() -> transform(create()));
   }
 
-  public function create():T {
+  public inline function create():T {
     return this();
   }
 }

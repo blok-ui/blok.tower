@@ -7,11 +7,19 @@ import kit.http.Request;
 
 @:fallback(error('No Navigator found'))
 class Navigator extends Model implements Context {
-  @:signal public final request:Request;
+  @:signal public final request:NavigatorRequest;
 
   @:action
-  public function go(url:String) {
-    if (url == request.peek().url) return;
-    request.set(new Request(Get, url));
+  public function go(url:String, isPopState = false) {
+    if (url == request.peek().request.url) return;
+    request.set({
+      request: new Request(Get, url),
+      isPopState: isPopState
+    });
   }
 }
+
+typedef NavigatorRequest = {
+  public final request:Request;
+  public final isPopState:Bool;
+} 

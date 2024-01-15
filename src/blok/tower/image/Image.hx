@@ -15,8 +15,6 @@ class Image extends Component {
   @:observable final alt:String;
   @:observable final size:ImageSize = ImageSize.Full;
   @:attribute final onClick:EventListener = null;
-  @:attribute final onTouchStart:EventListener = null;
-  @:attribute final onTouchEnd:EventListener = null;
   @:attribute final loading:()->Child;
   @:attribute final failed:(message:String)->Child;
   
@@ -28,14 +26,14 @@ class Image extends Component {
         var res = new Resource(() -> image.load(assetContext, __renderMode == Hydrating));
         return Html.figure({ className: wrapperClassName },
           Scope
-            .wrap(_ -> Html.img({ 
-              className: className,
-              src: res(), 
-              alt: alt,
-              onClick: onClick,
-              onTouchStart: onTouchStart,
-              onTouchEnd: onTouchEnd
-            }))
+            .wrap(_ -> {
+              Html.img({ 
+                className: className,
+                src: res(), 
+                alt: alt,
+                onClick: onClick
+              });
+            })
             .inSuspense(loading)
             .inErrorBoundary((_, e) -> failed(e.message))
         );

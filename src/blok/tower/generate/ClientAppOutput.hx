@@ -1,4 +1,4 @@
-package blok.tower.generate.compile;
+package blok.tower.generate;
 
 import blok.tower.config.Config;
 import haxe.macro.Compiler;

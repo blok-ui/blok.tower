@@ -110,7 +110,12 @@ class Generator {
             }
           })
         ], _ -> renderer.render(
-          () -> new Navigator({ request: new Request(Get, path) }),
+          () -> new Navigator({ 
+            request: {
+              request: new Request(Get, path),
+              isPopState: false 
+            }
+          }),
           () -> new AppContext(container, assets, config)
         ))
       );

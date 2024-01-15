@@ -29,7 +29,12 @@ class ClientTarget implements Target {
       document.getRoot(),
       () -> renderer.render(
         () -> {
-          var nav = new Navigator({ request: new Request(Get, getLocation()) });
+          var nav = new Navigator({ 
+            request: {
+              request: new Request(Get, getLocation()),
+              isPopState: false
+            } 
+          });
           var link = bindNavigatorToBrowserHistory(nav);
           nav.addDisposable(() -> link.cancel());
           nav;

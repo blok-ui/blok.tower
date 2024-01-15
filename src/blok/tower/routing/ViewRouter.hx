@@ -11,7 +11,8 @@ class ViewRouter extends Component {
   }
 
   function render() {
-    return switch routes.match(Navigator.from(this).request()) {
+    var nav = Navigator.from(this);
+    return switch routes.match(nav.request().request) {
       case Some(node):
         node;
       case None if (isNestedRouter()):
