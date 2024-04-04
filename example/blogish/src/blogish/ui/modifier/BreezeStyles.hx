@@ -11,7 +11,7 @@ class BreezeStyles extends Component {
   function setup() {
     Observer.track(() -> {
       var newClasses:String = styles();
-      getAdaptor().updateNodeAttribute(getRealNode(), 'class', previousClasses, newClasses);
+      getAdaptor().updateNodeAttribute(getPrimitive(), 'class', previousClasses, newClasses);
       previousClasses = newClasses;
     });
   }

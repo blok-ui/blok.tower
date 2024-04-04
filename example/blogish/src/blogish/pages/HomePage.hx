@@ -7,7 +7,7 @@ import blok.tower.routing.PageRoute;
 class HomePage implements PageRoute<'/'> {
   @:inject final logger:Logger;
 
-  function render(context:blok.ui.ComponentBase) {
+  function render(context:blok.ui.View) {
     logger.log(Info, 'Visited the home page');
     return Fragment.node(
       PageHeader.node({ title: 'Home' }),

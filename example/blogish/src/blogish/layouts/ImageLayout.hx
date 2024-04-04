@@ -14,7 +14,7 @@ class ImageLayout implements LayoutRoute<'blogish.pages.images'> {
     siteApi.get();
   }
 
-  function render(context:ComponentBase, router:Child):Child {
+  function render(context:View, router:Child):Child {
     return Fragment.node(
       SiteHead.node({ site: site() }),
       Html.div({}, 

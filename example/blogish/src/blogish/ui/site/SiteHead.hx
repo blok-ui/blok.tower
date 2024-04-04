@@ -12,8 +12,11 @@ class SiteHead extends Component {
   function render() {
     return Head.node({
       children: [
-        Html.title({}, site.title),
-        Html.meta({ name: 'viewport', content: 'width=device-width, initial-scale=1' }),
+        Html.title().child(site.title).node(),
+        Html.meta({ 
+          name: 'viewport', 
+          content: 'width=device-width, initial-scale=1' 
+        }).node(),
       ]
     });
   }

@@ -1,10 +1,10 @@
 package blok.tower.asset;
 
-import blok.tower.file.Directory;
+import kit.file.Directory;
 #if !blok.tower.client
-import haxe.Json;
-import blok.tower.file.FileSystem;
 import blok.tower.asset.data.*;
+import haxe.Json;
+import kit.file.FileSystem;
 
 using haxe.io.Path;
 #end
@@ -38,7 +38,7 @@ class Output {
   }
 
   public function addToManifest(path:String) {
-    path = Path.join([ pub.path, path ]);
+    path = Path.join([ pub.meta.path, path ]);
     if (manifest.contains(path)) return;
     manifest.push(path);
   }
@@ -72,7 +72,7 @@ class Output {
     return dir.listFiles().next(files -> {
       for (file in files) {
         // @todo: Still not sure about this.
-        if (!manifest.contains(file.path)) file.remove();
+        if (!manifest.contains(file.meta.path)) file.remove();
       }
       return Nothing;
     }).next(_ -> dir.listDirectories()

@@ -12,7 +12,7 @@ class BlogPostPage implements PageRoute<'/blog/post/{slug:String}'> {
     posts.getPost(params().slug);
   }
 
-  function render(context:ComponentBase) {
+  function render(context:View) {
     return Fragment.node(
       PageHeader.node({ title: post().title }),
       PageContent.node({

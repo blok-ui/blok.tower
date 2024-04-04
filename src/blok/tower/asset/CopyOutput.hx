@@ -10,7 +10,7 @@ class CopyOutput extends Model implements OutputItem  {
   @:constant final dest:String;
 
   public function process(output:Output):Task<Nothing> {
-    var path = Path.join([ output.pub.path, dest ]);
+    var path = Path.join([ output.pub.meta.path, dest ]);
     output.addToManifest(path);
     return isNewer(output.src, output.pub, source, dest).next(newer -> {
       if (!newer) return Nothing;

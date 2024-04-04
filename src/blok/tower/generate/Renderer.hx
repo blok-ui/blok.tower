@@ -24,7 +24,7 @@ class Renderer {
       child: Provider.compose([
         navigatorFactory,
         contextFactory
-      ], _ -> SuspenseBoundary.node({
+      ]).child(_ -> SuspenseBoundary.node({
         fallback: () -> DefaultSuspenseHandler.node({}),
         child: ViewRouter.node({ routes: routes.create() })
       }))

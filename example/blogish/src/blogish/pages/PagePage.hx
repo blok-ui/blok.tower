@@ -12,7 +12,7 @@ class PagePage implements PageRoute<'page/{slug:String}'> {
     pages.getPage(params().slug);
   }
 
-  function render(context:ComponentBase) {
+  function render(context:View) {
     return Fragment.node(
       PageHeader.node({ title: page().title }),
       PageContent.node({

@@ -109,7 +109,7 @@ class Generator {
               activate(Ok(document));
             }
           })
-        ], _ -> renderer.render(
+        ]).child(_ -> renderer.render(
           () -> new Navigator({ 
             request: {
               request: new Request(Get, path),

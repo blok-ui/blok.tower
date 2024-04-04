@@ -6,7 +6,7 @@ package blok.tower.module;
   for things like cached files.
 
   Note: paths are always relative to the current working directory. To
-  change that behavior, you'll need to remap the `blok.tower.file.FileSystemAdaptor`
+  change that behavior, you'll need to remap the `kit.file.Adaptor`
   to a different path (or implementation).
 **/
 @:genericBuild(blok.tower.module.AssetPathModuleBuilder.buildGeneric())

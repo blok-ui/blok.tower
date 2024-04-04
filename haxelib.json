@@ -9,6 +9,7 @@
   "dependencies": {
     "kit": "0.0.1",
     "kit.http": "0.0.1",
+    "kit.file": "0.0.1",
     "blok.core": "0.0.1",
     "kit.cli": "0.0.1",
     "capsule": "0.0.1",

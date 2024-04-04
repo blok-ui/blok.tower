@@ -5,7 +5,7 @@ import blogish.data.*;
 import blogish.ui.page.*;
 import blok.html.Html;
 import blok.tower.routing.PageRoute;
-import blok.ui.ComponentBase;
+import blok.ui.View;
 
 class BlogPostArchivePage implements PageRoute<'/blog/archive/page-{page:Int}'> {
   @:load final posts:Paginated = {
@@ -13,7 +13,7 @@ class BlogPostArchivePage implements PageRoute<'/blog/archive/page-{page:Int}'> 
     postApi.paginatePosts(params().page);
   }
 
-  function render(_:ComponentBase) {
+  function render(_:View) {
     return Fragment.node(
       PageHeader.node({ title: 'Blog Posts' }),
       PageContent.node({

@@ -17,13 +17,13 @@ final builderFactory = new ClassBuilderFactory([
       args: options.args,
       expr: macro {
         ${options.inits}
-        var previousOwner = blok.signal.Graph.setCurrentOwner(Some(disposables));
+        var previousOwner = blok.core.Owner.setCurrent(disposables);
         ${options.lateInits};
         ${switch options.previousExpr {
           case Some(expr): expr;
           case None: macro null;
         }}
-        blok.signal.Graph.setCurrentOwner(previousOwner);
+        blok.core.Owner.setCurrent(previousOwner);
         disposables.addDisposable(this.routes);
       }
     }
@@ -70,7 +70,7 @@ private function buildLayoutRoute(pack:String):ComplexType {
   var builder = new FieldBuilder([]);
 
   builder.add(macro class {
-    private function render(context:blok.ui.ComponentBase, router:blok.ui.Child):blok.ui.Child;
+    private function render(context:blok.ui.View, router:blok.ui.Child):blok.ui.Child;
   });
 
   Context.defineType({

@@ -36,8 +36,8 @@ class ImageOutput extends Model implements OutputItem {
   }
 
   function processImage(src:SourceDirectory, pub:PublicDirectory):Task<Nothing> {
-    var from = Path.join([ src.path, source ]);
-    var out = Path.join([ pub.path, dest ]);
+    var from = Path.join([ src.meta.path, source ]);
+    var out = Path.join([ pub.meta.path, dest ]);
     return switch image.size {
       case Full:
         src.getFile(source)

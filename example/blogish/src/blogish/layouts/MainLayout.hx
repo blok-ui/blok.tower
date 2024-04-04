@@ -18,7 +18,7 @@ class MainLayout implements LayoutRoute<'blogish.pages'> {
     siteApi.get();
   }
 
-  function render(context:ComponentBase, router:Child) {
+  function render(context:View, router:Child) {
     return Html.main({}, 
       SiteHead.node({ site: site() }),
       SiteHeader.node({ site: site() }),

@@ -1,6 +1,6 @@
 package blok.tower.cache;
 
-import blok.tower.file.*;
+import kit.file.*;
 
 using StringTools;
 using haxe.io.Path;
@@ -38,14 +38,15 @@ class FileSystemCache implements Cache<String> {
   }
 
   public function clear():Task<Nothing> {
-    return directory.exists().next(exists -> {
-      if (!exists) return Nothing;
+    return directory.exists().flatMap(exists -> {
+      if (!exists) return Task.resolve(Nothing);
       return directory.listFiles()
         .next(files -> files.filter(file -> {
           if (prefix != null && !file.meta.name.startsWith(prefix)) return false;
           file.meta.path.extension() == 'txt';
         }))
-        .next(files -> Task.sequence(...files.map(file -> file.remove())));
+        .next(files -> Task.sequence(...files.map(file -> file.remove())))
+        .next(_ -> Nothing);
     });
   }
   

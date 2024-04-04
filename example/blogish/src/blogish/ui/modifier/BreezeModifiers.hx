@@ -11,7 +11,7 @@ function styles(child:Child, ...classes:ClassName) {
   });
 }
 
-function observedStyles(child:Child, styles:ReadonlySignal<ClassName>) {
+function observedStyles(child:Child, styles:ReadOnlySignal<ClassName>) {
   return BreezeStyles.node({
     styles: styles, 
     child: child

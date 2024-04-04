@@ -38,9 +38,9 @@ class ContentContext implements Context {
           var type = getTypeForTag(content.type);
           var props:{} = {};
           for (field in Reflect.fields(content.data)) {
-            Reflect.setField(props, field, new ReadonlySignal(Reflect.field(content.data, field)));
+            Reflect.setField(props, field, new ReadOnlySignal(Reflect.field(content.data, field)));
           }
-          return new VRealNode(type, content.type, props, content.children.map(render));
+          return new VPrimitive(type, content.type, props, content.children.map(render));
         }
 
         throw new BlokException(

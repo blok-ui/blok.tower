@@ -9,7 +9,6 @@ import kit.http.Request;
 class Navigator extends Model implements Context {
   @:signal public final request:NavigatorRequest;
 
-  @:action
   public function go(url:String, isPopState = false) {
     if (url == request.peek().request.url) return;
     request.set({

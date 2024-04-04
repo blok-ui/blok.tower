@@ -1,6 +1,6 @@
 package blok.tower.cli.command;
 
-import blok.tower.file.FileSystem;
+import kit.file.FileSystem;
 import blok.tower.config.Config;
 import haxe.Template;
 
@@ -181,7 +181,7 @@ import blok.ui.*;
 import blok.tower.routing.LayoutRoute;
 
 class ::name::Layout implements LayoutRoute<'::target::'> {
-  function render(context:ComponentBase, router:Child):Child {
+  function render(context:View, router:Child):Child {
     // Implement your layout here. Be sure to return `router`
     // somewhere or your app will not work!
   }
@@ -194,7 +194,7 @@ import blok.ui.*;
 import blok.tower.routing.PageRoute;
 
 class ::name::Page implements PageRoute<'::url::'> {
-  public function render(context:ComponentBase):Child {
+  public function render(context:View):Child {
     // Implement your page here.
   }
 }

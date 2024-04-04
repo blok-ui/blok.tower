@@ -33,9 +33,9 @@ class ClientAppOutput implements OutputItem {
       output.pub.getFile(path).next(f -> Some(f)).recover(_ -> Future.immediate(None))
     ).next(files -> switch files {
       case [ Some(_), None ]:
-        build(Path.join([ output.pub.path, path ]));
+        build(Path.join([ output.pub.meta.path, path ]));
       case [ Some(a), Some(b) ] if (a.meta.updated.getTime() > b.meta.updated.getTime()):
-        build(Path.join([ output.pub.path, path ]));
+        build(Path.join([ output.pub.meta.path, path ]));
       case _:
         Nothing;
     });

@@ -30,7 +30,7 @@ class LoadFieldBuilder implements Builder {
       var exports = builder.getHook('load:export-json-assets');
       builder.add(macro class {
         #if !blok.tower.client
-        function __exportJsonAssets(context:blok.ui.ComponentBase) {
+        function __exportJsonAssets(context:blok.ui.View) {
           var assets = blok.tower.asset.AssetContext.from(context);
           @:mergeBlock $b{exports};
         }

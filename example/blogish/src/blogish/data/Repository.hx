@@ -1,9 +1,9 @@
 package blogish.data;
 
 import blok.tower.cache.*;
-import blok.tower.file.*;
 import blok.tower.format.*;
 import blok.tower.asset.data.SourceDirectory;
+import kit.file.*;
 
 using Reflect;
 using haxe.io.Path;
@@ -27,7 +27,7 @@ class Repository {
       case None:
         src.openDirectory('posts')
           .listFiles()
-          .next(files -> files.filter(file -> file.path.extension() == 'md'))
+          .next(files -> files.filter(file -> file.meta.path.extension() == 'md'))
           .next(files -> {
             files.sort((a, b) -> Math.ceil(a.meta.created.getTime() - b.meta.created.getTime()) * -1);
             files;
@@ -53,7 +53,7 @@ class Repository {
     return dir.getFile('data.md').next(file -> file.read()
       .next(markdown.parse)
       .next((data:Dynamic) -> {
-        data.setField('slug', dir.path.withoutDirectory());
+        data.setField('slug', dir.meta.name);
         Task.resolve(data);
       })
     );

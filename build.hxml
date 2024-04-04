@@ -1,7 +1,10 @@
+# Note: This file builds the Tower CLI.
+
 -cp src
 
 -lib kit
 -lib kit.cli
+-lib kit.file
 -lib toml
 -lib blok.core
 -lib capsule

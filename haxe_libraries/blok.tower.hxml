@@ -3,8 +3,9 @@
 -lib kit
 -lib kit.http
 -lib kit.cli
+-lib kit.file
+-lib blok.core
 -lib capsule
 -lib mime
--lib blok.core
 
 -D blok.tower=0.0.1

@@ -20,9 +20,9 @@ final builderFactory = new ClassBuilderFactory([
       args: options.args,
       expr: macro {
         ${options.inits};
-        var previousOwner = blok.signal.Graph.setCurrentOwner(Some(disposables));
+        var previousOwner = blok.core.Owner.setCurrent(disposables);
         ${options.lateInits};
-        blok.signal.Graph.setCurrentOwner(previousOwner);
+        blok.core.Owner.setCurrent(previousOwner);
         ${switch options.previousExpr {
           case Some(expr): expr;
           case None: macro null;
@@ -60,7 +60,7 @@ private function buildPageRoute(url:String) {
   var builder = new FieldBuilder([]);
 
   builder.add(macro class {
-    private function render(context:blok.ui.ComponentBase):blok.ui.Child;
+    private function render(context:blok.ui.View):blok.ui.Child;
   });
 
   Context.defineType({
@@ -160,10 +160,9 @@ class PageRouteBuilder implements Builder {
         if (__isDisposed) return None;
         if (request.method != Get) return None;
         if (matcher.match(request.url)) {
-          blok.signal.Action.run(() -> {
-            this.url.set(request.url);
-            this.params.set(${route.paramsBuilder});
-          });
+          this.url.set(request.url);
+          this.params.set(${route.paramsBuilder});
+        
           return Some(blok.ui.Scope.wrap(context -> {
             var view = render(context);
             #if !blok.tower.client

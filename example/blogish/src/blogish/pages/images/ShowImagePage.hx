@@ -5,7 +5,7 @@ import blok.ui.*;
 import blok.tower.routing.PageRoute;
 
 class ShowImagePage implements PageRoute<'/images'> {
-  public function render(context:ComponentBase):Child {
+  public function render(context:View):Child {
     return Fragment.node(
       Image.node({
         src: 'media/test.png',

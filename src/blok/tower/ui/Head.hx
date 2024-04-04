@@ -11,15 +11,14 @@ using StringTools;
 
 class Head extends Component {
   @:attribute final children:Children;
-  var root:Null<RootComponent> = null;
+  var root:Null<Root> = null;
 
   function createRoot() {
-    var component:RootComponent = cast RootComponent.node({
+    var component:Root = cast Root.node({
       target: new Element('head', {}),
-      child: () -> Fragment.node(...children.toArray()),
-      adaptor: new ServerAdaptor({ prefixTextWithMarker: false })
+      child: () -> Fragment.node(...children.toArray())
     }).createComponent();
-    component.mount(this, null);
+    component.mount(new ServerAdaptor({ prefixTextWithMarker: false }), this, null);
     addDisposable(component);
     return component;
   }
@@ -32,13 +31,13 @@ class Head extends Component {
 }
 
 private function updateRealHead(
-  head:ComponentBase,
-  root:ComponentBase,
+  head:View,
+  root:View,
   children:Array<VNode>
 ) {
   var assets = AssetContext.from(head);
   var document = AssetContext.from(head).document;
-  var target:Element = root.getRealNode();
+  var target:Element = root.getPrimitive();
 
   root.findChildOfType(Fragment)
     .unwrap()

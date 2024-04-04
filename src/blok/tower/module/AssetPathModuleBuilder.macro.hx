@@ -35,13 +35,13 @@ function buildAssetModule(src:String, pub:String, priv:String) {
     public function provide(container:blok.tower.core.Container) {
       #if !blok.tower.client
       container.map(blok.tower.asset.data.SourceDirectory)
-        .to((fs:blok.tower.file.FileSystem) -> fs.openDirectory($v{src}))
+        .to((fs:kit.file.FileSystem) -> fs.openDirectory($v{src}))
         .share();
       container.map(blok.tower.asset.data.PublicDirectory)
-        .to((fs:blok.tower.file.FileSystem) -> fs.openDirectory($v{pub}))
+        .to((fs:kit.file.FileSystem) -> fs.openDirectory($v{pub}))
         .share();
       container.map(blok.tower.asset.data.PrivateDirectory)
-        .to((fs:blok.tower.file.FileSystem) -> fs.openDirectory($v{priv}))
+        .to((fs:kit.file.FileSystem) -> fs.openDirectory($v{priv}))
         .share();
       #end
     }
