@@ -21,10 +21,10 @@ class JsonAsset extends Model implements Asset {
     }));
 
     var hydrationId = context.hydrationId;
-    var head:Element = context.document.getHead();
-    var script = new Element('script', { id: id });
+    var head:ElementPrimitive = context.document.getHead();
+    var script = new ElementPrimitive('script', { id: id });
     head.append(script);
-    script.append(new TextNode('(window.$hydrationId=window.$hydrationId||{})["$id"]=$content;', false));
+    script.append(new TextPrimitive('(window.$hydrationId=window.$hydrationId||{})["$id"]=$content;'));
     #end
   }
 }

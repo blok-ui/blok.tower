@@ -32,7 +32,7 @@ class DefaultHandler implements HandlerObject {
         mount(document.getRoot(), () -> Fragment.node(
           Head.node({
             children: [
-              Html.title({}, 'Error')
+              Html.title().child('Error').node()
             ]
           }),
           DefaultErrorHandler.node({

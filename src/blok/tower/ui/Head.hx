@@ -15,10 +15,10 @@ class Head extends Component {
 
   function createRoot() {
     var component:Root = cast Root.node({
-      target: new Element('head', {}),
+      target: new ElementPrimitive('head', {}),
       child: () -> Fragment.node(...children.toArray())
     }).createComponent();
-    component.mount(new ServerAdaptor({ prefixTextWithMarker: false }), this, null);
+    component.mount(new ServerAdaptor(), this, null);
     addDisposable(component);
     return component;
   }
@@ -37,17 +37,17 @@ private function updateRealHead(
 ) {
   var assets = AssetContext.from(head);
   var document = AssetContext.from(head).document;
-  var target:Element = root.getPrimitive();
+  var target:ElementPrimitive = root.getPrimitive();
 
   root.findChildOfType(Fragment)
     .unwrap()
     ?.update(Fragment.node(...children));
   
-  for (child in target.children) switch Std.downcast(child, Element) {
+  for (child in target.children) switch Std.downcast(child, ElementPrimitive) {
     case null:
     case el: switch el.tag {
       case 'title':
-        var content = el.children.map(d -> d.toString()).join('');
+        var content = el.children.map(d -> d.toString({ includeTextMarkers: false })).join('');
         document.setTitle(content);
       case 'meta' if (el.attributes.hasField('charset')):
         document.setMeta('charset', el.attributes.field('charset'));

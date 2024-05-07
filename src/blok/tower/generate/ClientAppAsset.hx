@@ -1,6 +1,6 @@
 package blok.tower.generate;
 
-import blok.html.server.Element;
+import blok.html.server.*;
 import blok.tower.asset.*;
 import blok.tower.config.Config;
 
@@ -22,16 +22,16 @@ class ClientAppAsset implements Asset {
     #end
     var url = context.config.path.createAssetUrl(hash).withExtension('js');
     var path = context.config.path.createAssetOutputPath(hash).withExtension('js');
-    var head:Element = context.document.getHead();
+    var head:ElementPrimitive = context.document.getHead();
 
     #if debug
-    head.append(new Element('script', {
+    head.append(new ElementPrimitive('script', {
       src: url,
       defer: true,
       type: 'text/javascript'
     }));
     #else
-    head.append(new Element('script', {
+    head.append(new ElementPrimitive('script', {
       src: url.withExtension('min.js'),
       defer: true,
       type: 'text/javascript'

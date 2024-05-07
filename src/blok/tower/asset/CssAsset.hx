@@ -13,19 +13,19 @@ class CssAsset extends StaticAsset {
 
   #if !blok.tower.client
   function modifyDocument(context:AssetContext, document:Document) {
-    var head:Element = document.getHead();
+    var head:ElementPrimitive = document.getHead();
     switch kind {
       case Inline(content):
-        var style = new Element('style', {});
-        style.append(new TextNode(content, true));
+        var style = new ElementPrimitive('style', {});
+        style.append(new TextPrimitive(content));
         head.append(style);
       case External:
-        head.append(new Element('link', {
+        head.append(new ElementPrimitive('link', {
           rel: 'stylesheet',
           href: path
         }));
       case Generated | Local(_): 
-        head.append(new Element('link', {
+        head.append(new ElementPrimitive('link', {
           rel: 'stylesheet',
           href: context.config.path.createAssetUrl(getPath())
         }));
