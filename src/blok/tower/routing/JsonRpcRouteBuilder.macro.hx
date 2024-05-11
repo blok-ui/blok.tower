@@ -1,12 +1,12 @@
 package blok.tower.routing;
 
-import blok.macro.*;
+import kit.macro.*;
 import blok.tower.macro.CompileConfig;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
 using Lambda;
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 using blok.tower.routing.macro.RouteBuilder;
 using haxe.macro.Tools;
 using kit.Hash;
@@ -146,14 +146,14 @@ function build(url:String) {
 // @todo: Come up with something better here.
 private function buildStaticClient(url:String) {
   var serverFields = Context.getBuildFields();
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
   
   for (field in serverFields) switch field.kind {
     case FFun(f) if (isRpcMethod(field)):
       var name = field.name;
       var args = f.args;
       
-      builder.addField({
+      fields.addField({
         name: name,
         pos: field.pos,
         access: field.access,
@@ -167,7 +167,7 @@ private function buildStaticClient(url:String) {
     default:
   }
 
-  builder.add(macro class {
+  fields.add(macro class {
     public function new() {}
 
     public function test(request:kit.http.Request):Bool {
@@ -181,14 +181,14 @@ private function buildStaticClient(url:String) {
     public function dispose() {}
   });
 
-  return builder.export();
+  return fields.export();
 }
 
 private function buildClient(url:String) {
   var serverFields = Context.getBuildFields();
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
 
-  builder.add(macro class {
+  fields.add(macro class {
     @:noCompletion static final __url = $v{url};
     
     final client:blok.tower.remote.JsonRpcClient;
@@ -222,7 +222,7 @@ private function buildClient(url:String) {
         }
         default: Context.error('Invalid return type', field.pos);
       }
-      builder.addField({
+      fields.addField({
         name: name,
         pos: field.pos,
         access: field.access,
@@ -238,7 +238,7 @@ private function buildClient(url:String) {
     default:
   }
   
-  return builder.export();
+  return fields.export();
 }
 
 private function buildJsonRpcRoute(url:String) {

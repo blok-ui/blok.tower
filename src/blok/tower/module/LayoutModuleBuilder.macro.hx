@@ -2,13 +2,13 @@ package blok.tower.module;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.*;
+import kit.macro.*;
 
 using Lambda;
 using blok.tower.routing.macro.RouteScanner;
 using haxe.macro.Tools;
 using kit.Hash;
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 
 function buildGeneric() {
   return switch Context.getLocalType() {
@@ -27,7 +27,7 @@ private function buildLayoutModule(pack:String):ComplexType {
 
   if (path.typePathExists()) return TPath(path);
   
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
   var layouts = pack.scanForLayoutRoutes();
   var routes = [ for (layout in layouts) {
     // We need to provide all the Layout's routes, which handily are
@@ -57,7 +57,7 @@ private function buildLayoutModule(pack:String):ComplexType {
     })} ]);
   }
   
-  builder.add(macro class {
+  fields.add(macro class {
     public function new() {}
 
     public function provide(container:blok.tower.core.Container) {
@@ -82,7 +82,7 @@ private function buildLayoutModule(pack:String):ComplexType {
         name: 'Module'
       }
     ], false, true),
-    fields: builder.export()
+    fields: fields.export()
   });
   
   return TPath(path);

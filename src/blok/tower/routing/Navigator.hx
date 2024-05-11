@@ -7,6 +7,7 @@ import kit.http.Request;
 
 @:fallback(error('No Navigator found'))
 class Navigator extends Model implements Context {
+  @:json(from = value, to = value)
   @:signal public final request:NavigatorRequest;
 
   public function go(url:String, isPopState = false) {

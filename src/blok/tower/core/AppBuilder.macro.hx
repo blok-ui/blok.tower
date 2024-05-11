@@ -3,11 +3,11 @@ package blok.tower.core;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
-import blok.macro.*;
+import kit.macro.*;
 
 using haxe.macro.Tools;
 using kit.Hash;
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 
 function buildGeneric() {
   return switch Context.getLocalType() {
@@ -25,7 +25,7 @@ private function buildApp(types:Array<Type>) {
 
   if (path.typePathExists()) return TPath(path);
 
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
   var body:Array<Expr> = [];
   var pos = Context.currentPos();
 
@@ -39,7 +39,7 @@ private function buildApp(types:Array<Type>) {
 
   var pos = Context.currentPos();
 
-  builder.add(macro class {
+  fields.add(macro class {
     public function new() {}
 
     public function provide(container:capsule.Container) {
@@ -74,7 +74,7 @@ private function buildApp(types:Array<Type>) {
         name: 'ContainerFactory'
       }
     ], false, true, false),
-    fields: builder.export()
+    fields: fields.export()
   });
 
   return TPath(path);

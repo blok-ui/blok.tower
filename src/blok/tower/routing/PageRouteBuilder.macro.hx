@@ -1,15 +1,15 @@
 package blok.tower.routing;
 
-import blok.macro.*;
+import kit.macro.*;
 import blok.tower.macro.builder.*;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 using blok.tower.routing.macro.RouteBuilder;
 using kit.Hash;
 
-final builderFactory = new ClassBuilderFactory([
+final factory = new ClassBuilderFactory([
   new LoadFieldBuilder({
     createJsonAssetExportMethod: true,
     createHashPrefix: _ -> macro kit.Hash.hash(url.get())
@@ -42,8 +42,8 @@ function buildGeneric() {
 }
 
 function build(url:String) {
-  return builderFactory
-    .withBuilders(new PageRouteBuilder(url))
+  return factory
+    .withParsers(new PageRouteBuilder(url))
     .fromContext()
     .export();
 }
@@ -57,9 +57,9 @@ private function buildPageRoute(url:String) {
 
   if (path.typePathExists()) return TPath(path);
 
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
 
-  builder.add(macro class {
+  fields.add(macro class {
     private function render(context:blok.ui.View):blok.ui.Child;
   });
 
@@ -85,14 +85,14 @@ private function buildPageRoute(url:String) {
         name: 'ViewRoute'
       }
     ], true, false, false),
-    fields: builder.export()
+    fields: fields.export()
   });
 
   return TPath(path);
 }
 
-class PageRouteBuilder implements Builder {
-  public final priority:BuilderPriority = Normal;
+class PageRouteBuilder implements Parser {
+  public final priority:Priority = Normal;
 
   final url:String;
   

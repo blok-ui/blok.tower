@@ -14,6 +14,7 @@ class ImageAsset extends Model implements Asset {
   #end
 
   @:constant final path:String;
+  @:json(from = ImageSize.ImageSizeTools.fromJson(value), to = value.toJson())
   @:constant final size:ImageSize;
   @:constant final config:ImageConfig;
 

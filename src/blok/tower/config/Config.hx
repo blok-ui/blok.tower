@@ -96,11 +96,13 @@ class HaxeConfig {
   @:prop public final main:String = 'App';
   @:prop public final target:String = 'js';
   @:prop public final output:String = 'dist/build.js';
+  @:json(from = value, to = value)
   @:prop public final dependencies:{
     shared:Array<String>,
     client:Array<String>,
     server:Array<String>
   } = { shared: [], client: [], server: [] };
+  @:json(from = value, to = value)
   @:prop public final flags:{
     shared:{},
     client:{},

@@ -1,16 +1,16 @@
 package blok.tower.routing;
 
 import blok.tower.macro.builder.*;
-import blok.macro.*;
+import kit.macro.*;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 using blok.tower.routing.macro.RouteScanner;
 using haxe.macro.Tools;
 using kit.Hash;
 
-final builderFactory = new ClassBuilderFactory([
+final factory = new ClassBuilderFactory([
   new InjectFieldBuilder({
     buildConstructor: true,
     customBuilder: options -> {
@@ -49,8 +49,8 @@ function buildGeneric() {
 }
 
 function build(pack:String) {
-  return builderFactory
-    .withBuilders(new LayoutRouteBuilder(pack))
+  return factory
+    .withParsers(new LayoutRouteBuilder(pack))
     .fromContext()
     .export();
 }
@@ -67,9 +67,9 @@ private function buildLayoutRoute(pack:String):ComplexType {
   if (path.typePathExists()) return TPath(path);
   
   var pos = Context.currentPos();
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
 
-  builder.add(macro class {
+  fields.add(macro class {
     private function render(context:blok.ui.View, router:blok.ui.Child):blok.ui.Child;
   });
 
@@ -100,14 +100,14 @@ private function buildLayoutRoute(pack:String):ComplexType {
         sub: 'LayoutRouteMarker'
       }
     ], true),
-    fields: builder.export()
+    fields: fields.export()
   });
 
   return TPath(path);
 }
 
-class LayoutRouteBuilder implements Builder {
-  public final priority:BuilderPriority = Normal;
+class LayoutRouteBuilder implements Parser {
+  public final priority:Priority = Normal;
 
   final pack:String;
 
@@ -127,7 +127,7 @@ class LayoutRouteBuilder implements Builder {
       routesBody.push(macro $i{name});
     }
 
-    builder.addHook('init', macro {
+    builder.hook(Init).addExpr(macro {
       @:mergeBlock $b{routes};
       this.routes = new blok.tower.routing.ViewRouteCollection([ $a{routesBody} ]);
     });

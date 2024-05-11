@@ -11,7 +11,7 @@ class Menu extends Model {
   @:constant public final options:Array<MenuOption>;
 }
 
-enum abstract MenuOptionType(String) {
+enum abstract MenuOptionType(String) to String {
   var InternalLink = 'internal';
   var ExternalLink = 'external';
 }

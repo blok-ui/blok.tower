@@ -1,11 +1,11 @@
 package blok.tower.macro.builder;
 
-import blok.macro.*;
+import kit.macro.*;
 import blok.tower.macro.CompileConfig;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 using haxe.macro.Tools;
 
 typedef LoadFieldBuilderOptions = {
@@ -13,8 +13,8 @@ typedef LoadFieldBuilderOptions = {
   public final createJsonAssetExportMethod:Bool;
 } 
 
-class LoadFieldBuilder implements Builder {
-  public final priority:BuilderPriority = Normal;
+class LoadFieldBuilder implements Parser {
+  public final priority:Priority = Normal;
 
   final options:LoadFieldBuilderOptions;
 
@@ -27,7 +27,7 @@ class LoadFieldBuilder implements Builder {
       applyLoadField(builder, field);
     }
     if (options.createJsonAssetExportMethod) {
-      var exports = builder.getHook('load:export-json-assets');
+      var exports = builder.hook('load:export-json-assets').getExprs();
       builder.add(macro class {
         #if !blok.tower.client
         function __exportJsonAssets(context:blok.ui.View) {
@@ -94,8 +94,8 @@ class LoadFieldBuilder implements Builder {
         }
 
         field.kind = FVar(macro:blok.suspense.Resource<$t>);
-        builder.addHook('init:late', macro @:pos(e.pos) this.$name = new blok.suspense.Resource(() -> $e));
-        builder.addHook('load:export-json-assets', macro switch this.$name.data.peek() {
+        builder.hook(LateInit).addExpr(macro @:pos(e.pos) this.$name = new blok.suspense.Resource(() -> $e));
+        builder.hook('load:export-json-assets').addExpr(macro switch this.$name.data.peek() {
           case Loaded(data):
             assets.add(new blok.tower.asset.JsonAsset({
               id: $hash,

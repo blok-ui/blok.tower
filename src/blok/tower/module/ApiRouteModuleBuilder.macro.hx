@@ -2,10 +2,10 @@ package blok.tower.module;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import blok.macro.FieldBuilder;
+import kit.macro.*;
 
 using blok.tower.routing.macro.RouteScanner;
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 using kit.Hash;
 
 function buildGeneric() {
@@ -25,7 +25,7 @@ private function buildApiRouteModule(pack:String):ComplexType {
 
   if (path.typePathExists()) return TPath(path);
   
-  var builder = new FieldBuilder([]);
+  var fields = new ClassFieldCollection([]);
   var routes = pack.scanForApiRoutes();
   var registerRoutes:Array<Expr> = [ for (route in routes) {
     var path = route.pack.concat([ route.name ]);
@@ -38,7 +38,7 @@ private function buildApiRouteModule(pack:String):ComplexType {
     })} ]);
   }
   
-  builder.add(macro class {
+  fields.add(macro class {
     public function new() {}
 
     public function provide(container:blok.tower.core.Container) {
@@ -60,7 +60,7 @@ private function buildApiRouteModule(pack:String):ComplexType {
         name: 'Module'
       }
     ], false, true),
-    fields: builder.export()
+    fields: fields.export()
   });
 
   return TPath(path);

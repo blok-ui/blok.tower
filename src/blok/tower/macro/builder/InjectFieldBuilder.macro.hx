@@ -1,11 +1,11 @@
 package blok.tower.macro.builder;
 
-import blok.macro.*;
+import kit.macro.*;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 
 using Lambda;
-using blok.macro.MacroTools;
+using kit.macro.Tools;
 using haxe.macro.Tools;
 using kit.Hash;
 
@@ -20,10 +20,10 @@ typedef InjectFieldBuilderOptions = {
   })->Function;
 }
 
-class InjectFieldBuilder implements Builder {
+class InjectFieldBuilder implements Parser {
   static inline final injectPrefix = "__inject__";
 
-  public final priority:BuilderPriority = Late;
+  public final priority:Priority = Late;
   
   final options:InjectFieldBuilderOptions;
 
@@ -36,11 +36,11 @@ class InjectFieldBuilder implements Builder {
       applyInjectField(builder, field);
     }
     
-    for (expr in builder.getHook('init')) {
+    for (expr in builder.hook(Init).getExprs()) {
       processInitExpr(builder, expr);
     }
 
-    for (expr in builder.getHook('init:late')) {
+    for (expr in builder.hook(LateInit).getExprs()) {
       processInitExpr(builder, expr);
     }
 
@@ -68,15 +68,15 @@ class InjectFieldBuilder implements Builder {
       case None:
         None;
     }
-    var args:Array<FunctionArg> = builder.getProps('inject').map(f -> ({
+    var args:Array<FunctionArg> = builder.hook('inject').getProps().map(f -> ({
       name: f.name,
       type: switch f.kind {
         case FVar(t, _): t;
         default: throw 'assert';
       }
     }:FunctionArg));
-    var init = builder.getHook('init:inject').concat(builder.getHook('init'));
-    var late = builder.getHook('init:late');
+    var init = builder.hook('init:inject').getExprs().concat(builder.hook(Init).getExprs());
+    var late = builder.hook(LateInit).getExprs();
     var func:Function = switch options.customBuilder {
       case null:
         var expr:Expr = macro {
@@ -125,7 +125,7 @@ class InjectFieldBuilder implements Builder {
         }
         var name = field.name;
         addInjectField(builder, name, t);
-        builder.addHook('init:inject', macro this.$name = $i{name});
+        builder.hook('init:inject').addExpr(macro this.$name = $i{name});
       default:
         Context.error('Invalid field type for :inject', field.pos);
     }
@@ -151,8 +151,9 @@ class InjectFieldBuilder implements Builder {
   }
 
   function addInjectField(builder:ClassBuilder, name:String, t:ComplexType) {
-    if (builder.getProps('inject').exists(f -> f.name == name)) return;
-    builder.addProp('inject', {
+    var injectHook = builder.hook('inject');
+    if (injectHook.getProps().exists(f -> f.name == name)) return;
+    injectHook.addProp({
       name: name,
       type: t,
       optional: false
